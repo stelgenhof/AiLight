@@ -39,9 +39,7 @@ uint8_t AiLightClass::getBrightness(void)
 
 void AiLightClass::setBrightness(uint8_t level)
 {
-    _brightness = (level <= MY9291_LEVEL_MAX)
-            ? level
-            : MY9291_LEVEL_MAX; // Clamp value to maximum
+    _brightness = clip<uint8_t>(level, 0, MY9291_LEVEL_MAX); // Ensure range bounds
 
     setRGBW();
     setState(true);
@@ -92,43 +90,34 @@ void AiLightClass::setColorTemperature(uint16_t temperature)
     int tmpKelvin = 1000000UL / temperature; // Convert from mired value
 
     // Temperature must fall between 1000 and 40000 degrees
-    tmpKelvin = (tmpKelvin < 1000) ? 1000 : tmpKelvin; // Clamp value to minimum
-    tmpKelvin = (tmpKelvin > 40000) ? 40000 : tmpKelvin; // Clamp value to maximum
-
+    tmpKelvin = clip<uint16_t>(tmpKelvin, 1000, 40000);
     tmpKelvin = tmpKelvin / 100; // All calculations require tmpKelvin \ 100, so
     // only do the conversion once
 
     // Perform conversions from color temperature to RGB values
 
     // Red
-    _color.red = (tmpKelvin <= 66)
+    float red = (tmpKelvin <= 66)
             ? MY9291_LEVEL_MAX
             : 329.698727446 * pow((tmpKelvin - 60), -0.1332047592);
 
-    _color.red = (_color.red > MY9291_LEVEL_MAX)
-            ? MY9291_LEVEL_MAX
-            : _color.red; // Clamp value to maximum
+    _color.red = clip<float>(red, 0, MY9291_LEVEL_MAX); // Ensure range bounds
 
     // Green
-    _color.green = (tmpKelvin <= 66)
+    float green = (tmpKelvin <= 66)
             ? 99.4708025861 * log(tmpKelvin) - 161.1195681661
             : 288.1221695283 * pow(tmpKelvin, -0.0755148492);
 
-    _color.green = (_color.green > MY9291_LEVEL_MAX)
-            ? MY9291_LEVEL_MAX
-            : _color.green; // Clamp value to maximum
+    _color.green = clip<float>(green, 0, MY9291_LEVEL_MAX); // Ensure range bounds
 
     // Blue
-    _color.blue =
-            (tmpKelvin >= 66)
+    float blue = (tmpKelvin >= 66)
             ? MY9291_LEVEL_MAX
-            : ((tmpKelvin <= 19)
-            ? 0
-            : 138.5177312231 * log(tmpKelvin - 10) - 305.0447927307);
+            : ((tmpKelvin <= 19) ? 0
+            : 138.5177312231 * log(tmpKelvin - 10) -
+            305.0447927307);
 
-    _color.blue = (_color.blue > MY9291_LEVEL_MAX)
-            ? MY9291_LEVEL_MAX
-            : _color.blue; // Clamp value to maximum
+    _color.blue = clip<float>(blue, 0, MY9291_LEVEL_MAX); // Ensure range bounds
 
     setRGBW();
     setState(true);
