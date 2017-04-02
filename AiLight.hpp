@@ -32,8 +32,9 @@ struct Color {
 
 // Function to clip a number to a lower and/or upper bound
 template <typename T>
-T clip(const T& n, const T& lower, const T& upper) {
-  return max(lower, min(n, upper));
+T clip(const T& n, const T& lower, const T& upper)
+{
+    return max(lower, min(n, upper));
 }
 
 class AiLightClass {

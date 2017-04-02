@@ -16,7 +16,7 @@ AiLightClass::AiLightClass(void)
 {
     _my9291 = new my9291(MY9291_DI_PIN, MY9291_DCKI_PIN, MY9291_COMMAND_DEFAULT);
 
-    setRGBW(); // Initialize color channels
+    setRGBW(); // Initialise colour channels
 }
 
 AiLightClass::AiLightClass(const AiLightClass &obj)
@@ -24,7 +24,7 @@ AiLightClass::AiLightClass(const AiLightClass &obj)
     _my9291 = new my9291(MY9291_DI_PIN, MY9291_DCKI_PIN, MY9291_COMMAND_DEFAULT);
     *_my9291 = *obj._my9291;
 
-    setRGBW(); // Initialize color channels
+    setRGBW(); // Initialise colour channels
 }
 
 AiLightClass::~AiLightClass(void)
@@ -87,14 +87,14 @@ void AiLightClass::setColorTemperature(uint16_t temperature)
 {
     _colortemp = temperature;
 
-    int tmpKelvin = 1000000UL / temperature; // Convert from mired value
+    uint16_t tmpKelvin = 1000000UL / temperature; // Convert from mired value
 
     // Temperature must fall between 1000 and 40000 degrees
     tmpKelvin = clip<uint16_t>(tmpKelvin, 1000, 40000);
     tmpKelvin = tmpKelvin / 100; // All calculations require tmpKelvin \ 100, so
     // only do the conversion once
 
-    // Perform conversions from color temperature to RGB values
+    // Perform conversions from colour temperature to RGB values
 
     // Red
     float red = (tmpKelvin <= 66)
