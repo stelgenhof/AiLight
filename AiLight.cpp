@@ -37,9 +37,9 @@ uint8_t AiLightClass::getBrightness(void)
     return _brightness;
 }
 
-void AiLightClass::setBrightness(uint8_t level)
+void AiLightClass::setBrightness(uint16_t level)
 {
-    _brightness = clip<uint8_t>(level, 0, MY9291_LEVEL_MAX); // Ensure range bounds
+    _brightness = constrain(level, 0, MY9291_LEVEL_MAX); // Force boundaries
 
     setRGBW();
     setState(true);
@@ -85,14 +85,12 @@ uint16_t AiLightClass::getColorTemperature(void)
 
 void AiLightClass::setColorTemperature(uint16_t temperature)
 {
-    _colortemp = temperature;
+    _colortemp = temperature; // Save ccolour temperature setting
 
-    uint16_t tmpKelvin = 1000000UL / temperature; // Convert from mired value
-
-    // Temperature must fall between 1000 and 40000 degrees
-    tmpKelvin = clip<uint16_t>(tmpKelvin, 1000, 40000);
-    tmpKelvin = tmpKelvin / 100; // All calculations require tmpKelvin \ 100, so
-    // only do the conversion once
+    // Convert from mired value to relative Kelvin temperature. The temperature
+    // must fall between 1000 and 40000 degrees. All calculations require
+    // tmpKelvin \ 100, so only do the conversion once
+    uint16_t tmpKelvin = constrain(1000000UL / temperature, 1000, 40000) / 100;
 
     // Perform conversions from colour temperature to RGB values
 
@@ -101,14 +99,14 @@ void AiLightClass::setColorTemperature(uint16_t temperature)
             ? MY9291_LEVEL_MAX
             : 329.698727446 * pow((tmpKelvin - 60), -0.1332047592);
 
-    _color.red = clip<float>(red, 0, MY9291_LEVEL_MAX); // Ensure range bounds
+    _color.red = constrain(red, 0, MY9291_LEVEL_MAX); // Force boundaries
 
     // Green
     float green = (tmpKelvin <= 66)
             ? 99.4708025861 * log(tmpKelvin) - 161.1195681661
             : 288.1221695283 * pow(tmpKelvin, -0.0755148492);
 
-    _color.green = clip<float>(green, 0, MY9291_LEVEL_MAX); // Ensure range bounds
+    _color.green = constrain(green, 0, MY9291_LEVEL_MAX); // Force boundaries
 
     // Blue
     float blue = (tmpKelvin >= 66)
@@ -117,7 +115,7 @@ void AiLightClass::setColorTemperature(uint16_t temperature)
             : 138.5177312231 * log(tmpKelvin - 10) -
             305.0447927307);
 
-    _color.blue = clip<float>(blue, 0, MY9291_LEVEL_MAX); // Ensure range bounds
+    _color.blue = constrain(blue, 0, MY9291_LEVEL_MAX); // Force boundaries
 
     setRGBW();
     setState(true);
