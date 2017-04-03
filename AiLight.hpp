@@ -23,6 +23,7 @@
 #define MY9291_LEVEL_MAX 255
 
 // Structure for holding the levels of all the colour channels
+
 struct Color {
     uint8_t red;
     uint8_t green;
@@ -45,7 +46,9 @@ public:
 
     /**
      * @brief Sets the state of the AiLight (i.e on or off)
-     *
+     * 
+     * @param state the desired state (true/false)
+     * 
      * @return void
      */
     void setState(bool state);
@@ -62,6 +65,8 @@ public:
      *
      * This functions sets the level for brightness and switches on the AiLight.
      *
+     * @param level the desired brightness level (range 0 - 255)
+     * 
      * @return void
      */
     void setBrightness(uint16_t level);
@@ -81,6 +86,10 @@ public:
      * work in conjunction: i.e. the white colour channel is not changed when the
      * levels of the RGB colour channels are changed.
      *
+     * @param red the desired level for the red colour channel (range 0 - 255)
+     * @param green the desired level for the green colour channel (range 0 - 255)
+     * @param blue the desired level for the blue colour channel (range 0 - 255)
+     * 
      * @return void
      */
     void setColor(uint8_t red, uint8_t green, uint8_t blue);
@@ -93,6 +102,8 @@ public:
      * conjunction: i.e. the RGB colour channels are not changed when the level of
      * the white colour channel is changed.
      *
+     * @param white the desired level for the white colour channel (range 0 - 255)
+     * 
      * @return void
      */
     void setWhite(uint8_t white);
@@ -113,6 +124,8 @@ public:
      * to express colour temperature). Subsequently, the colour temperature is
      * converted to equivalent RGB values as based on the algorithm by Tanner
      * Helland.
+     * 
+     * @param temperature the desired colour temperature (in mired)
      *
      * Sources:
      * http://www.tannerhelland.com/4435/convert-temperature-rgb-algorithm-code/
