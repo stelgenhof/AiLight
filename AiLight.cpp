@@ -42,7 +42,6 @@ void AiLightClass::setBrightness(uint16_t level)
     _brightness = constrain(level, 0, MY9291_LEVEL_MAX); // Force boundaries
 
     setRGBW();
-    setState(true);
 }
 
 bool AiLightClass::getState(void)
@@ -67,7 +66,6 @@ void AiLightClass::setColor(uint8_t red, uint8_t green, uint8_t blue)
     _color.blue = blue;
 
     setRGBW();
-    setState(true);
 }
 
 void AiLightClass::setWhite(uint8_t white)
@@ -75,7 +73,6 @@ void AiLightClass::setWhite(uint8_t white)
     _color.white = white;
 
     setRGBW();
-    setState(true);
 }
 
 uint16_t AiLightClass::getColorTemperature(void)
@@ -118,7 +115,6 @@ void AiLightClass::setColorTemperature(uint16_t temperature)
     _color.blue = constrain(blue, 0, MY9291_LEVEL_MAX); // Force boundaries
 
     setRGBW();
-    setState(true);
 }
 
 void AiLightClass::setRGBW()

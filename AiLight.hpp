@@ -139,7 +139,7 @@ private:
 
     // Current colour levels (RGBW). Initial values are 1/4th of maximum
     Color _color = {MY9291_LEVEL_MAX >> 2, MY9291_LEVEL_MAX >> 2,
-        MY9291_LEVEL_MAX >> 2, MY9291_LEVEL_MAX >> 2};
+        MY9291_LEVEL_MAX >> 2, 0};
 
     // Current brightness level. Initial value is 1/4th of maximum
     uint8_t _brightness = MY9291_LEVEL_MAX >> 2;
