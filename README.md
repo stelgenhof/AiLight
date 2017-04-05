@@ -5,23 +5,30 @@ Xose Pérez has written an excellent [article](http://tinkerman.cat/ailight-hack
 
 Using the AiLight library is very straightforward and simple. Include this AiLight library in your project: an instance named 'AiLight' is already available to control the light.
 
+## Features
+This library allows you to:
+- Set the state (i.e. Switching on/off)
+- Set the colour level of the 4 colour channels (Red, Green, Blue and White)
+- Set the level of brightness
+- Set the colour temperature
+
 Example: TBD
 
 Making this library was inspired by the [MY9291](https://github.com/xoseperez/my9291) LED driver of [Xose Pérez](https://github.com/xoseperez).
 
-# Disclaimer
+## Disclaimer
 
 This library is designed for the ESP8266 and AVR device only. Other [MCU](https://en.wikipedia.org/wiki/Microcontroller) are not supported.
 
 
-# Dependencies
+## Dependencies
 
 This library makes use of the [MY9291](https://github.com/xoseperez/my9291) LED driver. You need to add it to use this AiLight library.
 
-# Contributing
+## Contributing
 
 Contributions are encouraged and welcome; I am always happy to get feedback or pull requests on Github :)
 
-# License
+## License
 
 The AiLight library is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT). For the full copyright and license information, please see the [LICENSE](LICENSE) file that was distributed with this source code.
