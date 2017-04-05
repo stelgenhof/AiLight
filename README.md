@@ -1,7 +1,7 @@
 # AiLight
 AiLight is a simple library to control an AiLight that contains the MY9291 LED driver. The Ai-Light is an inexpensive WiFi RGBW LED bulb based on the ESP8266 MCU. 
 
-Xose Pérez has wrote an excellent [article](http://tinkerman.cat/ailight-hackable-rgbw-light-bulb/) on his blog how you can upload your own firmware to this bulb. Please note this requires a little bit of soldering :).
+Xose Pérez has written an excellent [article](http://tinkerman.cat/ailight-hackable-rgbw-light-bulb/) on his blog how you can upload your own firmware to this bulb. Please note this requires a little bit of soldering :).
 
 Using the AiLight library is very straightforward and simple. Include this AiLight library in your project: an instance named 'AiLight' is already available to control the light.
 
