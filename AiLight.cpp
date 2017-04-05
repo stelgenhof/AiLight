@@ -82,7 +82,9 @@ uint16_t AiLightClass::getColorTemperature(void)
 
 void AiLightClass::setColorTemperature(uint16_t temperature)
 {
-    _colortemp = temperature; // Save ccolour temperature setting
+    _colortemp = temperature; // Save colour temperature setting
+
+    temperature = (temperature == 0) ? 1 : temperature; // Avoid division by zero
 
     // Convert from mired value to relative Kelvin temperature. The temperature
     // must fall between 1000 and 40000 degrees. All calculations require
