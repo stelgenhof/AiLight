@@ -12,8 +12,6 @@ This library allows you to:
 - Set the level of brightness
 - Set the colour temperature
 
-Example: TBD
-
 Making this library was inspired by the [MY9291](https://github.com/xoseperez/my9291) LED driver of [Xose Pérez](https://github.com/xoseperez).
 
 ## Disclaimer
