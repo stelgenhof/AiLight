@@ -9,6 +9,26 @@
 #include "version.h"
 
 /**
+ * @brief Determines the ID of this Ai-Thinker RGBW Light
+ *
+ * @return the unique identifier of this Ai-Thinker RGBW Light
+ */
+const char *getDeviceID() {
+  char *identifier = new char[30];
+  strcpy(identifier, DEVICE_ID);
+  strcat_P(identifier, PSTR("_"));
+
+#ifdef ESP8266
+  // Get ESP Chip ID and change into char array
+  char cidBuf[7];
+  sprintf(cidBuf, "%d", ESP.getChipId());
+  strcat(identifier, cidBuf);
+#endif
+
+  return identifier;
+}
+
+/**
  * @brief Bootstrap/Initialization
  */
 void setup() {
@@ -25,6 +45,9 @@ void setup() {
   setupMQTT();
 
 #ifdef DEBUG
+  DEBUGLOG("%s - %s\n", APP_NAME, APP_VERSION);
+  DEBUGLOG("%s\n", getDeviceID());
+  DEBUGLOG("\n")
   wifiStatus();
 #endif
 

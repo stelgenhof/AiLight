@@ -188,10 +188,10 @@ void _mqttConnect() {
 
     if ((strlen(MQTT_USER) > 0) && (strlen(MQTT_PASSWORD) > 0)) {
       DEBUGLOG(" as user '%s'\n", MQTT_USER);
-      response = mqtt.connect(DEVICE_ID, MQTT_USER, MQTT_PASSWORD);
+      response = mqtt.connect(getDeviceID(), MQTT_USER, MQTT_PASSWORD);
     } else {
       DEBUGLOG("\n");
-      response = mqtt.connect(DEVICE_ID);
+      response = mqtt.connect(getDeviceID());
     }
   }
 
