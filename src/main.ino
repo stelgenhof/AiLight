@@ -45,9 +45,9 @@ void setup() {
   setupMQTT();
 
 #ifdef DEBUG
-  DEBUGLOG("%s - %s\n", APP_NAME, APP_VERSION);
-  DEBUGLOG("%s\n", getDeviceID());
-  DEBUGLOG("\n")
+  Serial.printf("%s - %s\n", APP_NAME, APP_VERSION);
+  Serial.printf("%s\n", getDeviceID());
+  Serial.println();
   wifiStatus();
 #endif
 
