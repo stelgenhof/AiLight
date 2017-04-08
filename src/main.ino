@@ -37,6 +37,11 @@ void setup() {
 #ifdef DEBUG
   Serial.begin(115200);
   Serial.setDebugOutput(true);
+
+  Serial.printf("Firmware  : %s - %s\n", APP_NAME, APP_VERSION);
+  Serial.printf("Device ID : %s\n", getDeviceID());
+  Serial.printf("Hostname  : %s.local\n", getDeviceID());
+  Serial.println();
 #endif
 
   setupLight();
@@ -45,9 +50,6 @@ void setup() {
   setupMQTT();
 
 #ifdef DEBUG
-  Serial.printf("%s - %s\n", APP_NAME, APP_VERSION);
-  Serial.printf("%s\n", getDeviceID());
-  Serial.println();
   wifiStatus();
 #endif
 
