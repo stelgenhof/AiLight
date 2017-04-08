@@ -19,7 +19,7 @@
  */
 void setupOTA() {
   ArduinoOTA.setPort(OTA_PORT);
-  ArduinoOTA.setHostname(DEVICE_ID);
+  ArduinoOTA.setHostname(getDeviceID());
   ArduinoOTA.setPassword(OTA_PASSWORD);
 
   ArduinoOTA.onStart([]() { DEBUGLOG("[OTA] Start\n"); });
