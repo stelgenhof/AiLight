@@ -51,7 +51,11 @@ To build and upload this firmware you need to have [PlatformIO](http://platformi
 
 That's all it takes, you're ready to go!
 
-If no compilation errors popped up, you can upload the firmware to your Ai-Thinker RGBW Light using an FTDI (or alike) programmer. This is a required step of course, since your Ai-Thinker RGBW Light still has the factory firmware. Once uploaded, you can use OTA to upload the firmware over the air.
+If no compilation errors popped up, you can upload the firmware to your Ai-Thinker RGBW Light using an FTDI (or alike) programmer. This is a required step of course, since your Ai-Thinker RGBW Light still has the factory firmware.
+
+While connected to your FTDI programmer, check the output on your Serial Monitor. You should see some messages appear that will tell you the ID of this light, hostname and the assigned IP address. Update the 'upload_port' variable in your platformio.ini file with the 'hostname' value from the Serial Monitor.
+
+Once uploaded, you can use OTA to upload the firmware over the air.
 
 ### Targets
 The PlatformIO configuration contains 4 environments for building and flashing your Ai-Thinker RGBW Light:
