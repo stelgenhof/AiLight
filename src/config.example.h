@@ -5,8 +5,7 @@
  * Copyright (c) 2017 Sacha Telgenhof
  */
 
-#define DEVICE_ID "idomo_light_001"
-#define IDOMO_DEVICE_TYPE "light"
+#define DEVICE_ID "AiLight"
 
 // ---------------------------
 // OTA (Over The Air) Updates
