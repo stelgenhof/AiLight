@@ -49,13 +49,11 @@ void lightMQTTCallback(uint8_t type, const char *topic, const char *payload) {
   // Handling the event of connecting to the MQTT broker
   if (type == MQTT_EVENT_CONNECT) {
     mqttSubscribe(MQTT_LIGHT_COMMAND_TOPIC);
-    mqttSubscribe(MQTT_LIGHT_ACTION_RESTART);
   }
 
   // Handling the event of disconnecting from the MQTT broker
   if (type == MQTT_EVENT_DISCONNECT) {
     mqttUnsubscribe(MQTT_LIGHT_COMMAND_TOPIC);
-    mqttUnsubscribe(MQTT_LIGHT_ACTION_RESTART);
   }
 
   // Handling the event a message is received from the MQTT broker
