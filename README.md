@@ -2,7 +2,7 @@
 
 The Ai-Thinker RGBW Light Firmware is a custom firmware for the inexpensive WiFi RGB light bulbs that has the ESP8266 MCU at its core. Xose Pérez has written an excellent [article](http://tinkerman.cat/ailight-hackable-rgbw-light-bulb/) on his blog how you can upload your own firmware to this light.
 
-This firmware is designed to operate with [Home Assistant](https://home-assistant.io) using the [MQTT](https://mqtt.org) protocol.
+This firmware is designed to operate with [Home Assistant](https://home-assistant.io) using the [MQTT](http://mqtt.org) protocol.
 
 ## Features
 
@@ -35,29 +35,30 @@ To build and upload this firmware you need to have [PlatformIO](http://platformi
 2. Rename the `config.example.h` file in the 'src' folder to `config.h`
 3. Depending on your environment, set at least the following values in the `config.h` file:
 
-  - WIFI_SSID // Your WiFi SSID
-  - WIFI_PSK // Your WiFi PSK/Password
-  - MQTT_SERVER // The hostname/IP address of your MQTT broker
-  - MQTT_USER // The username to connect to your MQTT broker
-  - MQTT_PASSWORD // The password to connect to your MQTT broker
-  - MQTT_LIGHT_STATE_TOPIC // The MQTT state topic for Home Assistant
-  - MQTT_LIGHT_COMMAND_TOPIC // The MQTT command topic for Home Assistant
+  - WIFI_SSID `// Your WiFi SSID`
+  - WIFI_PSK `// Your WiFi PSK/Password`
+  - MQTT_SERVER `// The hostname/IP address of your MQTT broker`
+  - MQTT_USER `// The username to connect to your MQTT broker`
+  - MQTT_PASSWORD `// The password to connect to your MQTT broker`
+  - MQTT_LIGHT_STATE_TOPIC `// The MQTT state topic for Home Assistant`
+  - MQTT_LIGHT_COMMAND_TOPIC `// The MQTT command topic for Home Assistant`
 
   Other configuration variables can be left as is, however feel free to adjust as you see fit.
 
 4. Rename the `platformio.example.ini` file to `platformio.ini`. The PlatformIO configuration should unchanged, however it is recommended to change the OTA port number and OTA password when using your Ai-Thinker RGBW Light in production. (In that case don't forget to update the respective variables in your `config.h` file too).
 
-5. Click on the PlatformIO "Build" button (or issue the "platformio run" command from the PlatformIO terminal).
+5. Click on the "PlatformIO: Build" icon (or issue a "platformio run" command from the PlatformIO terminal).
 
 That's all it takes, you're ready to go!
 
 If no compilation errors popped up, you can upload the firmware to your Ai-Thinker RGBW Light using an FTDI (or alike) programmer. This is a required step of course, since your Ai-Thinker RGBW Light still has the factory firmware.
 
-While connected to your FTDI programmer, check the output on your Serial Monitor. You should see some messages appear that will tell you the ID of this light, hostname and the assigned IP address. Update the 'upload_port' variable in your platformio.ini file with the 'hostname' value from the Serial Monitor.
+While connected to your FTDI programmer, check the output on your Serial Monitor. You should see some messages appear that will tell you the ID of this light, hostname and the assigned IP address. Update the `upload_port` variable in your platformio.ini file with the 'hostname' value from the Serial Monitor.
 
 Once uploaded, you can use OTA to upload the firmware over the air.
 
-### Targets
+### Environments
+
 The PlatformIO configuration contains 4 environments for building and flashing your Ai-Thinker RGBW Light:
 
 - 'env-dev': development/debug environment for building and uploading the firmware via an FTDI (or alike) programmer
