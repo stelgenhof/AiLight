@@ -74,11 +74,6 @@ void lightMQTTCallback(uint8_t type, const char *topic, const char *payload) {
 
       sendState(); // Notify subscribers about new state
     }
-
-    // Listen to this lights command topic
-    if (strcmp(topic, MQTT_LIGHT_ACTION_RESTART) == 0) {
-      ESP.restart();
-    }
   }
 }
 
