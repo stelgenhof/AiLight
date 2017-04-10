@@ -36,7 +36,8 @@ void setup() {
 // Serial Port Initialization
 #ifdef DEBUG
   Serial.begin(115200);
-  Serial.setDebugOutput(true);
+  Serial.println();
+  Serial.println();
 
   Serial.printf("Firmware  : %s - %s\n", APP_NAME, APP_VERSION);
   Serial.printf("Device ID : %s\n", getDeviceID());
