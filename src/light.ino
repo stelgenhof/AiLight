@@ -109,9 +109,7 @@ bool processJson(char *message) {
   JsonObject &root = jsonBuffer.parseObject(message);
 
   if (!root.success()) {
-#ifdef DEBUG
     DEBUGLOG("[LIGHT] Unable to parse message\n");
-#endif
     return false;
   }
 

@@ -28,16 +28,12 @@ void setupWiFi() {
   // Connecting
   WiFi.begin(WIFI_SSID, WIFI_PSK);
 
-#ifdef DEBUG
   DEBUGLOG("[WIFI] Connecting to %s\n", WIFI_SSID);
-#endif
 
   // Wait for connection
   while (WiFi.waitForConnectResult() != WL_CONNECTED) {
 
-#ifdef DEBUG
     DEBUGLOG("[WIFI] Connection not established! Rebooting...");
-#endif
 
     delay(5000);
     ESP.restart();

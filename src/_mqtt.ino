@@ -11,6 +11,7 @@
  * Copyright (c) 2016 - 2017 Sacha Telgenhof
  */
 
+#include <ArduinoJson.h>
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 #include <vector>
@@ -45,9 +46,7 @@ void mqttPublish(const char *topic, const char *message) {
   if ((strlen(topic) > 0) && (strlen(message) > 0)) {
     mqtt.publish(topic, message, MQTT_RETAIN);
 
-#ifdef DEBUG
     DEBUGLOG("[MQTT] Published message '%s' to '%s'\n", message, topic);
-#endif
   }
 }
 
@@ -67,9 +66,7 @@ void mqttSubscribe(const char *topic, uint8_t qos = MQTT_QOS_LEVEL) {
   if (strlen(topic) > 0) {
     mqtt.subscribe(topic, qos);
 
-#ifdef DEBUG
     DEBUGLOG("[MQTT] Subscribed to topic '%s'\n", topic);
-#endif
   }
 }
 
@@ -88,9 +85,7 @@ void mqttUnsubscribe(const char *topic) {
   if (strlen(topic) > 0) {
     mqtt.unsubscribe(topic);
 
-#ifdef DEBUG
     DEBUGLOG("[MQTT] Unsubscribed from topic '%s'\n", topic);
-#endif
   }
 }
 
@@ -111,9 +106,7 @@ void mqttRegister(void (*callback)(uint8_t, const char *, const char *)) {
  * @brief Event handler for when a connection to the MQTT has been establised.
  */
 void _mqttOnConnect() {
-#ifdef DEBUG
   DEBUGLOG("[MQTT] Connected\n");
-#endif
 
   // Notify subscribers (connected)
   for (uint8_t i = 0; i < _mqtt_callbacks.size(); i++) {
@@ -126,9 +119,7 @@ void _mqttOnConnect() {
  * disconnected.
  */
 void _mqttOnDisconnect() {
-#ifdef DEBUG
   DEBUGLOG("[MQTT] Disconnected\n");
-#endif
 
   // Notify subscribers (disconnected)
   for (uint8_t i = 0; i < _mqtt_callbacks.size(); i++) {
@@ -155,9 +146,7 @@ void _mqttOnMessage(char *topic, char *payload, uint8_t length) {
   memcpy(message, payload, length);
   message[length] = 0;
 
-#ifdef DEBUG
   DEBUGLOG("[MQTT] Received '%s'-'%s'\n", topic, message);
-#endif
 
   // Notify subscribers (message received)
   for (uint8_t i = 0; i < _mqtt_callbacks.size(); i++) {
@@ -180,9 +169,7 @@ void _mqttConnect() {
   // Try to make a connection to the MQTT broker
   if (!mqtt.connected()) {
 
-#ifdef DEBUG
     DEBUGLOG("[MQTT] Connecting to broker '%s:%i'", MQTT_SERVER, MQTT_PORT);
-#endif
 
     mqtt.setServer(MQTT_SERVER, MQTT_PORT);
 
@@ -200,9 +187,7 @@ void _mqttConnect() {
     _mqtt_connected = true;
   } else {
 
-#ifdef DEBUG
     DEBUGLOG("[MQTT] Connection failed (rc=%d)\n", mqtt.state());
-#endif
   }
 }
 
@@ -220,9 +205,7 @@ void setupMQTT() {
     return;
   }
 
-#ifdef DEBUG
   DEBUGLOG("[MQTT] Initialization...\n");
-#endif
 
   mqtt.setCallback([](char *topic, byte *payload, uint8_t length) {
     _mqttOnMessage(topic, (char *)payload, length);

@@ -31,7 +31,6 @@ void setupOTA() {
   });
 
   ArduinoOTA.onError([](ota_error_t error) {
-#ifdef DEBUG
     DEBUGLOG("\n[OTA] Error[%u]: ", error);
     if (error == OTA_AUTH_ERROR)
       DEBUGLOG("Authentication Failed\n");
@@ -43,7 +42,6 @@ void setupOTA() {
       DEBUGLOG("Receive Failed\n");
     else if (error == OTA_END_ERROR)
       DEBUGLOG("End Failed\n");
-#endif
   });
 
   ArduinoOTA.begin();
