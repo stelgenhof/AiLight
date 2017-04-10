@@ -27,7 +27,7 @@ The Ai-Thinker RGBW Light Firmware provides you basic functionality to control y
 
 ## Requirements
 
-To build and upload this firmware you need to have [PlatformIO](http://platformio.org/) installed and works only on the ESP8266 and AVR devices. Other [MCU](https://en.wikipedia.org/wiki/Microcontroller) are not supported.
+To build and upload this firmware you need to have [PlatformIO](http://platformio.org/) installed.
 
 ## Installation/Configuration
 
