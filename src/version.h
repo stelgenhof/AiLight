@@ -6,5 +6,5 @@
  */
 
 #define APP_NAME "Ai-Thinker RGBW Light"
-#define APP_VERSION "1.0.0"
+#define APP_VERSION "0.1.0-dev"
 #define APP_AUTHOR "stelgenhof@gmail.com"
