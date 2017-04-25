@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="true">
+    <title>Ai-Thinker RGBW Light</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+
+  <body style="zoom: 1;">
+
+    <!-- Top -->
+    <section class="hero">
+      <div class="hero-head">
+        <div class="container">
+          <nav class="nav">
+            <div class="nav-left">
+              <a class="nav-item is-brand" href="#">
+                <img src="http://bulma.io/images/bulma-logo.png" alt="Ai-Thinker RGBW Light">
+              </a>
+            </div>
+            <div class="nav-center"></div>
+            <span id="nav-toggle" class="nav-toggle">
+              <span></span>
+              <span></span>
+              <span></span>
+            </span>
+
+            <div id="nav-menu" class="nav-right nav-menu">
+                <span class="nav-item">
+                  <p class="control">
+                    <a class="button is-primary" href="#" id="button-restart">
+                      <span>RESTART</span>
+                      <span class="icon">
+                        <i class="icon-power"></i>
+                      </span>
+                    </a>
+                  </p>
+                </span>
+                <span class="nav-item">
+                  <p class="control">
+                    <a class="button is-danger is-outlined" href="#" id="reset">
+                      <span>RESET</span>
+                      <span class="icon">
+                        <i class="icon-arrow-loop"></i>
+                      </span>
+                    </a>
+                  </p>
+              </span>
+            </div>
+
+          </nav>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main menu -->
+    <nav class="nav" id="menu">
+      <div class="container">
+        <div class="nav-center">
+          <a id="tab_start" class="nav-item is-tab" href="#">Light</a>
+          <a id="tab_settings" class="nav-item is-tab" href="#">Settings</a>
+          <a id="tab_about" class="nav-item is-tab" href="#">About</a>
+        </div>
+      </div>
+    </nav>
+
+    <section id="pagescontent">
+
+      <!-- Start page -->
+      <section id="page_start" class="has-text-centered">
+        <p>Control your <strong><span id="app_name"></span></strong> using the controls below</p>
+
+        <table class="table">
+          <tbody>
+            <tr>
+              <th>Switch</th>
+              <td>
+                <label class="switch is-primary">
+                  <input type="checkbox" name="state" id="switch_state">
+                </label>
+              </td>
+            </tr>
+            <tr>
+                <th>Brightness</th>
+                <td><input class="slider is-primary" type="range" min="0" max="255" step="1" id="slider_brightness"></td>
+            </tr>
+            <tr>
+                <th>Colour Temperature</th>
+                <td><input class="slider is-primary" type="range" min="154" max="500" step="1" id="slider_color_temp"></td>
+            </tr>
+            <tr>
+                <th></th>
+                <td></td>
+            </tr>
+            <tr>
+                <th>Red</th>
+                <td><input class="slider is-danger" type="range" min="0" max="255" step="1" id="slider_r"></td>
+            </tr>
+            <tr>
+                <th>Green</th>
+                <td><input class="slider is-success" type="range" min="0" max="255" step="1" id="slider_g"></td>
+            </tr>
+            <tr>
+                <th>Blue</th>
+                <td><input class="slider is-info" type="range" min="0" max="255" step="1" id="slider_b"></td>
+            </tr>
+            <tr>
+                <th>White</th>
+                <td><input class="slider" type="range" min="0" max="255" step="1" id="slider_white_value"></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Settings page -->
+      <section id="page_settings">
+
+        <form id="settings">
+        <div class="columns is-mobile">
+          <div class="column is-two-thirds is-offset-2">
+
+            <h1 class="title is-4 is-primary">Network</h1>
+
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label">Hostname</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input class="input" type="text" minlength="1" maxlength="128" size="128" placeholder="Hostname" id="setting.hostname">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label">WiFi SSID</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input class="input" type="text" maxlength="32" size="32" placeholder="WiFi SSID" id="setting.wifi_ssid">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label">WiFi Password</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <p class="control">
+                    <input class="input" type="password" minlength="8" maxlength="63" size="63" placeholder="WiFi PSK (Password)" id="setting.wifi_psk">
+                  </p>
+                </div>
+              </div>
+              <span class="icon">
+                <i class="icon-eye" data-input="wifi_psk"></i>
+              </span>
+            </div>
+
+            <br/>
+            <h1 class="title is-4 is-primary">MQTT</h1>
+
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label">Server</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input class="input" type="text" minlength="1" maxlength="128" size="128" placeholder="MQTT Servername or IP Address" id="setting.mqtt_server">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label">Port Number</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input class="input" inputmode="numeric" type="text" min="0" max="65535" minlength="1" maxlength="5" size="5" placeholder="MQTT Server Port (e.g. 1883)" id="setting.mqtt_port">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label">User name</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input class="input" type="text" maxlength="64" size="64" placeholder="Username used for connecting to the MQTT Server" id="setting.mqtt_user">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label">Password</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input class="input" type="password" type="text" maxlength="64" size="10" placeholder="Password used for connecting to the MQTT Server" id="setting.mqtt_password">
+                  </div>
+                </div>
+              </div>
+              <span class="icon">
+                <i class="icon-eye" data-input="mqtt_password"></i>
+              </span>
+            </div>
+
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label">State Topic</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input class="input" type="text" maxlength="128" size="128" placeholder="MQTT Topic for publishing the state of this AiLight" id="setting.mqtt_state_topic">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label">Command Topic</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input class="input" type="text" maxlength="128" size="128" placeholder="MQTT Topic for receiving commands for this AiLight" id="setting.mqtt_command_topic">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <br/>
+            <div class="field is-horizontal">
+              <div class="field-label"></div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <button class="button is-primary" id="save">Save</button>
+                    </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </form>
+      </section>
+
+      <!-- About page -->
+      <section id="page_about">
+
+        <div class="has-text-centered">
+          <h1 class="title is-4"><strong><span data-s="app_name"></span></strong></h1>
+          <h2 class="subtitle is-6">Version <span data-s="app_version"></span></h2>
+        </div>
+
+        <table class="table">
+            <tbody>
+              <tr>
+                  <th>Manufacturer</th>
+                  <td><span data-s="manufacturer"></span></td>
+              </tr>
+              <tr>
+                  <th>Name</th>
+                  <td><span data-s="hostname"></span></td>
+              </tr>
+              <tr>
+                  <th>WiFi IP Address</th>
+                  <td><span data-s="device_ip"></span></td>
+              </tr>
+              <tr>
+                  <th>Hostname</th>
+                  <td><span data-s="hostname"></span>.local</td>
+              </tr>
+
+              <tr>
+                  <th></th>
+                  <td></td>
+              </tr>
+              <tr>
+                  <th>Firmware Build</th>
+                  <td><span data-s="build_date"></span>&nbsp;<span data-s="build_time"></span></td>
+              </tr>
+              <tr>
+                  <th>Processor</th>
+                  <td><span data-s="cpu_frequency"></span> MHz</td>
+              </tr>
+              <tr>
+                  <th>Memory</th>
+                  <td><span data-s="memory"></span> bytes</td>
+              </tr>
+              <tr>
+                  <th>Free Memory</th>
+                  <td><span data-s="free_heap"></span> bytes</td>
+              </tr>
+              <tr>
+                  <th>MAC Address</th>
+                  <td><span data-s="mac"></span></td>
+              </tr>
+            </tbody>
+        </table>
+      </section>
+
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="content has-text-centered">
+          <p>
+            <strong>AiLight</strong> is a project by <a href="https://www.sachatelgenhof.nl">Sacha Telgenhof</a> &copy; 2017
+          </p>
+          <p>
+            <a href="https://github.com/stelgenhof/AiLight">Source code</a> is available on Github and licensed <a href="http://opensource.org/licenses/mit-license.php">MIT</a>.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+
+</html>

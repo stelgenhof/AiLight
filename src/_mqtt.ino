@@ -4,17 +4,14 @@
  * The MQTT module holds all the code to manage all functions for communicating
  * with the MQTT broker.
  *
- * Parts of the code inspired by the Espurna firmware from Xose Pérez
- * (https://bitbucket.org/xoseperez/espurna)
- *
+ * This file is part of the Ai-Thinker RGBW Light Firmware.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+
  * Created by Sacha Telgenhof <stelgenhof at gmail dot com>
+ * (https://www.sachatelgenhof.nl)
  * Copyright (c) 2016 - 2017 Sacha Telgenhof
  */
-
-#include <ArduinoJson.h>
-#include <ESP8266WiFi.h>
-#include <PubSubClient.h>
-#include <vector>
 
 // MQTT Event type definitions
 #define MQTT_EVENT_CONNECT 0
@@ -37,7 +34,6 @@ std::vector<void (*)(uint8_t, const char *, const char *)> _mqtt_callbacks;
  * @param message the message to be published
  */
 void mqttPublish(const char *topic, const char *message) {
-
   // Don't do anything if we are not connected to the MQTT broker
   if (!mqtt.connected()) {
     return;
@@ -46,7 +42,7 @@ void mqttPublish(const char *topic, const char *message) {
   if ((strlen(topic) > 0) && (strlen(message) > 0)) {
     mqtt.publish(topic, message, MQTT_RETAIN);
 
-    DEBUGLOG("[MQTT] Published message '%s' to '%s'\n", message, topic);
+    DEBUGLOG("[MQTT] Published message to '%s'\n", topic);
   }
 }
 
@@ -57,7 +53,6 @@ void mqttPublish(const char *topic, const char *message) {
  * @param qos the desired QoS level (defaults to MQTT_QOS_LEVEL)
  */
 void mqttSubscribe(const char *topic, uint8_t qos = MQTT_QOS_LEVEL) {
-
   // Don't do anything if we are not connected to the MQTT broker
   if (!mqtt.connected()) {
     return;
@@ -76,7 +71,6 @@ void mqttSubscribe(const char *topic, uint8_t qos = MQTT_QOS_LEVEL) {
  * @param topic the MQTT topic to unsubscribe from
  */
 void mqttUnsubscribe(const char *topic) {
-
   // Don't do anything if we are not connected to the MQTT broker
   if (!mqtt.connected()) {
     return;
@@ -135,7 +129,6 @@ void _mqttOnDisconnect() {
  * @param length the length of the published message
  */
 void _mqttOnMessage(char *topic, char *payload, uint8_t length) {
-
   // Don't do anything if we are not connected to the MQTT broker
   if (!mqtt.connected()) {
     return;
@@ -146,7 +139,7 @@ void _mqttOnMessage(char *topic, char *payload, uint8_t length) {
   memcpy(message, payload, length);
   message[length] = 0;
 
-  DEBUGLOG("[MQTT] Received '%s'-'%s'\n", topic, message);
+  DEBUGLOG("[MQTT] Received message on '%s'\n", topic, message);
 
   // Notify subscribers (message received)
   for (uint8_t i = 0; i < _mqtt_callbacks.size(); i++) {
@@ -158,27 +151,22 @@ void _mqttOnMessage(char *topic, char *payload, uint8_t length) {
  * @brief Handles the connection to the MQTT broker.
  */
 void _mqttConnect() {
-
-  // Return if MQTT is not enabled
-  if (!MQTT_ENABLED) {
-    return;
-  }
-
   bool response = false;
 
   // Try to make a connection to the MQTT broker
   if (!mqtt.connected()) {
 
-    DEBUGLOG("[MQTT] Connecting to broker '%s:%i'", MQTT_SERVER, MQTT_PORT);
+    DEBUGLOG("[MQTT] Connecting to broker '%s:%i'", cfg.mqtt_server,
+             cfg.mqtt_port);
 
-    mqtt.setServer(MQTT_SERVER, MQTT_PORT);
+    mqtt.setServer(cfg.mqtt_server, cfg.mqtt_port);
 
-    if ((strlen(MQTT_USER) > 0) && (strlen(MQTT_PASSWORD) > 0)) {
-      DEBUGLOG(" as user '%s'\n", MQTT_USER);
-      response = mqtt.connect(getDeviceID(), MQTT_USER, MQTT_PASSWORD);
+    if ((strlen(cfg.mqtt_user) > 0) && (strlen(cfg.mqtt_password) > 0)) {
+      DEBUGLOG(" as user '%s'\n", cfg.mqtt_user);
+      response = mqtt.connect(cfg.hostname, cfg.mqtt_user, cfg.mqtt_password);
     } else {
       DEBUGLOG("\n");
-      response = mqtt.connect(getDeviceID());
+      response = mqtt.connect(cfg.hostname);
     }
   }
 
@@ -199,14 +187,6 @@ void _mqttConnect() {
  * @brief Bootstrap function for the MQTT connection
  */
 void setupMQTT() {
-
-  // Return if MQTT is not enabled
-  if (!MQTT_ENABLED) {
-    return;
-  }
-
-  DEBUGLOG("[MQTT] Initialization...\n");
-
   mqtt.setCallback([](char *topic, byte *payload, uint8_t length) {
     _mqttOnMessage(topic, (char *)payload, length);
   });
@@ -218,15 +198,10 @@ void setupMQTT() {
  * @brief Listen to MQTT requests (pub/sub)
  */
 void loopMQTT() {
-
-  // Return if MQTT is not enabled
-  if (!MQTT_ENABLED) {
-    return;
-  }
-
   if (WiFi.status() == WL_CONNECTED) {
     if (!mqtt.connected()) {
       if (_mqtt_connected) {
+        _mqttOnDisconnect();
         _mqtt_connected = false;
       }
 

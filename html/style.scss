@@ -1,0 +1,348 @@
+/**
+ * Ai-Thinker RGBW Light Firmware - Styling
+ *
+ * This file is part of the Ai-Thinker RGBW Light Firmware.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+
+ * Created by Sacha Telgenhof <stelgenhof at gmail dot com>
+ * (https://www.sachatelgenhof.nl)
+ * Copyright (c) 2016 - 2017 Sacha Telgenhof
+ */
+
+@import './node_modules/bulma/bulma';
+@font-face {
+  font-family: 'ailight';
+  src: url('ailight.ttf?vhsro1') format('truetype'), url('ailight.woff?vhsro1') format('woff'), url('ailight.svg?vhsro1#ailight') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+i {
+  font-family: 'ailight' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  vertical-align: -webkit-baseline-middle;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  cursor: pointer;
+}
+
+.icon-eye:before {
+    content: "\e900";
+    color: $grey-lighter;
+    vertical-align: -webkit-baseline-middle;
+}
+.icon-arrow-loop:before {
+  content: "\e901";
+}
+
+.icon-power:before {
+  content: "\e902";
+}
+
+.footer {
+    padding: 2rem 1.5rem 2rem;
+    margin-top: 3rem;
+}
+
+#menu {
+  z-index: 0;
+  margin-bottom: 2rem;
+}
+
+#page_start {
+  p {
+    margin-bottom: 2rem;
+  }
+
+  .table {
+    tr {
+      &:hover {
+        background: none;
+      }
+    }
+
+    th {
+      text-align: right;
+      border: none;
+    }
+
+    td {
+      vertical-align: middle;
+      border: none;
+    }
+  }
+}
+
+#page_about {
+  div:first-child {
+    margin-bottom: 1rem;
+  }
+
+  .table {
+    tr {
+      &:hover {
+        background: none;
+      }
+    }
+
+    th {
+      text-align: right;
+      border: none;
+    }
+
+    td {
+      vertical-align: middle;
+      border: none;
+    }
+  }
+}
+// Switch Component
+.switch {
+  --height: 22px;
+
+  input {
+    opacity: 0;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 1;
+    cursor: pointer;
+  }
+  appearance: none;
+  position: relative;
+  outline: 0;
+  border-radius: calc(0.8 * var(--height));
+  width: calc(1.625 * var(--height));
+  height: var(--height);
+  background-color: $border;
+  border: 1px solid $border;
+  cursor: pointer;
+  box-sizing: border-box;
+  display: inline-block;
+  -webkit-tap-highlight-color: transparent;
+
+  &:after,
+  &:before {
+    content: " ";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: calc(var(--height) - 2px);
+    border-radius: calc((var(--height) - 2px) / 2);
+    transition: 0.233s;
+  }
+
+  &:before {
+    width: calc(1.625 * var(--height) - 2px);
+    background-color: $grey-lighter;
+  }
+
+  &:after {
+    width: calc(var(--height) - 2px);
+    background-color: #FFF;
+    box-shadow: 0 2px 3px rgba(17, 17, 17, 0.1);
+  }
+
+  &.checked {
+    border-color: $text;
+    background-color: $text;
+
+    &:before {
+      transform: scale(0);
+    }
+
+    &:after {
+      transform: translateX(calc(0.625 * var(--height)));
+    }
+  }
+  // Colors
+  @each $name, $pair in $colors {
+    $color: nth($pair, 1);
+
+    &.is-#{$name} {
+      &.checked {
+        border-color: $color;
+        background-color: $color;
+      }
+    }
+  }
+  // Sizes
+  &.is-small {
+    --height: 12px;
+  }
+
+  &.is-medium {
+    --height: 28px;
+  }
+
+  &.is-large {
+    --height: 32px;
+  }
+}
+// Slider Component
+
+input[type=range].slider {
+  $radius: 290486px;
+  --height: 8px;
+
+  &.is-small {
+    --height: 4px;
+  }
+
+  &.is-medium {
+    --height: 12px;
+  }
+
+  &.is-large {
+    --height: 16px;
+  }
+
+  &.is-xlarge {
+    --height: 24px;
+  }
+
+  &.is-fullwidth {
+    width: 100%;
+  }
+  border: none;
+  border-radius: $radius;
+  display: block;
+  height: var(--height);
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  outline: none;
+  background: $border;
+  -webkit-tap-highlight-color: transparent;
+
+  &:focus {
+    outline: none;
+  }
+  // http://stackoverflow.com/questions/18794026/remove-dotted-outline-from-range-input-element-in-firefox
+  &::-moz-focus-outer {
+    border: none;
+  }
+
+  &,
+  &::-webkit-slider-runnable-track,
+  &::-webkit-slider-thumb {
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  @mixin thumb-base() {
+    border-radius: 50%;
+    height: calc(var(--height) * 2.33);
+    width: calc(var(--height) * 2.33);
+    background-color: #FFF;
+    border: calc(var(--height) / 2) solid $text;
+    box-shadow: 0 2px 3px rgba(17, 17, 17, 0.1);
+    transform: translateZ(0);
+    transition: (0.233s / 2) ease-in-out;
+    box-sizing: border-box;
+
+    &:hover {
+      transform: scale(1.25);
+    }
+  }
+  @mixin thumb-base-active {
+    cursor: grabbing;
+  }
+  @mixin track {
+    display: flex;
+    align-items: center;
+    height: var(--height);
+    border-radius: $radius;
+    --track-background: linear-gradient(to right, transparent var(--low), $text calc(0%), $text var(--high), transparent calc(0%)) no-repeat 0 100%;
+    background: var(--track-background);
+    transform: translateZ(0);
+    transition: (0.233s / 2);
+  }
+
+  &::-webkit-slider-thumb {
+    @include thumb-base();
+
+    &:active {
+      @include thumb-base-active();
+    }
+  }
+
+  &::-webkit-slider-runnable-track {
+    @include track();
+  }
+
+  &::-moz-range-thumb {
+    @include thumb-base();
+
+    &:active {
+      @include thumb-base-active();
+    }
+  }
+
+  &::-moz-range-progress:focus {
+    outline: 0;
+    border: 0;
+  }
+
+  &::-moz-range-track {
+    background: transparent;
+  }
+
+  &::-moz-range-progress {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: var(--height);
+    border-radius: $radius;
+    background-color: $text;
+  }
+
+  &::-ms-thumb {
+    @include thumb-base();
+
+    &:active {
+      @include thumb-base-active();
+    }
+  }
+
+  &::-ms-tooltip {
+    display: none;
+  }
+  // Colors
+  @each $name, $pair in $colors {
+    $color: nth($pair, 1);
+
+    &.is-#{$name} {
+      &::-webkit-slider-thumb {
+        border-color: $color;
+      }
+
+      &::-webkit-slider-runnable-track {
+        --track-background: linear-gradient(to right, transparent var(--low), $color calc(0%), $color var(--high), transparent calc(0%)) no-repeat 0 100%;
+        background: var(--track-background);
+      }
+      // http://www.quirksmode.org/blog/archives/2015/11/styling_and_scr.html
+      &::-moz-range-thumb {
+        border-color: $color;
+      }
+
+      &::-moz-range-progress {
+        background-color: $color;
+      }
+
+      &::-ms-thumb {
+        border-color: $color;
+      }
+
+      &::-ms-fill-lower {
+        background-color: $color;
+      }
+    }
+  }
+}

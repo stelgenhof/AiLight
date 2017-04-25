@@ -4,23 +4,22 @@
  * The OTA (Over The Air) module holds all the code to manage over the air
  * firmware updates.
  *
+ * This file is part of the Ai-Thinker RGBW Light Firmware.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+
  * Created by Sacha Telgenhof <stelgenhof at gmail dot com>
+ * (https://www.sachatelgenhof.nl)
  * Copyright (c) 2016 - 2017 Sacha Telgenhof
  */
-
-#include "ArduinoOTA.h"
-
-// ---------------------------
-// Core functions
-// ---------------------------
 
 /**
  * @brief Bootstrap function for the OTA UDP service
  */
 void setupOTA() {
   ArduinoOTA.setPort(OTA_PORT);
-  ArduinoOTA.setHostname(getDeviceID());
-  ArduinoOTA.setPassword(OTA_PASSWORD);
+  ArduinoOTA.setHostname(cfg.hostname);
+  ArduinoOTA.setPassword(ADMIN_PASSWORD);
 
   ArduinoOTA.onStart([]() { DEBUGLOG("[OTA] Start\n"); });
 

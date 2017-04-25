@@ -4,13 +4,14 @@
  * The WiFi module holds all the code to manage all functions for setting up the
  * WiFi connection.
  *
+ * This file is part of the Ai-Thinker RGBW Light Firmware.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+
  * Created by Sacha Telgenhof <stelgenhof at gmail dot com>
+ * (https://www.sachatelgenhof.nl)
  * Copyright (c) 2016 - 2017 Sacha Telgenhof
  */
-
-#include <ESP8266WiFi.h>
-#include <ESP8266mDNS.h>
-#include <WiFiUdp.h>
 
 // ---------------------------
 // Core functions
@@ -21,22 +22,36 @@
  */
 void setupWiFi() {
 
+  // Set WiFi hostname
+  if (strlen(cfg.hostname) == 0) {
+    strcpy(cfg.hostname, getDeviceID());
+    EEPROM_write(cfg);
+  }
+  WiFi.hostname(cfg.hostname);
+
   // Set WiFi module to STA mode and set Power Output
-  WiFi.mode(WIFI_STA);
-  WiFi.setOutputPower(WIFI_OUTPUT_POWER);
+  if (WiFi.getMode() != WIFI_STA) {
+    WiFi.mode(WIFI_STA);
+    WiFi.setOutputPower(WIFI_OUTPUT_POWER);
+  }
 
   // Connecting
-  WiFi.begin(WIFI_SSID, WIFI_PSK);
+  WiFi.disconnect();
+  WiFi.begin(cfg.wifi_ssid, cfg.wifi_psk);
+  MDNS.begin(cfg.hostname);
+  MDNS.addService("http", "tcp", 80);
 
-  DEBUGLOG("[WIFI] Connecting to %s\n", WIFI_SSID);
+  DEBUGLOG("[WIFI] Connecting to %s\n", cfg.wifi_ssid);
 
-  // Wait for connection
-  while (WiFi.waitForConnectResult() != WL_CONNECTED) {
+  // Check connection and switch to AP mode if no connection
+  if (WiFi.waitForConnectResult() != WL_CONNECTED) {
+    DEBUGLOG("[WIFI] Connection not established! Changing into AP mode...\n");
 
-    DEBUGLOG("[WIFI] Connection not established! Rebooting...");
+    // Go into software AP mode.
+    WiFi.mode(WIFI_AP);
+    delay(10);
 
-    delay(5000);
-    ESP.restart();
+    WiFi.softAP(cfg.hostname, ADMIN_PASSWORD);
   }
 }
 

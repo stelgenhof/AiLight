@@ -4,25 +4,16 @@
  * The Light module contains all the code to process incoming commands and set
  * the light attributes (RGBW, brightness, etc.) accordingly.
  *
+ * This file is part of the Ai-Thinker RGBW Light Firmware.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+
  * Created by Sacha Telgenhof <stelgenhof at gmail dot com>
- * Copyright (c) 2017 Sacha Telgenhof
+ * (https://www.sachatelgenhof.nl)
+ * Copyright (c) 2016 - 2017 Sacha Telgenhof
  */
 
-#include "AiLight.hpp"
-#include <ArduinoJson.h>
-
 static const int BUFFER_SIZE = JSON_OBJECT_SIZE(10);
-
-// JSON Key names as used in Home Assistant
-#define JSON_KEY_STATE "state"
-#define JSON_KEY_BRIGHTNESS "brightness"
-#define JSON_KEY_WHITE "white_value"
-#define JSON_KEY_COLORTEMP "color_temp"
-#define JSON_KEY_FLASH "flash"
-#define JSON_KEY_COLOR "color"
-#define JSON_KEY_COLOR_R "r"
-#define JSON_KEY_COLOR_G "g"
-#define JSON_KEY_COLOR_B "b"
 
 // Globals for flash
 bool flash = false;
@@ -48,19 +39,19 @@ void lightMQTTCallback(uint8_t type, const char *topic, const char *payload) {
 
   // Handling the event of connecting to the MQTT broker
   if (type == MQTT_EVENT_CONNECT) {
-    mqttSubscribe(MQTT_LIGHT_COMMAND_TOPIC);
+    mqttSubscribe(cfg.mqtt_command_topic);
   }
 
   // Handling the event of disconnecting from the MQTT broker
   if (type == MQTT_EVENT_DISCONNECT) {
-    mqttUnsubscribe(MQTT_LIGHT_COMMAND_TOPIC);
+    mqttUnsubscribe(cfg.mqtt_command_topic);
   }
 
   // Handling the event a message is received from the MQTT broker
   if (type == MQTT_EVENT_MESSAGE) {
 
     // Listen to this lights command topic
-    if (strcmp(topic, MQTT_LIGHT_COMMAND_TOPIC) == 0) {
+    if (strcmp(topic, cfg.mqtt_command_topic) == 0) {
 
       // Convert payload into char variable
       uint8_t length = strlen(payload);
@@ -72,6 +63,14 @@ void lightMQTTCallback(uint8_t type, const char *topic, const char *payload) {
         return;
       }
 
+      // Store light parameters for persistance
+      cfg.is_on = AiLight.getState();
+      cfg.brightness = AiLight.getBrightness();
+      cfg.color_temp = AiLight.getColorTemperature();
+      cfg.color = {AiLight.getColor().red, AiLight.getColor().green,
+                   AiLight.getColor().blue, AiLight.getColor().white};
+
+      EEPROM_write(cfg);
       sendState(); // Notify subscribers about new state
     }
   }
@@ -84,21 +83,21 @@ void sendState() {
   StaticJsonBuffer<BUFFER_SIZE> jsonBuffer;
   JsonObject &root = jsonBuffer.createObject();
 
-  root[JSON_KEY_STATE] =
-      AiLight.getState() ? MQTT_PAYLOAD_ON : MQTT_PAYLOAD_OFF;
-  root[JSON_KEY_BRIGHTNESS] = AiLight.getBrightness();
-  root[JSON_KEY_WHITE] = AiLight.getColor().white;
-  root[JSON_KEY_COLORTEMP] = AiLight.getColorTemperature();
+  root[KEY_STATE] = AiLight.getState() ? MQTT_PAYLOAD_ON : MQTT_PAYLOAD_OFF;
+  root[KEY_BRIGHTNESS] = AiLight.getBrightness();
+  root[KEY_WHITE] = AiLight.getColor().white;
+  root[KEY_COLORTEMP] = AiLight.getColorTemperature();
 
-  JsonObject &color = root.createNestedObject(JSON_KEY_COLOR);
-  color[JSON_KEY_COLOR_R] = AiLight.getColor().red;
-  color[JSON_KEY_COLOR_G] = AiLight.getColor().green;
-  color[JSON_KEY_COLOR_B] = AiLight.getColor().blue;
+  JsonObject &color = root.createNestedObject(KEY_COLOR);
+  color[KEY_COLOR_R] = AiLight.getColor().red;
+  color[KEY_COLOR_G] = AiLight.getColor().green;
+  color[KEY_COLOR_B] = AiLight.getColor().blue;
 
   char buffer[root.measureLength() + 1];
   root.printTo(buffer, sizeof(buffer));
 
-  mqttPublish(MQTT_LIGHT_STATE_TOPIC, buffer);
+  mqttPublish(cfg.mqtt_state_topic, buffer); // Notify all MQTT subscribers
+  ws.textAll(buffer);                        // Notify all WebSocket clients
 }
 
 /**
@@ -114,23 +113,21 @@ bool processJson(char *message) {
   }
 
   // Flash
-  if (root.containsKey(JSON_KEY_FLASH)) {
+  if (root.containsKey(KEY_FLASH)) {
 
     // Save current settings to be restored later
     currentColor = AiLight.getColor();
     currentBrightness = AiLight.getBrightness();
     currentState = AiLight.getState();
 
-    flashLength = (uint16_t)root[JSON_KEY_FLASH] * 1000U;
+    flashLength = (uint16_t)root[KEY_FLASH] * 1000U;
 
-    flashBrightness = (root.containsKey(JSON_KEY_BRIGHTNESS))
-                          ? root[JSON_KEY_BRIGHTNESS]
-                          : currentBrightness;
+    flashBrightness = (root.containsKey(KEY_BRIGHTNESS)) ? root[KEY_BRIGHTNESS]
+                                                         : currentBrightness;
 
-    if (root.containsKey(JSON_KEY_COLOR)) {
-      flashColor = {root[JSON_KEY_COLOR][JSON_KEY_COLOR_R],
-                    root[JSON_KEY_COLOR][JSON_KEY_COLOR_G],
-                    root[JSON_KEY_COLOR][JSON_KEY_COLOR_B]};
+    if (root.containsKey(KEY_COLOR)) {
+      flashColor = {root[KEY_COLOR][KEY_COLOR_R], root[KEY_COLOR][KEY_COLOR_G],
+                    root[KEY_COLOR][KEY_COLOR_B]};
     } else {
       flashColor = {currentColor.red, currentColor.green, currentColor.blue};
     }
@@ -145,28 +142,27 @@ bool processJson(char *message) {
     flash = false;
   }
 
-  if (root.containsKey(JSON_KEY_BRIGHTNESS)) {
-    AiLight.setBrightness(root[JSON_KEY_BRIGHTNESS]);
+  if (root.containsKey(KEY_BRIGHTNESS)) {
+    AiLight.setBrightness(root[KEY_BRIGHTNESS]);
   }
 
-  if (root.containsKey(JSON_KEY_COLOR)) {
-    AiLight.setColor(root[JSON_KEY_COLOR][JSON_KEY_COLOR_R],
-                     root[JSON_KEY_COLOR][JSON_KEY_COLOR_G],
-                     root[JSON_KEY_COLOR][JSON_KEY_COLOR_B]);
+  if (root.containsKey(KEY_COLOR)) {
+    AiLight.setColor(root[KEY_COLOR][KEY_COLOR_R], root[KEY_COLOR][KEY_COLOR_G],
+                     root[KEY_COLOR][KEY_COLOR_B]);
   }
 
-  if (root.containsKey(JSON_KEY_WHITE)) {
-    AiLight.setWhite(root[JSON_KEY_WHITE]);
+  if (root.containsKey(KEY_WHITE)) {
+    AiLight.setWhite(root[KEY_WHITE]);
   }
 
-  if (root.containsKey(JSON_KEY_COLORTEMP)) {
-    AiLight.setColorTemperature(root[JSON_KEY_COLORTEMP]);
+  if (root.containsKey(KEY_COLORTEMP)) {
+    AiLight.setColorTemperature(root[KEY_COLORTEMP]);
   }
 
-  if (root.containsKey(JSON_KEY_STATE)) {
-    if (strcmp(root[JSON_KEY_STATE], MQTT_PAYLOAD_ON) == 0) {
+  if (root.containsKey(KEY_STATE)) {
+    if (strcmp(root[KEY_STATE], MQTT_PAYLOAD_ON) == 0) {
       AiLight.setState(true);
-    } else if (strcmp(root[JSON_KEY_STATE], MQTT_PAYLOAD_OFF) == 0) {
+    } else if (strcmp(root[KEY_STATE], MQTT_PAYLOAD_OFF) == 0) {
       AiLight.setState(false);
     }
   }
@@ -177,7 +173,17 @@ bool processJson(char *message) {
 /**
  * @brief Bootstrap function for the RGBW light
  */
-void setupLight() { mqttRegister(lightMQTTCallback); }
+void setupLight() {
+  // Restore last used settings (Note: set colour temperature first as it
+  // changed the RGB channels!)
+  AiLight.setColorTemperature(cfg.color_temp);
+  AiLight.setColor(cfg.color.red, cfg.color.green, cfg.color.blue);
+  AiLight.setWhite(cfg.color.white);
+  AiLight.setBrightness(cfg.brightness);
+  AiLight.setState(cfg.is_on);
+
+  mqttRegister(lightMQTTCallback);
+}
 
 /**
  * @brief Process requests and keep on running...
