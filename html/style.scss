@@ -102,6 +102,13 @@ i {
     }
   }
 }
+.nav {
+  height:5rem;
+}
+.nav-item img {
+  max-height: 3.75rem;
+}
+
 // Switch Component
 .switch {
   --height: 22px;
