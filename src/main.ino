@@ -39,6 +39,7 @@ const char *getDeviceID() {
  */
 void loadFactoryDefaults() {
   // Light defaults
+  cfg.ic = INIT_HASH;
   cfg.is_on = LIGHT_STATE;
   cfg.brightness = LIGHT_BRIGHTNESS;
   cfg.color_temp = LIGHT_COLOR_TEMPERATURE;
@@ -68,6 +69,9 @@ void loadFactoryDefaults() {
  */
 void setup() {
   EEPROM.begin(SPI_FLASH_SEC_SIZE);
+  if (cfg.ic != INIT_HASH) {
+    loadFactoryDefaults();
+  }
   EEPROM_read(cfg);
 
 // Serial Port Initialization
@@ -75,7 +79,6 @@ void setup() {
   Serial.begin(115200);
   DEBUGLOG("\n");
   DEBUGLOG("\n");
-
   DEBUGLOG("Welcome to %s!\n", APP_NAME);
   DEBUGLOG("Firmware Version : %s\n", APP_VERSION);
   DEBUGLOG("Firmware Build   : %s - %s\n", __DATE__, __TIME__);
