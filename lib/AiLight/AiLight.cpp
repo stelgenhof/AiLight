@@ -1,13 +1,16 @@
-/*
-  AiLight Library
+/**
+ * AiLight Library
+ *
+ * AiLight is a simple library to control an AiLight that contains the MY9291 LED
+ * driver and encapsulates the MY9291 LED driver made by Xose Pérez
+ *
+ * This file is part of the Ai-Thinker RGBW Light Firmware.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
 
-  AiLight is a simple library to control an AiLight that contains the MY9291 LED
-  driver and encapsulates the MY9291 LED driver made by Xose Pérez
-
-  Copyright 2017 Sacha Telgenhof (stelgenhof@gmail.com). All rights reserved.
-
-  For the full copyright and license information, please view the LICENSE
-  file that was distributed with this source code.
+ * Created by Sacha Telgenhof <stelgenhof at gmail dot com>
+ * (https://www.sachatelgenhof.nl)
+ * Copyright (c) 2016 - 2017 Sacha Telgenhof
  */
 
 #include "AiLight.hpp"
