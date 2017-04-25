@@ -242,9 +242,6 @@ function wsConnect() {
   var host = window.location.hostname;
   var port = location.port;
 
-  var port = '';
-  var host = '192.168.1.9';
-
   if (websock) {
     websock.close();
   }
