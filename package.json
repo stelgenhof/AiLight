@@ -1,0 +1,39 @@
+{
+  "name": "AiLight",
+  "version": "0.2.0-alpha",
+  "description": "The Ai-Thinker RGBW Light Firmware is a custom firmware for the inexpensive WiFi RGB light bulbs that has the ESP8266 MCU at its core.",
+  "license": "MIT",
+  "keywords": ["AiLight", "firmware", "ESP8266", "Arduino", "LED", "RGBW", "Bulb"],
+  "author": {
+    "name": "Sacha Telgenhof",
+    "email": "stelgenhof@gmail.com",
+    "url": "https://www.sachatelgenhof"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stelgenhof/AiLight.git"
+  },
+  "bugs": {
+    "url": "https://github.com/stelgenhof/AiLight/issues"
+  },
+  "homepage": "https://github.com/stelgenhof/AiLight#readme",
+  "scripts": {
+    "dev": "lite-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "bulma": "^0.4.1",
+    "del": "^2.2.2",
+    "gulp": "^3.9.1",
+    "gulp-base64-favicon": "^1.0.2",
+    "gulp-clean-css": "^3.0.4",
+    "gulp-css-base64": "^1.3.4",
+    "gulp-gzip": "^1.4.0",
+    "gulp-htmlmin": "^3.0.0",
+    "gulp-inline": "^0.1.3",
+    "gulp-plumber": "^1.1.0",
+    "gulp-sass": "^3.1.0",
+    "gulp-uglify": "^2.1.2",
+    "lite-server": "^2.3.0"
+  }
+}
