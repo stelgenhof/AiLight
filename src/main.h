@@ -36,6 +36,7 @@ extern "C" {
 #include "html.gz.h"
 
 #define EEPROM_START_ADDRESS 0
+#define INIT_HASH 0x4B
 
 // Key names as used internally and in Home Assistant
 #define KEY_SETTINGS "s"
@@ -61,6 +62,7 @@ extern "C" {
 
 // Configuration structure that gets stored to the EEPROM
 struct config_t {
+  uint8_t ic;                 // Initialization check
   bool is_on;                 // Operational state (true == on)
   uint8_t brightness;         // Brightness level
   uint8_t color_temp;         // Colour temperature
