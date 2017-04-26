@@ -32,7 +32,7 @@ To build and upload this firmware you need to have [PlatformIO](http://platformi
 ## Installation/Configuration
 
 1. Clone this repository
-2. Rename the `config.example.h` file in the 'src' folder to `config.h`
+2. Make a copy of the `config.example.h` file in the 'src' folder named `config.h`
 3. Depending on your environment, set at least the following values in the `config.h` file:
 
   - WIFI_SSID `// Your WiFi SSID`
@@ -45,7 +45,7 @@ To build and upload this firmware you need to have [PlatformIO](http://platformi
 
   Other configuration variables can be left as is, however feel free to adjust as you see fit.
 
-4. Rename the `platformio.example.ini` file to `platformio.ini`. The PlatformIO configuration should unchanged, however it is recommended to change the OTA port number and OTA password when using your Ai-Thinker RGBW Light in production. (In that case don't forget to update the respective variables in your `config.h` file too).
+4. Make a copy of the `platformio.example.ini` file name `platformio.ini`. This PlatformIO configuration doesn't require any changes, however it is recommended to change the OTA port number and OTA password when using your Ai-Thinker RGBW Light in production. (In that case don't forget to update the respective variables in your `config.h` file too).
 
 5. Click on the "PlatformIO: Build" icon (or issue a "platformio run" command from the PlatformIO terminal).
 
