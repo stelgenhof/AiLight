@@ -21,6 +21,8 @@ void setupOTA() {
   ArduinoOTA.setHostname(cfg.hostname);
   ArduinoOTA.setPassword(ADMIN_PASSWORD);
 
+  DEBUGLOG("[OTA] Server running at %s:%u\n", ArduinoOTA.getHostname().c_str(), OTA_PORT);
+
   ArduinoOTA.onStart([]() { DEBUGLOG("[OTA] Start\n"); });
 
   ArduinoOTA.onEnd([]() { DEBUGLOG("\n[OTA] End\n"); });
