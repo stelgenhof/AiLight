@@ -69,10 +69,10 @@ void loadFactoryDefaults() {
  */
 void setup() {
   EEPROM.begin(SPI_FLASH_SEC_SIZE);
+  EEPROM_read(cfg);
   if (cfg.ic != INIT_HASH) {
     loadFactoryDefaults();
   }
-  EEPROM_read(cfg);
 
 // Serial Port Initialization
 #ifdef DEBUG
