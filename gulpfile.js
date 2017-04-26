@@ -88,7 +88,8 @@ gulp.task('html', ['clean', 'css'], function() {
           mangle: true
         });
       },
-      css: [cleancss]
+      css: [cleancss],
+      disabledTypes: ['svg']
     }))
     .pipe(htmlmin({
       collapseWhitespace: true,
