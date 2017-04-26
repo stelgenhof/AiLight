@@ -18,7 +18,7 @@
           <nav class="nav">
             <div class="nav-left">
               <a class="nav-item is-brand" href="#">
-                <img src="logo.svg" alt="Ai-Thinker RGBW Light">
+                <img src="logo.png" alt="Ai-Thinker RGBW Light">
               </a>
               <div class="nav-item">
                 <h2 class="title is-2">AiLight</h2>
@@ -74,7 +74,7 @@
 
       <!-- Start page -->
       <section id="page_start" class="has-text-centered">
-        <p>Control your <strong><span id="app_name"></span></strong> using the controls below</p>
+        <p>Control your <strong><span data-s="app_name"></span></strong> using the controls below</p>
 
         <table class="table">
           <tbody>
@@ -134,7 +134,7 @@
               <div class="field-body">
                 <div class="field">
                   <div class="control">
-                    <input class="input" type="text" minlength="1" maxlength="128" size="128" placeholder="Hostname" id="setting.hostname">
+                    <input class="input" type="text" minlength="1" maxlength="128" size="128" placeholder="Hostname" id="hostname">
                   </div>
                 </div>
               </div>
@@ -147,7 +147,7 @@
               <div class="field-body">
                 <div class="field">
                   <div class="control">
-                    <input class="input" type="text" maxlength="32" size="32" placeholder="WiFi SSID" id="setting.wifi_ssid">
+                    <input class="input" type="text" maxlength="32" size="32" placeholder="WiFi SSID" id="wifi_ssid">
                   </div>
                 </div>
               </div>
@@ -160,7 +160,7 @@
               <div class="field-body">
                 <div class="field">
                   <p class="control">
-                    <input class="input" type="password" minlength="8" maxlength="63" size="63" placeholder="WiFi PSK (Password)" id="setting.wifi_psk">
+                    <input class="input" type="password" minlength="8" maxlength="63" size="63" placeholder="WiFi PSK (Password)" id="wifi_psk">
                   </p>
                 </div>
               </div>
@@ -179,7 +179,7 @@
               <div class="field-body">
                 <div class="field">
                   <div class="control">
-                    <input class="input" type="text" minlength="1" maxlength="128" size="128" placeholder="MQTT Servername or IP Address" id="setting.mqtt_server">
+                    <input class="input" type="text" minlength="1" maxlength="128" size="128" placeholder="MQTT Servername or IP Address" id="mqtt_server">
                   </div>
                 </div>
               </div>
@@ -192,7 +192,7 @@
               <div class="field-body">
                 <div class="field">
                   <div class="control">
-                    <input class="input" inputmode="numeric" type="text" min="0" max="65535" minlength="1" maxlength="5" size="5" placeholder="MQTT Server Port (e.g. 1883)" id="setting.mqtt_port">
+                    <input class="input" inputmode="numeric" type="text" min="0" max="65535" minlength="1" maxlength="5" size="5" placeholder="MQTT Server Port (e.g. 1883)" id="mqtt_port">
                   </div>
                 </div>
               </div>
@@ -205,7 +205,7 @@
               <div class="field-body">
                 <div class="field">
                   <div class="control">
-                    <input class="input" type="text" maxlength="64" size="64" placeholder="Username used for connecting to the MQTT Server" id="setting.mqtt_user">
+                    <input class="input" type="text" maxlength="64" size="64" placeholder="Username used for connecting to the MQTT Server" id="mqtt_user">
                   </div>
                 </div>
               </div>
@@ -218,7 +218,7 @@
               <div class="field-body">
                 <div class="field">
                   <div class="control">
-                    <input class="input" type="password" type="text" maxlength="64" size="10" placeholder="Password used for connecting to the MQTT Server" id="setting.mqtt_password">
+                    <input class="input" type="password" type="text" maxlength="64" size="10" placeholder="Password used for connecting to the MQTT Server" id="mqtt_password">
                   </div>
                 </div>
               </div>
@@ -234,7 +234,7 @@
               <div class="field-body">
                 <div class="field">
                   <div class="control">
-                    <input class="input" type="text" maxlength="128" size="128" placeholder="MQTT Topic for publishing the state of this AiLight" id="setting.mqtt_state_topic">
+                    <input class="input" type="text" maxlength="128" size="128" placeholder="MQTT Topic for publishing the state of this AiLight" id="mqtt_state_topic">
                   </div>
                 </div>
               </div>
@@ -247,7 +247,7 @@
               <div class="field-body">
                 <div class="field">
                   <div class="control">
-                    <input class="input" type="text" maxlength="128" size="128" placeholder="MQTT Topic for receiving commands for this AiLight" id="setting.mqtt_command_topic">
+                    <input class="input" type="text" maxlength="128" size="128" placeholder="MQTT Topic for receiving commands for this AiLight" id="mqtt_command_topic">
                   </div>
                 </div>
               </div>

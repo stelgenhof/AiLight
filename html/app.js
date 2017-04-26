@@ -193,8 +193,6 @@ function processData(data) {
     if (key == 's') {
       // Bind data to DOM
       for (var s in data[key]) {
-        var id = 'setting.' + s;
-
         // Bind to span elements
         var a = document.getElementById("pagescontent").querySelectorAll("span[data-s='" + s + "']");
         [].forEach.call(a, function(item) {
@@ -202,8 +200,8 @@ function processData(data) {
         });
 
         // Bind to specific DOM elements
-        if (document.getElementById(id) !== null) {
-          document.getElementById(id).value = data[key][s];
+        if (document.getElementById(s) !== null) {
+          document.getElementById(s).value = data[key][s];
         }
       }
     }
@@ -318,7 +316,7 @@ function reset() {
  * @return void
  */
 function togglePassword() {
-  var ie = document.getElementById('setting.' + this.dataset.input);
+  var ie = document.getElementById(this.dataset.input);
   ie.type = (ie.type == "text") ? "password" : "text";
 }
 
