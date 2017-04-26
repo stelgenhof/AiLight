@@ -33,15 +33,14 @@ void setupWiFi() {
   if (WiFi.getMode() != WIFI_STA) {
     WiFi.mode(WIFI_STA);
     WiFi.setOutputPower(WIFI_OUTPUT_POWER);
+    delay(10);
   }
 
   // Connecting
   WiFi.disconnect();
   DEBUGLOG("[WIFI] Connecting to %s\n", cfg.wifi_ssid);
   WiFi.begin(cfg.wifi_ssid, cfg.wifi_psk);
-  if (MDNS.begin(WiFi.getMode() == WIFI_AP ? HOSTNAME : cfg.hostname)) {
-    MDNS.addService("http", "tcp", 80);
-  }
+  MDNS.addService("http", "tcp", 80);
 
   // Check connection and switch to AP mode if no connection
   if (WiFi.waitForConnectResult() != WL_CONNECTED) {
