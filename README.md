@@ -2,7 +2,7 @@
 
 AiLight is a custom firmware for the inexpensive Ai-Thinker RGBW WiFi RGB light bulbs that has the ESP8266 MCU at its core. Xose Pérez has written an excellent [article](http://tinkerman.cat/ailight-hackable-rgbw-light-bulb/) on his blog how you can upload your own firmware to this light.
 
-![AiLight](https://www.sachatelgenhof.nl/user/pages/02.blog/ailight/screen1.png)
+![AiLight](https://www.sachatelgenhof.nl/user/pages/02.blog/ailight/screen1_m.png)
 
 ## Features
 
@@ -58,8 +58,9 @@ If no compilation errors popped up, you can start flashing the firmware to your 
 
 If the upload of he AiLight firmware was successful, it is recommended to restart your Ai-Thinker RGBW Light. This can be done by reconnecting the power of your FTDI programmer.
 
-
 While connected to your FTDI programmer, check the output on your Serial Monitor. You should see some messages appear that will tell you details of the firmware, the light, hostname and the assigned IP address. Update the `upload_port` variable in your platformio.ini file with the 'hostname' value from the Serial Monitor.
+
+![AiLight](https://www.sachatelgenhof.nl/user/pages/02.blog/ailight/terminal.png)
 
 Once uploaded, you can start using OTA to upload any updates of the firmware over the air.
 
