@@ -1,8 +1,6 @@
-# Ai-Thinker RGBW Light Firmware (Home Assistant)
+# AiLight
 
-The Ai-Thinker RGBW Light Firmware is a custom firmware for the inexpensive WiFi RGB light bulbs that has the ESP8266 MCU at its core. Xose Pérez has written an excellent [article](http://tinkerman.cat/ailight-hackable-rgbw-light-bulb/) on his blog how you can upload your own firmware to this light.
-
-This firmware is designed to operate with [Home Assistant](https://home-assistant.io) using the [MQTT](http://mqtt.org) protocol.
+AiLight is a custom firmware for the inexpensive Ai-Thinker RGBW WiFi RGB light bulbs that has the ESP8266 MCU at its core. Xose Pérez has written an excellent [article](http://tinkerman.cat/ailight-hackable-rgbw-light-bulb/) on his blog how you can upload your own firmware to this light.
 
 ## Features
 
@@ -23,7 +21,7 @@ This Ai-Thinker RGBW Light Firmware currently allows you to:
 
 Making this firmware was largely inspired by the [MY9291](https://github.com/xoseperez/my9291) LED driver and the [Espurna](https://bitbucket.org/xoseperez/espurna) firmware of [Xose Pérez](https://github.com/xoseperez).
 
-The Ai-Thinker RGBW Light Firmware provides you basic functionality to control your The Ai-Thinker RGBW Light with Home Assistant. If you need more advanced features, the [Espurna](https://bitbucket.org/xoseperez/espurna) firmware is an excellent alternative. Also [Samuel Mertenat](https://github.com/mertenats) has created similar [firmware](https://github.com/mertenats/AI-Thinker_RGBW_Bulb) that provides another alternative.
+The Ai-Thinker RGBW Light Firmware provides some basic functions to control your The Ai-Thinker RGBW Light with Home Assistant and by using the embedded UI.
 
 ## Requirements
 
