@@ -177,7 +177,7 @@ function processData(data) {
 
     // Process Device information
     if (key == 'd') {
-      document.title = data[key]['app_name']; // Set document title
+      document.title = data['d']['app_name'];
 
       // Bind data to DOM
       for (var dev in data[key]) {
@@ -191,6 +191,8 @@ function processData(data) {
 
     // Process settings
     if (key == 's') {
+      document.title += ' - ' + data[key]['hostname'];
+
       // Bind data to DOM
       for (var s in data[key]) {
         // Bind to span elements
@@ -263,6 +265,7 @@ function wsConnect() {
   websock.onmessage = function(event) {
     var data = getJSON(event.data);
     if (data) {
+      console.log(data);
       processData(data);
     }
   }
