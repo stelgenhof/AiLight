@@ -82,7 +82,7 @@ Light:
 
     light:
       platform: mqtt_json
-      name: 'Ai RGBW Light'
+      name: 'AiLight Office'
       state_topic: '<YOUR_MQTT_STATE_TOPIC>'
       command_topic: '<YOUR_MQTT_COMMAND_TOPIC>'
       color_temp: true
@@ -99,9 +99,11 @@ Lastly, add your Ai-Thinker RGBW Light in a Home Assistant view. For example lik
       lights:
         name: Lights
         entities:
-          - light.Ai_RGBW_Light
+          - light.ailight_office
 
 Restart Home Assistant to load the new configuration. If everything goes according to plan, you should see the light appear in your Home Assistant.
+
+![Home Assistant](http://sacha/user/pages/02.blog/ailight/hass.png)
 
 ### Environments
 
