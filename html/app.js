@@ -232,7 +232,7 @@ function processData(data) {
 }
 
 /**
- * WebSocket client iniitalization and event processing
+ * WebSocket client initialization and event processing
  *
  * @return void
  */
