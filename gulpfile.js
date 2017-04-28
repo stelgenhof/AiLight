@@ -81,7 +81,7 @@ gulp.task('css', ['sass'], function() {
 // Process HTML files
 gulp.task('html', ['clean', 'css'], function() {
   return gulp.src(targetFolder + '*.html')
-    //.pipe(favicon())
+    .pipe(favicon())
     .pipe(inline({
       js: function() {
         return uglify({
