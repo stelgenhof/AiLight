@@ -10,7 +10,7 @@
  * Copyright (c) 2016 - 2017 Sacha Telgenhof
  */
 
-#define APP_NAME "Ai-Thinker RGBW Light"
+#define APP_NAME "AiLight"
 #define APP_VERSION "0.2.0-alpha"
 #define APP_AUTHOR "stelgenhof@gmail.com"
 

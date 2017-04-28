@@ -47,6 +47,7 @@ void wsStart(uint8_t id) {
   device["free_heap"] = ESP.getFreeHeap();
   device["cpu_frequency"] = ESP.getCpuFreqMHz();
   device["manufacturer"] = "Ai-Thinker";
+  device["model"] = "RGBW Light";
   device["device_ip"] = (WiFi.getMode() == WIFI_AP) ? WiFi.softAPIP().toString()
                                                     : WiFi.localIP().toString();
   device["mac"] = WiFi.macAddress();
