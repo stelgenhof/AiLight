@@ -28,11 +28,11 @@ Making this firmware was largely inspired by the [MY9291](https://github.com/xos
 
 ## Requirements
 
-To build and upload this firmware you need to have [PlatformIO](http://platformio.org/) installed.
+To build and upload this firmware you need to have [PlatformIO](http://platformio.org/) and NodeJS installed.
 
 ## Installation/Configuration
 
-1. Clone this AiLight repository
+1. Clone this AiLight repository and change your current directory to where AiLight is cloned.
 2. Make a copy of the `config.example.h` file in the 'src' folder named `config.h`
 3. Depending on your environment, set at least the following values in the `config.h` file:
 
@@ -48,7 +48,7 @@ To build and upload this firmware you need to have [PlatformIO](http://platformi
 
 4. Make a copy of the `platformio.example.ini` file name `platformio.ini`. This PlatformIO configuration doesn't require any changes, however it is recommended to change the OTA port number and OTA password when using your Ai-Thinker RGBW Light in production. (In that case don't forget to update the respective variables in your `config.h` file too).
 
-5. In a terminal session (or in PlatformIO), run the command `npm install` (or `yarn install`). This is a required step that will install necessary NodeJS modules for building the UI interface.
+5. In a terminal session (or in PlatformIO), run the command `npm install` (or `yarn install`). This is a required step that will install necessary NodeJS packages for building the UI interface. Make sure you do this in the directory where you cloned AiLight (e.g 'AiLight'), otherwise the NodeJS packages will not get installed.
 
 6. Click on the "PlatformIO: Build" icon (or issue a "platformio run" command from the PlatformIO terminal).
 
