@@ -18,13 +18,11 @@
 #define MQTT_EVENT_DISCONNECT 1
 #define MQTT_EVENT_MESSAGE 2
 
-WiFiClient client;
-PubSubClient mqtt(client);
-boolean _mqtt_connected = false;
+AsyncMqttClient mqtt;
 std::vector<void (*)(uint8_t, const char *, const char *)> _mqtt_callbacks;
 
 // ---------------------------
-// API functions
+// 'External' functions
 // ---------------------------
 
 /**
@@ -40,7 +38,7 @@ void mqttPublish(const char *topic, const char *message) {
   }
 
   if ((strlen(topic) > 0) && (strlen(message) > 0)) {
-    mqtt.publish(topic, message, MQTT_RETAIN);
+    mqtt.publish(topic, MQTT_QOS_LEVEL, MQTT_RETAIN, message);
 
     DEBUGLOG("[MQTT] Published message to '%s'\n", topic);
   }
@@ -97,9 +95,9 @@ void mqttRegister(void (*callback)(uint8_t, const char *, const char *)) {
 // ---------------------------
 
 /**
- * @brief Event handler for when a connection to the MQTT has been establised.
+ * @brief Event handler for when a connection to the MQTT has been established.
  */
-void _mqttOnConnect() {
+void onMQTTConnect() {
   DEBUGLOG("[MQTT] Connected\n");
 
   // Notify subscribers (connected)
@@ -112,7 +110,7 @@ void _mqttOnConnect() {
  * @brief Event handler for when the connection to the MQTT broker has been
  * disconnected.
  */
-void _mqttOnDisconnect() {
+void onMQTTDisconnect() {
   DEBUGLOG("[MQTT] Disconnected\n");
 
   // Notify subscribers (disconnected)
@@ -126,9 +124,9 @@ void _mqttOnDisconnect() {
  *
  * @param topic the MQTT topic to which the message has been published
  * @param payload the contents/message that has been published
- * @param length the length of the published message
+ * @param length size of the published message
  */
-void _mqttOnMessage(char *topic, char *payload, uint8_t length) {
+void onMQTTMessage(char *topic, char *payload, uint16_t length) {
   // Don't do anything if we are not connected to the MQTT broker
   if (!mqtt.connected()) {
     return;
@@ -150,8 +148,7 @@ void _mqttOnMessage(char *topic, char *payload, uint8_t length) {
 /**
  * @brief Handles the connection to the MQTT broker.
  */
-void _mqttConnect() {
-  bool response = false;
+void mqttConnect() {
 
   // Try to make a connection to the MQTT broker
   if (!mqtt.connected()) {
@@ -160,23 +157,17 @@ void _mqttConnect() {
              cfg.mqtt_port);
 
     mqtt.setServer(cfg.mqtt_server, cfg.mqtt_port);
+    mqtt.setKeepAlive(MQTT_KEEPALIVE);
+    mqtt.setCleanSession(false);
+    mqtt.setClientId(cfg.hostname);
 
     if ((strlen(cfg.mqtt_user) > 0) && (strlen(cfg.mqtt_password) > 0)) {
       DEBUGLOG(" as user '%s'\n", cfg.mqtt_user);
-      response = mqtt.connect(cfg.hostname, cfg.mqtt_user, cfg.mqtt_password);
-    } else {
-      DEBUGLOG("\n");
-      response = mqtt.connect(cfg.hostname);
+      mqtt.setCredentials(cfg.mqtt_user, cfg.mqtt_password);
     }
   }
 
-  if (response) {
-    _mqttOnConnect();
-    _mqtt_connected = true;
-  } else {
-
-    DEBUGLOG("[MQTT] Connection failed (rc=%d)\n", mqtt.state());
-  }
+  mqtt.connect();
 }
 
 // ---------------------------
@@ -187,35 +178,31 @@ void _mqttConnect() {
  * @brief Bootstrap function for the MQTT connection
  */
 void setupMQTT() {
-  mqtt.setCallback([](char *topic, byte *payload, uint8_t length) {
-    _mqttOnMessage(topic, (char *)payload, length);
-  });
+  mqtt.onConnect([](bool sessionPresent) { onMQTTConnect(); });
 
-  _mqttConnect(); // Make connection
+  mqtt.onDisconnect(
+      [](AsyncMqttClientDisconnectReason reason) { onMQTTDisconnect(); });
+
+  mqtt.onMessage([](char *topic, char *payload,
+                    AsyncMqttClientMessageProperties properties, size_t len,
+                    size_t index,
+                    size_t total) { onMQTTMessage(topic, payload, len); });
 }
 
 /**
- * @brief Listen to MQTT requests (pub/sub)
+ * @brief Try to reconnect if connection to MQTT broker is lost
  */
 void loopMQTT() {
   if (WiFi.status() == WL_CONNECTED) {
     if (!mqtt.connected()) {
-      if (_mqtt_connected) {
-        _mqttOnDisconnect();
-        _mqtt_connected = false;
-      }
 
       // Wait 10 seconds before trying to connect again
       unsigned long currPeriod = millis() / MQTT_RECONNECT_TIME;
       static unsigned long lastPeriod = 0;
       if (currPeriod != lastPeriod) {
         lastPeriod = currPeriod;
-        _mqttConnect();
+        mqttConnect();
       }
-    }
-
-    if (mqtt.connected()) {
-      mqtt.loop();
     }
   }
 }

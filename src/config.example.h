@@ -59,6 +59,7 @@
 #define MQTT_RECONNECT_TIME 10000
 #define MQTT_QOS_LEVEL 0
 #define MQTT_RETAIN false
+#define MQTT_KEEPALIVE 30
 
 #define MQTT_PAYLOAD_ON "ON"
 #define MQTT_PAYLOAD_OFF "OFF"
