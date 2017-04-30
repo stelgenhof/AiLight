@@ -6,8 +6,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## [Unreleased]
 
 ### Added
+- favico added to HTML UI
+- Added model name to distinguish nameing between AiLight and Ai-Thinker light bulb manufacturer/model name.
 
 ### Changed
+- Migrated to AsyncMQTTClient library (replacing PubSubClient Library) * Please be aware of changes to the platformio.ini and config.h files!
+- Build.py script now uses locally installed Gulp binary instead of global one
+- HTML UI title includes now the device name so it's easier to identify which light you are looking at
 
 ### Fixed
 
