@@ -28,7 +28,7 @@ Making this firmware was largely inspired by the [MY9291](https://github.com/xos
 
 ## Requirements
 
-To build and upload this firmware you need to have [PlatformIO](http://platformio.org/) and NodeJS installed.
+To build and upload this firmware you need to have [PlatformIO](http://platformio.org/) and [NodeJS](https://nodejs.org/en/) installed. Please check their respective websites for installation instructions.
 
 ## Installation/Configuration
 
