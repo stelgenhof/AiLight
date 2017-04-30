@@ -13,6 +13,6 @@
 Import("env")
 
 def before_build(source, target, env):
-    env.Execute("gulp")
+    env.Execute("./node_modules/.bin/gulp")
 
 env.AddPreAction("$BUILD_DIR/src/main.ino.o", before_build)
