@@ -19,13 +19,13 @@
 #include "AiLight.hpp"
 #include "ArduinoOTA.h"
 #include <ArduinoJson.h>
+#include <AsyncMqttClient.h>
 #include <EEPROM.h>
 #include <ESP8266WiFi.h>
 #include <ESP8266mDNS.h>
 #include <ESPAsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include <Hash.h>
-#include <PubSubClient.h>
 #include <WiFiUdp.h>
 #include <vector>
 
