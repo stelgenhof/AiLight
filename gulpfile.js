@@ -59,7 +59,9 @@ gulp.task('build', ['html'], function() {
   ws.write('\n};')
   ws.end();
 
+  // Remove intermediate files
   fs.unlinkSync(source);
+  fs.unlinkSync(targetFolder + 'style.css');
 });
 
 // Convert the SCSS to CSS
