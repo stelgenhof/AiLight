@@ -13,7 +13,8 @@ AiLight allows you to:
 - set the brightness level
 - set the light at a particular colour temperature
 - let the light flash (with a given colour and brightness)
-- keep the last known settings (colour, brightness, etc.) after a power cycle.
+- keep the last known settings (colour, brightness, etc.) after a power cycle
+- enable Gamma Correction to make the LED colours appear closer to what our eyes perceive
 
 This can all be done in [Home Assistant](https://home-assistant.io) (using the MQTT integration) or the built in (mobile friendly) UI. The UI interface also gives you the ability to configure the light remotely. You can easily change your WiFi settings or the configuration of your MQTT broker.
 
@@ -58,11 +59,13 @@ If no compilation errors popped up, you can start flashing the firmware to your 
 
 If the upload of he AiLight firmware was successful, it is recommended to restart your Ai-Thinker RGBW Light. This can be done by reconnecting the power of your FTDI programmer.
 
-While connected to your FTDI programmer, check the output on your Serial Monitor. You should see some messages appear that will tell you details of the firmware, the light, hostname and the assigned IP address. Update the `upload_port` variable in your platformio.ini file with the 'hostname' value from the Serial Monitor.
+While connected to your FTDI programmer, check the output on your Serial Monitor. You should see some messages appear that will tell you details of the firmware, the light, hostname and the assigned IP address. 
 
 ![AiLight](https://www.sachatelgenhof.nl/user/pages/02.blog/ailight/terminal.png)
 
-Once uploaded, you can start using OTA to upload any updates of the firmware over the air.
+The same information can be seen in the HTML UI (About screen). By default the Web interface can be accessed via 'http://AiLight-######.local' where '#####' is the unique ID of your Ai-Thinker RGBW Light. If you have changed your hostname, then of course the URL is different also.
+
+From this point, you can upload newer versions of the firmware via OTA. Update the `upload_port` variable in your platformio.ini file with the 'hostname' value from the Serial Monitor / HTML UI. Now you can start using OTA to upload any updates of the firmware over the air.
 
 
 ### Home Assistant / MQTT
