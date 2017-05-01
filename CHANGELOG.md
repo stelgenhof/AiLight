@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## [Unreleased]
 
 ### Added
+- Gamma Correction: makes the colours of the LED light to appear closer to what our eyes perceive. This allows for better colour representations.
 - favico added to HTML UI
 - Added model name to distinguish nameing between AiLight and Ai-Thinker light bulb manufacturer/model name.
 
