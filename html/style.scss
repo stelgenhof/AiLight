@@ -9,7 +9,6 @@
  * (https://www.sachatelgenhof.nl)
  * Copyright (c) 2016 - 2017 Sacha Telgenhof
  */
-
 @import './node_modules/bulma/bulma';
 @font-face {
   font-family: 'ailight';
@@ -33,10 +32,11 @@ i {
 }
 
 .icon-eye:before {
-    content: "\e900";
-    color: $grey-lighter;
-    vertical-align: -webkit-baseline-middle;
+  content: "\e900";
+  color: $grey-lighter;
+  vertical-align: -webkit-baseline-middle;
 }
+
 .icon-arrow-loop:before {
   content: "\e901";
 }
@@ -46,8 +46,8 @@ i {
 }
 
 .footer {
-    padding: 2rem 1.5rem 2rem;
-    margin-top: 3rem;
+  padding: 2rem 1.5rem;
+  margin-top: 3rem;
 }
 
 #menu {
@@ -102,13 +102,14 @@ i {
     }
   }
 }
+
 .nav {
-  height:5rem;
+  height: 5rem;
 }
+
 .nav-item img {
   max-height: 3.75rem;
 }
-
 // Switch Component
 .switch {
   --height: 22px;
