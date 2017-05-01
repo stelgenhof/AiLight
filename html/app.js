@@ -274,7 +274,6 @@ function wsConnect() {
   websock.onmessage = function(event) {
     var data = getJSON(event.data);
     if (data) {
-      console.log(data);
       processData(data);
     }
   }
