@@ -19,6 +19,7 @@ const K_R = "r";
 const K_G = "g";
 const K_B = "b";
 const K_W = "white_value";
+const K_GM = "gamma";
 
 const S_ON = 'ON';
 const S_OFF = 'OFF';
@@ -53,9 +54,14 @@ function Switch(id) {
     this.state = !this.state;
     this.setState(this.state);
 
-    websock.send(JSON.stringify({
-      'state': (this.state) ? S_ON : S_OFF
-    }))
+    var state = {};
+    var value = this.state;
+    if (this.id === 'state') {
+      value = (this.state) ? S_ON : S_OFF;
+    }
+    state[this.id] = value;
+
+    websock.send(JSON.stringify(state));
   }
 
   this.init = function() {
@@ -122,8 +128,6 @@ function Slider(id) {
 }).call(Slider.prototype);
 
 var websock;
-
-var state = false;
 var stSwitch = new Switch(K_S);
 var brSlider = new Slider(K_BR);
 var ctSlider = new Slider(K_CT);
@@ -131,6 +135,7 @@ var rSlider = new Slider(K_R);
 var gSlider = new Slider(K_G);
 var bSlider = new Slider(K_B);
 var wSlider = new Slider(K_W);
+var gmSwitch = new Switch(K_GM);
 
 /**
  * Sends the RGB triplet state to the connected WebSocket clients
@@ -229,6 +234,10 @@ function processData(data) {
 
     if (key == K_W) {
       wSlider.setValue(data[key]);
+    }
+
+    if (key == K_GM) {
+      gmSwitch.setState(data[key]);
     }
   }
 }

@@ -11,7 +11,7 @@
  */
 
 #define APP_NAME "AiLight"
-#define APP_VERSION "0.2.0-alpha"
+#define APP_VERSION "0.3.0"
 #define APP_AUTHOR "stelgenhof@gmail.com"
 
 #include "config.h"
@@ -51,6 +51,7 @@ extern "C" {
 #define KEY_COLOR_G "g"
 #define KEY_COLOR_B "b"
 #define KEY_HOSTNAME "hostname"
+#define KEY_GAMMA_CORRECTION "gamma"
 #define KEY_WIFI_SSID "wifi_ssid"
 #define KEY_WIFI_PSK "wifi_psk"
 #define KEY_MQTT_SERVER "mqtt_server"
@@ -76,6 +77,7 @@ struct config_t {
   char mqtt_password[64];     // Password used for connecting to the MQTT Broker
   char mqtt_state_topic[128]; // MQTT Topic for publishing the state
   char mqtt_command_topic[128]; // MQTT Topic for receiving commands
+  bool gamma;                   // Gamma Correction enabled or not
 } cfg;
 
 #define SerialPrint(format, ...)                                               \

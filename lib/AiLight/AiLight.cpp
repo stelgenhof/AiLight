@@ -1,8 +1,8 @@
 /**
  * AiLight Library
  *
- * AiLight is a simple library to control an AiLight that contains the MY9291 LED
- * driver and encapsulates the MY9291 LED driver made by Xose Pérez
+ * AiLight is a simple library to control an AiLight that contains the MY9291
+ * LED driver and encapsulates the MY9291 LED driver made by Xose Pérez
  *
  * This file is part of the Ai-Thinker RGBW Light Firmware.
  * For the full copyright and license information, please view the LICENSE
@@ -98,11 +98,25 @@ void AiLightClass::setColorTemperature(uint16_t temperature) {
   setRGBW();
 }
 
+bool AiLightClass::hasGammaCorrection(void) { return _gammacorrection; }
+
+void AiLightClass::useGammaCorrection(bool gamma) {
+  _gammacorrection = gamma;
+  setRGBW();
+}
+
 void AiLightClass::setRGBW() {
+  uint8_t red =
+      (_gammacorrection) ? pgm_read_byte(&gamma8[_color.red]) : _color.red;
+  uint8_t green =
+      (_gammacorrection) ? pgm_read_byte(&gamma8[_color.green]) : _color.green;
+  uint8_t blue =
+      (_gammacorrection) ? pgm_read_byte(&gamma8[_color.blue]) : _color.blue;
+
   _my9291->setColor((my9291_color_t){
-      (uint32_t)map(_color.red, 0, MY9291_LEVEL_MAX, 0, _brightness),
-      (uint32_t)map(_color.green, 0, MY9291_LEVEL_MAX, 0, _brightness),
-      (uint32_t)map(_color.blue, 0, MY9291_LEVEL_MAX, 0, _brightness),
+      (uint32_t)map(red, 0, MY9291_LEVEL_MAX, 0, _brightness),
+      (uint32_t)map(green, 0, MY9291_LEVEL_MAX, 0, _brightness),
+      (uint32_t)map(blue, 0, MY9291_LEVEL_MAX, 0, _brightness),
       (uint32_t)map(_color.white, 0, MY9291_LEVEL_MAX, 0, _brightness)});
 }
 

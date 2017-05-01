@@ -37,6 +37,8 @@ void wsStart(uint8_t id) {
   color[KEY_COLOR_G] = AiLight.getColor().green;
   color[KEY_COLOR_B] = AiLight.getColor().blue;
 
+  root[KEY_GAMMA_CORRECTION] = AiLight.hasGammaCorrection();
+
   // Device settings/state
   JsonObject &device = root.createNestedObject("d");
   device["app_name"] = APP_NAME;
@@ -74,6 +76,8 @@ void wsProcessMessage(uint8_t num, char *payload, size_t length) {
   JsonObject &root = jsonBuffer.parseObject(payload);
   bool settings_changed = false;
   bool needRestart = false;
+
+  root.printTo(Serial);
 
   if (!root.success()) {
     DEBUGLOG("[WEBSOCKET] Error parsing data\n");
@@ -217,12 +221,18 @@ void wsProcessMessage(uint8_t num, char *payload, size_t length) {
     AiLight.setState(state);
   }
 
+  if (root.containsKey(KEY_GAMMA_CORRECTION)) {
+    bool gamma = root[KEY_GAMMA_CORRECTION];
+    AiLight.useGammaCorrection(gamma);
+  }
+
   // Store light parameters for persistance
   cfg.is_on = AiLight.getState();
   cfg.brightness = AiLight.getBrightness();
   cfg.color_temp = AiLight.getColorTemperature();
   cfg.color = {AiLight.getColor().red, AiLight.getColor().green,
                AiLight.getColor().blue, AiLight.getColor().white};
+  cfg.gamma = AiLight.hasGammaCorrection();
   EEPROM_write(cfg);
 
   if (needRestart) {

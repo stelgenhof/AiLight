@@ -93,6 +93,8 @@ void sendState() {
   color[KEY_COLOR_G] = AiLight.getColor().green;
   color[KEY_COLOR_B] = AiLight.getColor().blue;
 
+  root[KEY_GAMMA_CORRECTION] = AiLight.hasGammaCorrection();
+
   char buffer[root.measureLength() + 1];
   root.printTo(buffer, sizeof(buffer));
 

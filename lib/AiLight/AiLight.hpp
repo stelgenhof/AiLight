@@ -1,8 +1,8 @@
 /**
  * AiLight Library
  *
- * AiLight is a simple library to control an AiLight that contains the MY9291 LED
- * driver and encapsulates the MY9291 LED driver made by Xose Pérez
+ * AiLight is a simple library to control an AiLight that contains the MY9291
+ * LED driver and encapsulates the MY9291 LED driver made by Xose Pérez
  *
  * This file is part of the Ai-Thinker RGBW Light Firmware.
  * For the full copyright and license information, please view the LICENSE
@@ -12,7 +12,7 @@
  * (https://www.sachatelgenhof.nl)
  * Copyright (c) 2016 - 2017 Sacha Telgenhof
  */
- 
+
 #ifndef AiLight_h
 #define AiLight_h
 
@@ -33,6 +33,29 @@ struct Color {
   uint8_t blue;
   uint8_t white;
 };
+
+// This table remaps linear input values to nonlinear gamma-corrected output
+// values. The output values are specified for 8-bit colours with a gamma
+// correction factor of 2.8
+const static uint8_t PROGMEM gamma8[256] = {
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,
+    1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2,
+    2,   2,   2,   2,   3,   3,   3,   3,   3,   3,   3,   4,   4,   4,   4,
+    4,   5,   5,   5,   5,   6,   6,   6,   6,   7,   7,   7,   7,   8,   8,
+    8,   9,   9,   9,   10,  10,  10,  11,  11,  11,  12,  12,  13,  13,  13,
+    14,  14,  15,  15,  16,  16,  17,  17,  18,  18,  19,  19,  20,  20,  21,
+    21,  22,  22,  23,  24,  24,  25,  25,  26,  27,  27,  28,  29,  29,  30,
+    31,  32,  32,  33,  34,  35,  35,  36,  37,  38,  39,  39,  40,  41,  42,
+    43,  44,  45,  46,  47,  48,  49,  50,  50,  51,  52,  54,  55,  56,  57,
+    58,  59,  60,  61,  62,  63,  64,  66,  67,  68,  69,  70,  72,  73,  74,
+    75,  77,  78,  79,  81,  82,  83,  85,  86,  87,  89,  90,  92,  93,  95,
+    96,  98,  99,  101, 102, 104, 105, 107, 109, 110, 112, 114, 115, 117, 119,
+    120, 122, 124, 126, 127, 129, 131, 133, 135, 137, 138, 140, 142, 144, 146,
+    148, 150, 152, 154, 156, 158, 160, 162, 164, 167, 169, 171, 173, 175, 177,
+    180, 182, 184, 186, 189, 191, 193, 196, 198, 200, 203, 205, 208, 210, 213,
+    215, 218, 220, 223, 225, 228, 231, 233, 236, 239, 241, 244, 247, 249, 252,
+    255};
 
 class AiLightClass {
 public:
@@ -137,6 +160,32 @@ public:
    */
   void setColorTemperature(uint16_t temperature);
 
+  /**
+   * @brief Returns whether Gamma Correction is enabled or disabled
+   *
+   * @return the current status whether Gamma Correction is enabled or disabled
+   */
+  bool hasGammaCorrection(void);
+
+  /**
+   * @brief Use Gamma Correction or not (i.e on or off)
+   *
+   * Gamma correction controls the overall brightness of an image. Images which
+   * are not properly corrected can look either bleached out, or too dark.
+   * Trying to reproduce colors accurately also requires some knowledge of
+   * gamma. Varying the amount of gamma correction changes not only the
+   * brightness, but also the ratios of red to green to blue.
+   *
+   * Sources:
+   * http://cgsd.com/papers/gamma_intro.html
+   * https://learn.adafruit.com/led-tricks-gamma-correction/the-issue
+   *
+   * @param value the desired state for using Gamma Correction (true/false)
+   *
+   * @return void
+   */
+  void useGammaCorrection(bool gamma);
+
 private:
   my9291 *_my9291; // MY9291 driver handle
 
@@ -161,6 +210,9 @@ private:
    * @return void
    */
   void setRGBW();
+
+  // Gamma correction is enabled or disabled
+  bool _gammacorrection = false;
 };
 
 extern AiLightClass AiLight;
