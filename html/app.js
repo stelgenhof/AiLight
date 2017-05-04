@@ -10,6 +10,8 @@
  * Copyright (c) 2016 - 2017 Sacha Telgenhof
  */
 
+/* jshint curly: true, undef: true, unused: true, eqeqeq: true, esversion: 6, varstmt: true, browser: true, devel: true */
+
 // Key names as used internally and in Home Assistant
 const K_S = "state";
 const K_BR = "brightness";
@@ -39,7 +41,7 @@ function Switch(id) {
 (function() {
   this.getState = function() {
     return this.state;
-  }
+  };
 
   this.setState = function(state) {
     const CLASS_CHECKED = 'checked';
@@ -48,7 +50,7 @@ function Switch(id) {
 
     var pNode = this.el.parentNode;
     this.el.checked ? pNode.classList.add(CLASS_CHECKED) : pNode.classList.remove(CLASS_CHECKED);
-  }
+  };
 
   this.toggleState = function() {
     this.state = !this.state;
@@ -62,13 +64,13 @@ function Switch(id) {
     state[this.id] = value;
 
     websock.send(JSON.stringify(state));
-  }
+  };
 
   this.init = function() {
     this.el = document.getElementById("switch_" + this.id);
     this.state = this.el.checked;
     this.el.addEventListener("click", this.toggleState.bind(this), false);
-  }
+  };
 
 }).call(Switch.prototype);
 
@@ -87,12 +89,12 @@ function Slider(id) {
 (function() {
   this.getValue = function() {
     return this.el.value;
-  }
+  };
 
   this.setValue = function(val) {
     this.el.value = val;
     this._sethigh();
-  }
+  };
 
   this._sethigh = function() {
     this._high = (this.el.value - this.el.min) / (this.el.max - this.el.min) * 100 + '%';
@@ -106,11 +108,11 @@ function Slider(id) {
     msg[this.id] = this.el.value;
 
     websock.send(JSON.stringify(msg));
-  }
+  };
 
   this._init = function() {
     this.el = document.getElementById("slider_" + this.id);
-    this.el.style.setProperty('--low', '0%')
+    this.el.style.setProperty('--low', '0%');
     this._sethigh();
 
     this.el.addEventListener("mousemove", this._sethigh.bind(this), false);
@@ -181,7 +183,7 @@ function processData(data) {
   for (var key in data) {
 
     // Process Device information
-    if (key == 'd') {
+    if (key === 'd') {
       document.title = data['d']['app_name'];
 
       // Bind data to DOM
@@ -195,7 +197,7 @@ function processData(data) {
     }
 
     // Process settings
-    if (key == 's') {
+    if (key === 's') {
       document.title += ' - ' + data[key]['hostname'];
 
       // Bind data to DOM
@@ -214,29 +216,29 @@ function processData(data) {
     }
 
     // Set state
-    if (key == K_S) {
+    if (key === K_S) {
       stSwitch.setState((data[key] === S_OFF) ? false : true);
     }
 
-    if (key == K_BR) {
+    if (key === K_BR) {
       brSlider.setValue(data[key]);
     }
 
-    if (key == K_CT) {
+    if (key === K_CT) {
       ctSlider.setValue(data[key]);
     }
 
-    if (key == 'color') {
+    if (key === 'color') {
       rSlider.setValue(data[key][K_R]);
       gSlider.setValue(data[key][K_G]);
       bSlider.setValue(data[key][K_B]);
     }
 
-    if (key == K_W) {
+    if (key === K_W) {
       wSlider.setValue(data[key]);
     }
 
-    if (key == K_GM) {
+    if (key === K_GM) {
       gmSwitch.setState(data[key]);
     }
   }
@@ -259,24 +261,24 @@ function wsConnect() {
 
   websock.onopen = function(event) {
     console.log('[WEBSOCKET] Connected to: ' + event.currentTarget.URL);
-  }
+  };
 
   websock.onclose = function(event) {
     console.log('[WEBSOCKET] Connection from ' + event.currentTarget.URL + ' closed.');
     console.log(event);
     console.log(event.reason);
-  }
+  };
 
   websock.onerror = function(event) {
     console.log('[WEBSOCKET] Error: ' + event);
-  }
+  };
 
   websock.onmessage = function(event) {
     var data = getJSON(event.data);
     if (data) {
       processData(data);
     }
-  }
+  };
 }
 
 /**
@@ -286,11 +288,13 @@ function wsConnect() {
  */
 function restart() {
   var response = window.confirm("Are you sure you want to restart your device?");
-  if (response == false) return false;
+  if (response === false) {
+    return false;
+  }
 
   websock.send(JSON.stringify({
     'command': 'restart'
-  }))
+  }));
 
   // Wait 10 seconds before reloading the page
   setTimeout(function() {
@@ -307,11 +311,13 @@ function restart() {
  */
 function reset() {
   var response = window.confirm("You are about to reset your device to the factory defaults!\n Are you sure you want to reset?");
-  if (response == false) return false;
+  if (response === false) {
+    return false;
+  }
 
   websock.send(JSON.stringify({
     'command': 'reset'
-  }))
+  }));
 
   // Wait 10 seconds before reloading the page
   setTimeout(function() {
@@ -328,7 +334,7 @@ function reset() {
  */
 function togglePassword() {
   var ie = document.getElementById(this.dataset.input);
-  ie.type = (ie.type == "text") ? "password" : "text";
+  ie.type = (ie.type === "text") ? "password" : "text";
 }
 
 function addValidationMessage(el, message) {
@@ -366,14 +372,14 @@ function save() {
     });
 
     // Validate hostname input
-    if (id == 'hostname' && !Valid952HostnameRegex.test(inputs[i].value)) {
+    if (id === 'hostname' && !Valid952HostnameRegex.test(inputs[i].value)) {
       addValidationMessage(inputs[i], 'This hostname is invalid.');
       isValid = false;
       continue;
     }
 
     // Validate WiFi PSK
-    if (id == 'wifi_psk' && inputs[i].value.length < 8) {
+    if (id === 'wifi_psk' && inputs[i].value.length < 8) {
       addValidationMessage(inputs[i], 'A WiFi Passphrase Key (Password) must be between 8 and 63 characters.');
       isValid = false;
       continue;
@@ -464,7 +470,7 @@ function toggleNav() {
  */
 document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('button-restart').addEventListener('click', restart, false);
-  document.getElementById('reset').addEventListener('click', restart, false);
+  document.getElementById('reset').addEventListener('click', reset, false);
   document.getElementById('nav-toggle').addEventListener('click', toggleNav, false);
   document.getElementById('save').addEventListener('click', save, false);
 
@@ -476,4 +482,4 @@ document.addEventListener('DOMContentLoaded', function() {
 
   initTabs();
   wsConnect();
-})
+});
