@@ -14,8 +14,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 - Migrated to AsyncMQTTClient library (replacing PubSubClient Library) * Please be aware of changes to the platformio.ini and config.h files!
 - Build.py script now uses locally installed Gulp binary instead of global one
 - HTML UI title includes now the device name so it's easier to identify which light you are looking at
+- Reduced size of HTML UI by removing unused stylesheet elements, shrinking logo and removing unnecessary code.
 
 ### Fixed
+- Reset button now properly performs a factory reset. Previously was executing a restart.
 
 ### Removed
 
