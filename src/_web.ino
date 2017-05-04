@@ -77,8 +77,6 @@ void wsProcessMessage(uint8_t num, char *payload, size_t length) {
   bool settings_changed = false;
   bool needRestart = false;
 
-  root.printTo(Serial);
-
   if (!root.success()) {
     DEBUGLOG("[WEBSOCKET] Error parsing data\n");
     return;

@@ -127,11 +127,6 @@ void onMQTTDisconnect() {
  * @param length size of the published message
  */
 void onMQTTMessage(char *topic, char *payload, uint16_t length) {
-  // Don't do anything if we are not connected to the MQTT broker
-  if (!mqtt.connected()) {
-    return;
-  }
-
   // Convert payload into char variable
   char message[length + 1];
   memcpy(message, payload, length);

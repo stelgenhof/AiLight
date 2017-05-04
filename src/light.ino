@@ -50,7 +50,7 @@ void lightMQTTCallback(uint8_t type, const char *topic, const char *payload) {
   // Handling the event a message is received from the MQTT broker
   if (type == MQTT_EVENT_MESSAGE) {
 
-    // Listen to this lights command topic
+    // Listen to this lights' MQTT command topic
     if (strcmp(topic, cfg.mqtt_command_topic) == 0) {
 
       // Convert payload into char variable
