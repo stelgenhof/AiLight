@@ -48,15 +48,15 @@ gulp.task('build', ['html'], function() {
   var data = fs.readFileSync(source);
 
   ws.write('#define html_gz_len ' + data.length + '\n');
-  ws.write('const uint8_t html_gz[] PROGMEM = {')
+  ws.write('const uint8_t html_gz[] PROGMEM = {');
 
   for (i = 0; i < data.length; i++) {
-    if (i % 1000 == 0) ws.write('\n');
+    if (i % 1000 === 0) ws.write('\n');
     ws.write('0x' + ('00' + data[i].toString(16)).slice(-2));
     if (i < data.length - 1) ws.write(',');
   }
 
-  ws.write('\n};')
+  ws.write('\n};');
   ws.end();
 
   // Remove intermediate files
@@ -78,7 +78,6 @@ gulp.task('css', ['sass'], function() {
     .pipe(cssBase64())
     .pipe(gulp.dest('html'));
 });
-
 
 // Process HTML files
 gulp.task('html', ['clean', 'css'], function() {
