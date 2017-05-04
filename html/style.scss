@@ -9,7 +9,18 @@
  * (https://www.sachatelgenhof.nl)
  * Copyright (c) 2016 - 2017 Sacha Telgenhof
  */
-@import './node_modules/bulma/bulma';
+@charset "utf-8";
+@import './node_modules/bulma/sass/utilities/_all';
+@import './node_modules/bulma/sass/base/_all';
+@import './node_modules/bulma/sass/elements/button';
+@import './node_modules/bulma/sass/elements/form';
+@import './node_modules/bulma/sass/elements/icon';
+@import './node_modules/bulma/sass/elements/table';
+@import './node_modules/bulma/sass/elements/title';
+@import './node_modules/bulma/sass/components/nav';
+@import './node_modules/bulma/sass/grid/columns';
+@import './node_modules/bulma/sass/layout/_all';
+
 @font-face {
   font-family: 'ailight';
   src: url('ailight.ttf?vhsro1') format('truetype'), url('ailight.woff?vhsro1') format('woff'), url('ailight.svg?vhsro1#ailight') format('svg');
@@ -111,6 +122,7 @@ i {
   max-height: 3.75rem;
 }
 // Switch Component
+
 .switch {
   --height: 22px;
 
@@ -171,7 +183,7 @@ i {
     }
   }
   // Colors
-  @each $name, $pair in $colors {
+  @each $name, $pair in ("primary": ($primary, $primary-invert)) {
     $color: nth($pair, 1);
 
     &.is-#{$name} {
@@ -181,40 +193,12 @@ i {
       }
     }
   }
-  // Sizes
-  &.is-small {
-    --height: 12px;
-  }
-
-  &.is-medium {
-    --height: 28px;
-  }
-
-  &.is-large {
-    --height: 32px;
-  }
 }
 // Slider Component
 
 input[type=range].slider {
   $radius: 290486px;
   --height: 8px;
-
-  &.is-small {
-    --height: 4px;
-  }
-
-  &.is-medium {
-    --height: 12px;
-  }
-
-  &.is-large {
-    --height: 16px;
-  }
-
-  &.is-xlarge {
-    --height: 24px;
-  }
 
   &.is-fullwidth {
     width: 100%;
@@ -323,7 +307,7 @@ input[type=range].slider {
     display: none;
   }
   // Colors
-  @each $name, $pair in $colors {
+  @each $name, $pair in ("primary": ($primary, $primary-invert), "info": ($info, $info-invert), "success": ($success, $success-invert), "danger": ($danger, $danger-invert)) {
     $color: nth($pair, 1);
 
     &.is-#{$name} {
