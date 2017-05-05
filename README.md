@@ -120,8 +120,10 @@ In addition, for each of these 2 environments, an OTA environment is available f
 ## Dependencies
 
 - [MY9291](https://github.com/xoseperez/my9291) LED driver.
-- PubSubClient library
+- AsyncMQTTClient library
 - ArduinoJson library
+- ESPAsyncTCP library
+- ESPAsyncWebServer library
 
 ## Contributing
 
