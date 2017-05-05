@@ -21,19 +21,19 @@ void setupOTA() {
   ArduinoOTA.setHostname(cfg.hostname);
   ArduinoOTA.setPassword(ADMIN_PASSWORD);
 
-  DEBUGLOG("[OTA] Server running at %s:%u\n", ArduinoOTA.getHostname().c_str(),
+  DEBUGLOG("[OTA ] Server running at %s:%u\n", ArduinoOTA.getHostname().c_str(),
            OTA_PORT);
 
-  ArduinoOTA.onStart([]() { DEBUGLOG("[OTA] Start\n"); });
+  ArduinoOTA.onStart([]() { DEBUGLOG("[OTA ] Start\n"); });
 
-  ArduinoOTA.onEnd([]() { DEBUGLOG("\n[OTA] End\n"); });
+  ArduinoOTA.onEnd([]() { DEBUGLOG("\n[OTA ] End\n"); });
 
-  ArduinoOTA.onProgress([](uint8_t progress, uint8_t total) {
-    DEBUGLOG("[OTA] Progress: %u%%\r", (progress / (total / 100)));
+  ArduinoOTA.onProgress([](uint32_t progress, uint32_t total) {
+    DEBUGLOG("Progress: %u%%\r", (progress / (total / 100)));
   });
 
   ArduinoOTA.onError([](ota_error_t error) {
-    DEBUGLOG("\n[OTA] Error[%u]: ", error);
+    DEBUGLOG("\n[OTA ] Error[%u]: ", error);
     if (error == OTA_AUTH_ERROR)
       DEBUGLOG("Authentication Failed\n");
     else if (error == OTA_BEGIN_ERROR)
