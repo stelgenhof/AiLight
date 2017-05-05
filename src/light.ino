@@ -182,6 +182,7 @@ void setupLight() {
   AiLight.setColor(cfg.color.red, cfg.color.green, cfg.color.blue);
   AiLight.setWhite(cfg.color.white);
   AiLight.setBrightness(cfg.brightness);
+  AiLight.useGammaCorrection(cfg.gamma);
   AiLight.setState(cfg.is_on);
 
   mqttRegister(lightMQTTCallback);
