@@ -60,6 +60,7 @@ extern "C" {
 #define KEY_MQTT_PASSWORD "mqtt_password"
 #define KEY_MQTT_STATE_TOPIC "mqtt_state_topic"
 #define KEY_MQTT_COMMAND_TOPIC "mqtt_command_topic"
+#define KEY_MQTT_LWT_TOPIC "mqtt_lwt_topic"
 
 // Configuration structure that gets stored to the EEPROM
 struct config_t {
@@ -77,7 +78,8 @@ struct config_t {
   char mqtt_password[64];     // Password used for connecting to the MQTT Broker
   char mqtt_state_topic[128]; // MQTT Topic for publishing the state
   char mqtt_command_topic[128]; // MQTT Topic for receiving commands
-  bool gamma;                   // Gamma Correction enabled or not
+  char mqtt_lwt_topic[128]; // MQTT Topic for publising Last Will and Testament
+  bool gamma;               // Gamma Correction enabled or not
 } cfg;
 
 #define SerialPrint(format, ...)                                               \

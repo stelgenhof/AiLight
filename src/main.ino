@@ -54,9 +54,13 @@ void loadFactoryDefaults() {
   strcpy(cfg.mqtt_password, MQTT_PASSWORD);
   strcpy(cfg.mqtt_state_topic, getDeviceID());
 
-  char *cmd_topic = new char[64];
+  char *cmd_topic = new char[128];
   sprintf_P(cmd_topic, PSTR("%s/set"), getDeviceID());
   strcpy(cfg.mqtt_command_topic, cmd_topic);
+
+  char *lwt_topic = new char[128];
+  sprintf_P(lwt_topic, PSTR("%s/status"), getDeviceID());
+  strcpy(cfg.mqtt_lwt_topic, lwt_topic);
 
   strcpy(cfg.wifi_ssid, WIFI_SSID);
   strcpy(cfg.wifi_psk, WIFI_PSK);

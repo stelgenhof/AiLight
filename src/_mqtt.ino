@@ -155,6 +155,7 @@ void mqttConnect() {
     mqtt.setKeepAlive(MQTT_KEEPALIVE);
     mqtt.setCleanSession(false);
     mqtt.setClientId(cfg.hostname);
+    mqtt.setWill(cfg.mqtt_lwt_topic, 2, true, MQTT_STATUS_OFFLINE);
 
     if ((strlen(cfg.mqtt_user) > 0) && (strlen(cfg.mqtt_password) > 0)) {
       DEBUGLOG(" as user '%s'\n", cfg.mqtt_user);

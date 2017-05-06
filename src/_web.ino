@@ -65,6 +65,7 @@ void wsStart(uint8_t id) {
   settings[KEY_MQTT_PASSWORD] = cfg.mqtt_password;
   settings[KEY_MQTT_STATE_TOPIC] = cfg.mqtt_state_topic;
   settings[KEY_MQTT_COMMAND_TOPIC] = cfg.mqtt_command_topic;
+  settings[KEY_MQTT_LWT_TOPIC] = cfg.mqtt_lwt_topic;
 
   char buffer[root.measureLength() + 1];
   root.printTo(buffer, sizeof(buffer));
@@ -163,6 +164,14 @@ void wsProcessMessage(uint8_t num, char *payload, size_t length) {
       const char *mqtt_command_topic = settings[KEY_MQTT_COMMAND_TOPIC];
       if (strcmp(cfg.mqtt_command_topic, mqtt_command_topic) != 0) {
         strcpy(cfg.mqtt_command_topic, mqtt_command_topic);
+        mqtt_changed = true;
+      }
+    }
+
+    if (settings.containsKey(KEY_MQTT_LWT_TOPIC)) {
+      const char *mqtt_lwt_topic = settings[KEY_MQTT_LWT_TOPIC];
+      if (strcmp(cfg.mqtt_lwt_topic, mqtt_lwt_topic) != 0) {
+        strcpy(cfg.mqtt_lwt_topic, mqtt_lwt_topic);
         mqtt_changed = true;
       }
     }
