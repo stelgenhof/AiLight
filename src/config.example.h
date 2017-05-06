@@ -63,3 +63,6 @@
 
 #define MQTT_PAYLOAD_ON "ON"
 #define MQTT_PAYLOAD_OFF "OFF"
+
+#define MQTT_STATUS_ONLINE "online"
+#define MQTT_STATUS_OFFLINE "offline"
