@@ -29,10 +29,12 @@ This can all be done in [Home Assistant](https://home-assistant.io) (using the M
 
 **Roadmap**
 
+- MQTT Discovery
 - Effects
 - Transitions
 - ~~Remember light state after power cycle~~
-- MQTT Discovery
+- ~~MQTT Last Will And Testament~~
+- ~~Gamma Correction~~
 
 Making this firmware was largely inspired by the [MY9291](https://github.com/xoseperez/my9291) LED driver and the [Espurna](https://bitbucket.org/xoseperez/espurna) firmware of [Xose Pérez](https://github.com/xoseperez).
 
