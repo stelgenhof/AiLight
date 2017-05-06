@@ -6,18 +6,20 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## [Unreleased]
 
 ### Added
+- MQTT Last Will and Testament, giving the MQTT broker and other clients option to know if the Ai-Thinker RGBW light has been disconnected gracefully or not.
 - Gamma Correction: makes the colours of the LED light to appear closer to what our eyes perceive. This allows for better colour representations.
 - favico added to HTML UI
-- Added model name to distinguish nameing between AiLight and Ai-Thinker light bulb manufacturer/model name.
+- Added model name to distinguish naming between AiLight and Ai-Thinker light bulb manufacturer/model name.
 
 ### Changed
 - Migrated to AsyncMQTTClient library (replacing PubSubClient Library) * Please be aware of changes to the platformio.ini and config.h files!
 - Build.py script now uses locally installed Gulp binary instead of global one
 - HTML UI title includes now the device name so it's easier to identify which light you are looking at
-- Reduced size of HTML UI by removing unused stylesheet elements, shrinking logo and removing unnecessary code.
+- Reduced size of HTML UI by removing unused style sheet elements, shrinking logo and removing unnecessary code.
 
 ### Fixed
-- Reset button now properly performs a factory reset. Previously was executing a restart.
+- Reset button now properly performs a factory reset. Previously it was executing a restart.
+- OTA upload was behaving erratically caused by incorrectly implementing the asynchronous 'onProgress' method (Wrong datatypes used).
 
 ### Removed
 
