@@ -16,7 +16,16 @@ AiLight allows you to:
 - keep the last known settings (colour, brightness, etc.) after a power cycle
 - enable Gamma Correction to make the LED colours appear closer to what our eyes perceive
 
-This can all be done in [Home Assistant](https://home-assistant.io) (using the MQTT integration) or the built in (mobile friendly) UI. The UI interface also gives you the ability to configure the light remotely. You can easily change your WiFi settings or the configuration of your MQTT broker.
+This can all be done in [Home Assistant](https://home-assistant.io) (using the MQTT built-in integration via JSON) or the built in (mobile friendly) UI. The UI interface also gives you the ability to configure the light remotely. You can easily change your WiFi settings or the configuration of your MQTT broker.
+
+### Other
+
+- MQTT Last Will and Testament enabled
+- Support for Over The Air (OTA) firmware updates
+- Preserve light settings and configuration after power cycle or restart
+- Perform remote restart using the built-in HTML UI.
+- Reset to factory defaults using the built-in HTML UI (* 'factory' here means the default settings of the AiLight firmware upon compile time)
+
 
 **Roadmap**
 
@@ -42,7 +51,7 @@ To build and upload this firmware you need to have [PlatformIO](http://platformi
   - MQTT_SERVER `// The hostname/IP address of your MQTT broker`
   - MQTT_USER `// The username to connect to your MQTT broker`
   - MQTT_PASSWORD `// The password to connect to your MQTT broker`
-  
+
   Leaving the WiFi settings blank, will make the AiLight start in AP mode (Access Point). From here you can access the   settings screen and enter your WiFi settings.
 
   Other configuration variables can be left as is, however feel free to adjust as you see fit.
@@ -59,7 +68,7 @@ If no compilation errors popped up, you can start flashing the firmware to your 
 
 If the upload of he AiLight firmware was successful, it is recommended to restart your Ai-Thinker RGBW Light. This can be done by reconnecting the power of your FTDI programmer.
 
-While connected to your FTDI programmer, check the output on your Serial Monitor. You should see some messages appear that will tell you details of the firmware, the light, hostname and the assigned IP address. 
+While connected to your FTDI programmer, check the output on your Serial Monitor. You should see some messages appear that will tell you details of the firmware, the light, hostname and the assigned IP address.
 
 ![AiLight](https://www.sachatelgenhof.nl/user/pages/02.blog/ailight/terminal.png)
 
