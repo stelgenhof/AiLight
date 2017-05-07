@@ -4,7 +4,13 @@
  * This file is part of the Ai-Thinker RGBW Light Firmware.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
-
+ *
+ * Slider styling is based on the Slider Component for Vue Bulma
+ * (https://github.com/vue-bulma/slider)
+ *
+ * Switch styling is based on the Switch Component for Vue Bulma
+ * (https://github.com/vue-bulma/switch)
+ *
  * Created by Sacha Telgenhof <stelgenhof at gmail dot com>
  * (https://www.sachatelgenhof.nl)
  * Copyright (c) 2016 - 2017 Sacha Telgenhof
@@ -17,6 +23,7 @@
 @import './node_modules/bulma/sass/elements/form';
 @import './node_modules/bulma/sass/elements/icon';
 @import './node_modules/bulma/sass/elements/table';
+@import './node_modules/bulma/sass/elements/tag';
 @import './node_modules/bulma/sass/elements/title';
 @import './node_modules/bulma/sass/elements/other';
 @import './node_modules/bulma/sass/components/nav';
