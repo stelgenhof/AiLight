@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 - Build.py script now uses locally installed Gulp binary instead of global one
 - HTML UI title includes now the device name so it's easier to identify which light you are looking at
 - Reduced size of HTML UI by removing unused style sheet elements, shrinking logo and removing unnecessary code.
+- The sliders are now accompanied with a value bubble to make it easier understanding what the actual value is.
 
 ### Fixed
 - Reset button now properly performs a factory reset. Previously it was executing a restart.
