@@ -99,6 +99,12 @@ function Slider(id) {
   this._sethigh = function() {
     this._high = (this.el.value - this.el.min) / (this.el.max - this.el.min) * 100 + '%';
     this.el.style.setProperty('--high', this._high);
+
+    var output = this.el.parentNode.getElementsByTagName('output')[0];
+    if (typeof(output) !== "undefined") {
+      output.innerHTML = this.el.value;
+    }
+
   };
 
   this._send = function() {
