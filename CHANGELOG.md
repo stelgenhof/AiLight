@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## [Unreleased]
 
 ### Added
+
+### Changed
+
+### Fixed
+
+### Removed
+
+## [0.3.0] - 2017-05-09
+
+### Added
 - MQTT Last Will and Testament, giving the MQTT broker and other clients option to know if the Ai-Thinker RGBW light has been disconnected gracefully or not.
 - Gamma Correction: makes the colours of the LED light to appear closer to what our eyes perceive. This allows for better colour representations.
 - favico added to HTML UI
