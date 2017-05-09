@@ -72,7 +72,7 @@ If the upload of he AiLight firmware was successful, it is recommended to restar
 
 While connected to your FTDI programmer, check the output on your Serial Monitor. You should see some messages appear that will tell you details of the firmware, the light, hostname and the assigned IP address.
 
-![AiLight](https://www.sachatelgenhof.nl/user/pages/02.blog/ailight/terminal.png)
+![AiLight](https://www.sachatelgenhof.nl/user/pages/02.blog/ailight/terminal_030.png)
 
 The same information can be seen in the HTML UI (About screen). By default the Web interface can be accessed via 'http://AiLight-######.local' where '#####' is the unique ID of your Ai-Thinker RGBW Light. If you have changed your hostname, then of course the URL is different also.
 
