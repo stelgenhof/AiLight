@@ -54,7 +54,7 @@ To build and upload this firmware you need to have [PlatformIO](http://platformi
   - MQTT_USER `// The username to connect to your MQTT broker`
   - MQTT_PASSWORD `// The password to connect to your MQTT broker`
 
-  Leaving the WiFi settings blank, will make the AiLight start in AP mode (Access Point). From here you can access the   settings screen and enter your WiFi settings.
+  Leaving the WiFi settings blank, will make the AiLight start in AP mode (Access Point). From there you can access the   settings screen and enter your WiFi settings.
 
   Other configuration variables can be left as is, however feel free to adjust as you see fit.
 
@@ -72,7 +72,7 @@ If the upload of he AiLight firmware was successful, it is recommended to restar
 
 While connected to your FTDI programmer, check the output on your Serial Monitor. You should see some messages appear that will tell you details of the firmware, the light, hostname and the assigned IP address.
 
-![AiLight](https://www.sachatelgenhof.nl/user/pages/02.blog/ailight/terminal.png)
+![AiLight](https://www.sachatelgenhof.nl/user/pages/02.blog/ailight/terminal1.png)
 
 The same information can be seen in the HTML UI (About screen). By default the Web interface can be accessed via 'http://AiLight-######.local' where '#####' is the unique ID of your Ai-Thinker RGBW Light. If you have changed your hostname, then of course the URL is different also.
 
@@ -97,8 +97,8 @@ Light:
     light:
       platform: mqtt_json
       name: 'AiLight Office'
-      state_topic: '<YOUR_MQTT_STATE_TOPIC>'
-      command_topic: '<YOUR_MQTT_COMMAND_TOPIC>'
+      state_topic: '<YOUR_MQTT_STATE_TOPIC>' (e.g. 'AiLight-CC8410')
+      command_topic: '<YOUR_MQTT_COMMAND_TOPIC>' (e.g. 'AiLight-CC8410/set')
       color_temp: true
       brightness: true
       rgb: true
