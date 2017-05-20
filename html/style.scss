@@ -29,7 +29,6 @@
 @import './node_modules/bulma/sass/components/nav';
 @import './node_modules/bulma/sass/grid/columns';
 @import './node_modules/bulma/sass/layout/_all';
-
 @font-face {
   font-family: 'ailight';
   src: url('ailight.ttf?vhsro1') format('truetype'), url('ailight.woff?vhsro1') format('woff'), url('ailight.svg?vhsro1#ailight') format('svg');
@@ -49,6 +48,11 @@ i {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   cursor: pointer;
+}
+
+.icon-eye {
+  font-size: 1.5rem;
+  height: 2.75rem;
 }
 
 .icon-eye:before {
@@ -346,8 +350,8 @@ input[type=range].slider {
     }
   }
 }
-
 // Bubble showing slider's numerical value
+
 output {
   min-width: 2.6rem;
   margin-left: 0.5rem;
