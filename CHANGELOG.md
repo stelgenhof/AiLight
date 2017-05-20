@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Added
 
 ### Changed
+- Changed position of password visibility icon to be inside input box.
 - Adjusted path to gulp binary in the 'build.py' file to better support Windows environments.
 
 ### Fixed
