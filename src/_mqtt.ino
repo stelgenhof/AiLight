@@ -13,14 +13,6 @@
  * Copyright (c) 2016 - 2017 Sacha Telgenhof
  */
 
-// MQTT Event type definitions
-#define MQTT_EVENT_CONNECT 0
-#define MQTT_EVENT_DISCONNECT 1
-#define MQTT_EVENT_MESSAGE 2
-
-AsyncMqttClient mqtt;
-std::vector<void (*)(uint8_t, const char *, const char *)> _mqtt_callbacks;
-
 // ---------------------------
 // 'External' functions
 // ---------------------------

@@ -13,21 +13,6 @@
  * Copyright (c) 2016 - 2017 Sacha Telgenhof
  */
 
-static const int BUFFER_SIZE = JSON_OBJECT_SIZE(10);
-
-// Globals for flash
-bool flash = false;
-bool startFlash = false;
-uint16_t flashLength = 0;
-uint32_t flashStartTime = 0;
-Color flashColor;
-uint8_t flashBrightness = 0;
-
-// Globals for current state
-Color currentColor;
-uint8_t currentBrightness;
-bool currentState;
-
 /**
  * @brief Publish a message to an MQTT topic
  *

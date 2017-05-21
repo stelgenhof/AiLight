@@ -26,6 +26,8 @@ const K_GM = "gamma";
 const S_ON = 'ON';
 const S_OFF = 'OFF';
 
+const WAIT = 15000;
+
 /**
  * Object representing a Switch component
  *
@@ -135,6 +137,7 @@ function Slider(id) {
   };
 }).call(Slider.prototype);
 
+// Globals
 var websock;
 var stSwitch = new Switch(K_S);
 var brSlider = new Slider(K_BR);
@@ -195,7 +198,7 @@ function processData(data) {
       // Bind data to DOM
       for (var dev in data[key]) {
         // Bind to span elements
-        var d = document.getElementById("pagescontent").querySelectorAll("span[data-s='" + dev + "']");
+        var d = document.querySelectorAll("span[data-s='" + dev + "']");
         [].forEach.call(d, function(item) {
           item.innerHTML = data[key][dev];
         });
@@ -266,11 +269,11 @@ function wsConnect() {
   websock = new WebSocket('ws://' + host + ':' + port + '/ws');
 
   websock.onopen = function(event) {
-    console.log('[WEBSOCKET] Connected to: ' + event.currentTarget.URL);
+    console.log('[WEBSOCKET] Connected');
   };
 
   websock.onclose = function(event) {
-    console.log('[WEBSOCKET] Connection from ' + event.currentTarget.URL + ' closed.');
+    console.log('[WEBSOCKET] Connection closed');
     console.log(event);
     console.log(event.reason);
   };
@@ -288,6 +291,74 @@ function wsConnect() {
 }
 
 /**
+ * EventSource client initialization and event processing
+ *
+ * @return void
+ */
+function esConnect() {
+  if (!!window.EventSource) {
+    var source = new EventSource('/events');
+
+    source.addEventListener('open', function(e) {
+      console.log('[EVENTSOURCE] Connected');
+    }, false);
+
+    source.addEventListener('error', function(e) {
+      if (e.target.readyState !== EventSource.OPEN) {
+        console.log('[EVENTSOURCE] Connection closed');
+      }
+    }, false);
+
+    source.addEventListener('message', function(e) {
+      console.log("message", e.data);
+
+      if (e.data === 'reload') {
+        // Wait for the device to have restarted before reloading the page
+        reload();
+      }
+
+    }, false);
+
+    // Handling OTA events
+    source.addEventListener('ota', function(e) {
+      var m = document.getElementById("om");
+
+      if (e.data.startsWith("p-")) {
+        var pb = document.getElementById("op");
+        var p = parseInt(e.data.split("-")[1]);
+        pb.value = p;
+
+        if (p === 100) {
+          var f = document.createElement('p');
+          f.innerHTML = "Completed successfully! Please wait for this page to be refreshed.";
+          pb.parentNode.appendChild(f);
+        }
+      }
+
+      // Show OTA Modal
+      if (e.data === 'start') {
+        m.classList.add("is-active");
+      }
+    }, false);
+  }
+}
+
+/**
+ * Reloads the page after waiting certain time.
+ *
+ * The time before the page is being reloaded is defined by the 'WAIT' constant.
+ *
+ * @return void
+ */
+function reload() {
+  document.getElementById("rm").classList.add("is-active");
+
+  setTimeout(function() {
+    location.reload(true);
+  }, WAIT);
+}
+
+/**
  * Handler for the Restart button
  *
  * @return bool true when user approves, false otherwise
@@ -302,10 +373,8 @@ function restart() {
     'command': 'restart'
   }));
 
-  // Wait 10 seconds before reloading the page
-  setTimeout(function() {
-    location.reload(true);
-  }, 10000);
+  // Wait for the device to have restarted before reloading the page
+  reload();
 
   return true;
 }
@@ -325,10 +394,8 @@ function reset() {
     'command': 'reset'
   }));
 
-  // Wait 10 seconds before reloading the page
-  setTimeout(function() {
-    location.reload(true);
-  }, 10000);
+  // Wait for the device to have restarted before reloading the page
+  reload();
 
   return true;
 }
@@ -343,6 +410,14 @@ function togglePassword() {
   ie.type = (ie.type === "text") ? "password" : "text";
 }
 
+/**
+ * Adds validation message to the selected element
+ *
+ * @param el the DOM element to which the validation message needs to be added
+ * @param message the validation message to be diplayed
+ *
+ * @return void
+ */
 function addValidationMessage(el, message) {
   const CLASS_WARNING = 'is-danger';
   var v = document.createElement('p');
@@ -488,4 +563,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
   initTabs();
   wsConnect();
+  esConnect();
 });

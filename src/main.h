@@ -62,6 +62,17 @@ extern "C" {
 #define KEY_MQTT_COMMAND_TOPIC "mqtt_command_topic"
 #define KEY_MQTT_LWT_TOPIC "mqtt_lwt_topic"
 
+// MQTT Event type definitions
+#define MQTT_EVENT_CONNECT 0
+#define MQTT_EVENT_DISCONNECT 1
+#define MQTT_EVENT_MESSAGE 2
+
+AsyncWebSocket ws("/ws");
+AsyncEventSource events("/events");
+AsyncWebServer *server;
+AsyncMqttClient mqtt;
+std::vector<void (*)(uint8_t, const char *, const char *)> _mqtt_callbacks;
+
 // Configuration structure that gets stored to the EEPROM
 struct config_t {
   uint8_t ic;                 // Initialization check
@@ -81,6 +92,21 @@ struct config_t {
   char mqtt_lwt_topic[128]; // MQTT Topic for publising Last Will and Testament
   bool gamma;               // Gamma Correction enabled or not
 } cfg;
+
+static const int BUFFER_SIZE = JSON_OBJECT_SIZE(10);
+
+// Globals for flash
+bool flash = false;
+bool startFlash = false;
+uint16_t flashLength = 0;
+uint32_t flashStartTime = 0;
+Color flashColor;
+uint8_t flashBrightness = 0;
+
+// Globals for current state
+Color currentColor;
+uint8_t currentBrightness;
+bool currentState;
 
 #define SerialPrint(format, ...)                                               \
   StreamPrint_progmem(Serial, PSTR(format), ##__VA_ARGS__)

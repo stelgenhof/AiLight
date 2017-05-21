@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## [Unreleased]
 
 ### Added
+- When an OTA update has been initiated, a message window - with a nice progress bar - is being displayed to indicate the user that an update is in progress. The Web UI is then reloaded automatically.
+- When the user chooses RESTART or RESET, a user friendly message window is being shown.
 
 ### Changed
 - Changed position of password visibility icon to be inside input box.
