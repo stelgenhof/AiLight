@@ -35,10 +35,11 @@ void setupOTA() {
   });
 
   ArduinoOTA.onProgress([](uint32_t progress, uint32_t total) {
-    DEBUGLOG("Progress: %u%%\r", (progress / (total / 100)));
+    uint8_t pp = (progress / (total / 100));
+    DEBUGLOG("Progress: %u%%\r", pp);
 
     char p[6];
-    sprintf(p, "p-%u", (progress / (total / 100)));
+    sprintf(p, "p-%u", pp);
     events.send(p, "ota");
   });
 
