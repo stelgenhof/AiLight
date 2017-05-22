@@ -50,8 +50,7 @@ function Switch(id) {
     this.state = state;
     this.el.checked = this.state;
 
-    var pNode = this.el.parentNode;
-    this.el.checked ? pNode.classList.add(CLASS_CHECKED) : pNode.classList.remove(CLASS_CHECKED);
+    this.el.checked ? this.el.parentNode.classList.add(CLASS_CHECKED) : this.el.parentNode.classList.remove(CLASS_CHECKED);
   };
 
   this.toggleState = function() {
@@ -193,7 +192,7 @@ function processData(data) {
 
     // Process Device information
     if (key === 'd') {
-      document.title = data['d']['app_name'];
+      document.title = data.d.app_name;
 
       // Bind data to DOM
       for (var dev in data[key]) {
@@ -207,7 +206,7 @@ function processData(data) {
 
     // Process settings
     if (key === 's') {
-      document.title += ' - ' + data[key]['hostname'];
+      document.title += ' - ' + data[key].hostname;
 
       // Bind data to DOM
       for (var s in data[key]) {
@@ -300,7 +299,7 @@ function esConnect() {
     var source = new EventSource('/events');
 
     source.addEventListener('open', function(e) {
-      console.log('[EVENTSOURCE] Connected');
+      console.log('[EVENTSOURCE] Connected to ' + e.target.url);
     }, false);
 
     source.addEventListener('error', function(e) {
@@ -311,18 +310,10 @@ function esConnect() {
 
     source.addEventListener('message', function(e) {
       console.log("message", e.data);
-
-      if (e.data === 'reload') {
-        // Wait for the device to have restarted before reloading the page
-        reload();
-      }
-
     }, false);
 
     // Handling OTA events
     source.addEventListener('ota', function(e) {
-      var m = document.getElementById("om");
-
       if (e.data.startsWith("p-")) {
         var pb = document.getElementById("op");
         var p = parseInt(e.data.split("-")[1]);
@@ -332,12 +323,13 @@ function esConnect() {
           var f = document.createElement('p');
           f.innerHTML = "Completed successfully! Please wait for this page to be refreshed.";
           pb.parentNode.appendChild(f);
+          reload(false);
         }
       }
 
       // Show OTA Modal
       if (e.data === 'start') {
-        m.classList.add("is-active");
+        document.getElementById("om").classList.add("is-active");
       }
     }, false);
   }
@@ -348,10 +340,14 @@ function esConnect() {
  *
  * The time before the page is being reloaded is defined by the 'WAIT' constant.
  *
+ * @param show Indicates whether a modal windows needs to be displayed or not.
+ *
  * @return void
  */
-function reload() {
-  document.getElementById("rm").classList.add("is-active");
+function reload(show) {
+  if (show) {
+    document.getElementById("rm").classList.add("is-active");
+  }
 
   setTimeout(function() {
     location.reload(true);
@@ -374,7 +370,7 @@ function restart() {
   }));
 
   // Wait for the device to have restarted before reloading the page
-  reload();
+  reload(true);
 
   return true;
 }
@@ -395,7 +391,7 @@ function reset() {
   }));
 
   // Wait for the device to have restarted before reloading the page
-  reload();
+  reload(true);
 
   return true;
 }
