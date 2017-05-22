@@ -292,11 +292,6 @@ void setupWeb() {
 
   });
   server->addHandler(&ws);
-
-  // Setup EventSource and handle EventSource events
-  events.onConnect([](AsyncEventSourceClient *client) {
-    client->send("hello!", NULL, millis(), 1000);
-  });
   server->addHandler(&events);
 
   server->rewrite("/", "/index.html");
