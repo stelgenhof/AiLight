@@ -50,7 +50,11 @@ function Switch(id) {
     this.state = state;
     this.el.checked = this.state;
 
-    this.el.checked ? this.el.parentNode.classList.add(CLASS_CHECKED) : this.el.parentNode.classList.remove(CLASS_CHECKED);
+    if (this.el.checked) {
+      this.el.parentNode.classList.add(CLASS_CHECKED);
+    } else {
+      this.el.parentNode.classList.remove(CLASS_CHECKED);
+    }
   };
 
   this.toggleState = function() {
@@ -267,22 +271,22 @@ function wsConnect() {
 
   websock = new WebSocket('ws://' + host + ':' + port + '/ws');
 
-  websock.onopen = function(event) {
-    console.log('[WEBSOCKET] Connected');
+  websock.onopen = function(e) {
+    console.log('[WEBSOCKET] Connected to ' + e.target.url);
   };
 
-  websock.onclose = function(event) {
+  websock.onclose = function(e) {
     console.log('[WEBSOCKET] Connection closed');
-    console.log(event);
-    console.log(event.reason);
+    console.log(e);
+    console.log(e.reason);
   };
 
-  websock.onerror = function(event) {
-    console.log('[WEBSOCKET] Error: ' + event);
+  websock.onerror = function(e) {
+    console.log('[WEBSOCKET] Error: ' + e);
   };
 
-  websock.onmessage = function(event) {
-    var data = getJSON(event.data);
+  websock.onmessage = function(e) {
+    var data = getJSON(e.data);
     if (data) {
       processData(data);
     }
@@ -371,8 +375,6 @@ function restart() {
 
   // Wait for the device to have restarted before reloading the page
   reload(true);
-
-  return true;
 }
 
 /**
@@ -392,8 +394,6 @@ function reset() {
 
   // Wait for the device to have restarted before reloading the page
   reload(true);
-
-  return true;
 }
 
 /**
@@ -429,8 +429,7 @@ function addValidationMessage(el, message) {
  * @return void
  */
 function save() {
-  var s = {};
-  var msg = {};
+  var s, msg = {};
   var isValid = true;
 
   var Valid952HostnameRegex = /^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$/i;
@@ -466,7 +465,7 @@ function save() {
   }
 
   if (isValid) {
-    msg['s'] = s;
+    msg.s = s;
     websock.send(JSON.stringify(msg));
   }
 }
@@ -496,8 +495,8 @@ function initTabs() {
 
   // Hide tab contents we don't need
   var pages = document.getElementById("pagescontent").querySelectorAll("section");
-  for (var i = 1; i < pages.length; i++) {
-    pages[i].style.display = "none";
+  for (var j = 1; j < pages.length; j++) {
+    pages[j].style.display = "none";
   }
 }
 
