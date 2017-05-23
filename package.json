@@ -1,7 +1,7 @@
 {
   "name": "AiLight",
   "version": "0.2.0-alpha",
-  "description": "The Ai-Thinker RGBW Light Firmware is a custom firmware for the inexpensive WiFi RGB light bulbs that has the ESP8266 MCU at its core.",
+  "description": "The AiLight Firmware is a custom firmware for the Ai-Thinker RGBW Light bulbs that has a ESP8266 MCU at its core.",
   "license": "MIT",
   "keywords": ["AiLight", "firmware", "ESP8266", "Arduino", "LED", "RGBW", "Bulb"],
   "author": {
