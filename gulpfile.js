@@ -104,5 +104,40 @@ gulp.task('html', ['clean', 'css'], function() {
     .pipe(gulp.dest(sourceFolder));
 });
 
+// Creates a gamma correction table
+// Copy the contents of this file in the lib/AiLight/AiLight.hpp file
+gulp.task('gamma', function() {
+  var gamma = 2.8; // Correction factor
+  var MAX_IN = 255; // Tope end of INPUT range
+  var MAX_OUT = 255; // Tope end of OUTPUT range
+  var destination = 'gamma.h';
+
+  var ws = fs.createWriteStream(destination);
+
+  ws.on('error', function(err) {
+    console.log(err);
+  });
+
+  ws.write('// This table remaps linear input values to nonlinear gamma-corrected output\n');
+  ws.write('// values. The output values are specified for 8-bit colours with a gamma\n');
+  ws.write('// correction factor of 2.8\n');
+  ws.write('const static uint8_t PROGMEM gamma8[256] = {');
+  for (var i = 0; i <= MAX_IN; i++) {
+    if (i > 0) {
+      ws.write(',');
+    }
+
+    if ((i & 15) === 0) {
+      ws.write('\n');
+    }
+
+    var level = (Math.floor(Math.pow(i / MAX_IN, gamma) * MAX_OUT + 0.5));
+    ws.write(("    " + level).slice(-4));
+  }
+
+  ws.write(' };\n');
+  ws.end();
+});
+
 // Default task
 gulp.task('default', ['build']);
