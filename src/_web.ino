@@ -221,8 +221,8 @@ void wsProcessMessage(uint8_t num, char *payload, size_t length) {
   }
 
   if (root.containsKey(KEY_STATE)) {
-    bool state = (strcmp(root[KEY_STATE], MQTT_PAYLOAD_ON) == 0) ? true : false;
-    AiLight.setState(state);
+    AiLight.setState((strcmp(root[KEY_STATE], MQTT_PAYLOAD_ON) == 0) ? true
+                                                                     : false);
   }
 
   if (root.containsKey(KEY_GAMMA_CORRECTION)) {
