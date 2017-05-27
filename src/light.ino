@@ -14,7 +14,7 @@
  */
 
 /**
- * @brief Publish a message to an MQTT topic
+ * @brief Handle the various MQTT Events (Connect, Disconnect, etc.)
  *
  * @param type the MQTT event type (e.g. 'connect', 'message', etc.)
  * @param topic the MQTT topic to which the message has been published
@@ -130,13 +130,33 @@ bool processJson(char *message) {
     flash = false;
   }
 
+  if (root.containsKey(KEY_TRANSITION)) {
+    transitionTime = root[KEY_TRANSITION];
+    startTransTime = millis();
+  } else {
+    transitionTime = 0;
+  }
+
   if (root.containsKey(KEY_BRIGHTNESS)) {
     AiLight.setBrightness(root[KEY_BRIGHTNESS]);
   }
 
   if (root.containsKey(KEY_COLOR)) {
-    AiLight.setColor(root[KEY_COLOR][KEY_COLOR_R], root[KEY_COLOR][KEY_COLOR_G],
-                     root[KEY_COLOR][KEY_COLOR_B]);
+
+    if (transitionTime > 0) {
+      stepR =
+          calculateStep(AiLight.getColor().red, root[KEY_COLOR][KEY_COLOR_R]);
+      stepG =
+          calculateStep(AiLight.getColor().green, root[KEY_COLOR][KEY_COLOR_G]);
+      stepB =
+          calculateStep(AiLight.getColor().blue, root[KEY_COLOR][KEY_COLOR_B]);
+
+      stepCount = 0;
+    } else {
+      AiLight.setColor(root[KEY_COLOR][KEY_COLOR_R],
+                       root[KEY_COLOR][KEY_COLOR_G],
+                       root[KEY_COLOR][KEY_COLOR_B]);
+    }
   }
 
   if (root.containsKey(KEY_WHITE)) {
@@ -148,10 +168,10 @@ bool processJson(char *message) {
   }
 
   if (root.containsKey(KEY_STATE)) {
-    if (strcmp(root[KEY_STATE], MQTT_PAYLOAD_ON) == 0) {
-      AiLight.setState(true);
-    } else if (strcmp(root[KEY_STATE], MQTT_PAYLOAD_OFF) == 0) {
-      AiLight.setState(false);
+    state = (strcmp(root[KEY_STATE], MQTT_PAYLOAD_ON) == 0) ? true : false;
+
+    if (transitionTime == 0) {
+      AiLight.setState(state);
     }
   }
 
@@ -207,4 +227,48 @@ void loopLight() {
       sendState(); // Notify subscribers again about current state
     }
   }
+
+  // Transition/Fade
+  if (transitionTime > 0) {
+    AiLight.setState(true);
+
+    uint32_t currentTransTime = millis();
+    if (currentTransTime - startTransTime > transitionTime) {
+      if (stepCount <= 1020) {
+        startTransTime = currentTransTime;
+
+        AiLight.setColor(
+            calculateVal(stepR, AiLight.getColor().red, stepCount),
+            calculateVal(stepG, AiLight.getColor().green, stepCount),
+            calculateVal(stepB, AiLight.getColor().blue, stepCount));
+        stepCount++;
+      } else {
+        transitionTime = 0;
+        sendState(); // Notify subscribers again about current state
+      }
+    }
+  }
+}
+
+int calculateStep(int currentLevel, int targetLevel) {
+  int step = targetLevel - currentLevel;
+  if (step) {
+    step = 1020 / step;
+  }
+
+  return step;
+}
+
+int calculateVal(int step, int val, int i) {
+  if ((step) && i % step == 0) {
+    if (step > 0) {
+      val++;
+    } else if (step < 0) {
+      val--;
+    }
+  }
+
+  val = constrain(val, 0, 255); // Force boundaries
+
+  return val;
 }
