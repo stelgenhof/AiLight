@@ -17,6 +17,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 - Included missing gulp-util package in the 'package.json' file.
 
 ### Removed
+- SVG font (used for icons) as most browsers started unsupporting it. Helps reducing the size of the firmware.
+
 
 ## [0.3.0] - 2017-05-09
 
