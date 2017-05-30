@@ -114,8 +114,8 @@ bool state = false;
 uint16_t transitionTime = 0;
 uint32_t startTransTime = 0;
 int stepR, stepG, stepB;
-int transR, transG, transB;
-int stepCount = 0;
+uint8_t transR, transG, transB;
+uint16_t stepCount = 0;
 
 #define SerialPrint(format, ...)                                               \
   StreamPrint_progmem(Serial, PSTR(format), ##__VA_ARGS__)

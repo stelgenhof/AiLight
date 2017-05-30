@@ -294,7 +294,7 @@ int16_t calculateStep(uint8_t currentLevel, uint8_t targetLevel) {
  *
  * @return the new value
  */
-uint8_t calculateVal(int step, int val, int i, uint8_t targetLevel) {
+uint8_t calculateVal(int step, int val, uint16_t i, uint8_t targetLevel) {
   if ((step) && i % step == 0) {
     if (step > 0) {
       val++;
