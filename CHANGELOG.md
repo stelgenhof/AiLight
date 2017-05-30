@@ -6,17 +6,19 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## [Unreleased]
 
 ### Added
-- When an OTA update has been initiated, a message window - with a nice progress bar - is being displayed to indicate the user that an update is in progress. The Web UI is then reloaded automatically.
-- When the user chooses RESTART or RESET, a user friendly message window is being shown.
+- When an OTA update has been initiated, a message window - with a nice progress bar - is being displayed in the Web UI to indicate the user that an update is in progress. Subsequently, the Web UI is now reloaded automatically.
+- When the user chooses RESTART or RESET, a user friendly message window is being shown in the Web UI.
 
 ### Changed
 - Changed position of password visibility icon to be inside input box.
-- Adjusted path to gulp binary in the 'build.py' file to better support Windows environments.
+- Adjusted path to gulp binary in the 'build.py' file to better support Windows OS.
 
 ### Fixed
 - Included missing gulp-util package in the 'package.json' file.
 
 ### Removed
+- SVG font (used for icons) as most browsers started unsupporting it. Helps reducing the size of the firmware.
+
 
 ## [0.3.0] - 2017-05-09
 
