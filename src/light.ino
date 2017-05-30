@@ -143,13 +143,20 @@ bool processJson(char *message) {
 
   if (root.containsKey(KEY_COLOR)) {
 
+    // In transition/fade
     if (transitionTime > 0) {
-      stepR =
-          calculateStep(AiLight.getColor().red, root[KEY_COLOR][KEY_COLOR_R]);
-      stepG =
-          calculateStep(AiLight.getColor().green, root[KEY_COLOR][KEY_COLOR_G]);
-      stepB =
-          calculateStep(AiLight.getColor().blue, root[KEY_COLOR][KEY_COLOR_B]);
+      transR = root[KEY_COLOR][KEY_COLOR_R];
+      transG = root[KEY_COLOR][KEY_COLOR_G];
+      transB = root[KEY_COLOR][KEY_COLOR_B];
+
+      // If light is off, start fading from Zero
+      if (!AiLight.getState()) {
+        AiLight.setColor(0, 0, 0);
+      }
+
+      stepR = calculateStep(AiLight.getColor().red, transR);
+      stepG = calculateStep(AiLight.getColor().green, transG);
+      stepB = calculateStep(AiLight.getColor().blue, transB);
 
       stepCount = 0;
     } else {
@@ -228,47 +235,85 @@ void loopLight() {
     }
   }
 
-  // Transition/Fade
+  // Transitioning/Fading
   if (transitionTime > 0) {
     AiLight.setState(true);
 
     uint32_t currentTransTime = millis();
+
+    // Cross fade the RGB channels every millisecond
     if (currentTransTime - startTransTime > transitionTime) {
-      if (stepCount <= 1020) {
+      if (stepCount < 1000) {
         startTransTime = currentTransTime;
 
         AiLight.setColor(
-            calculateVal(stepR, AiLight.getColor().red, stepCount),
-            calculateVal(stepG, AiLight.getColor().green, stepCount),
-            calculateVal(stepB, AiLight.getColor().blue, stepCount));
+            calculateVal(stepR, AiLight.getColor().red, stepCount, transR),
+            calculateVal(stepG, AiLight.getColor().green, stepCount, transG),
+            calculateVal(stepB, AiLight.getColor().blue, stepCount, transB));
         stepCount++;
       } else {
         transitionTime = 0;
+        stepCount = 0;
+
+        cfg.is_on = AiLight.getState();
+        cfg.brightness = AiLight.getBrightness();
+        cfg.color_temp = AiLight.getColorTemperature();
+        cfg.color = {AiLight.getColor().red, AiLight.getColor().green,
+                     AiLight.getColor().blue, AiLight.getColor().white};
+        EEPROM_write(cfg);
         sendState(); // Notify subscribers again about current state
       }
     }
   }
 }
 
-int calculateStep(int currentLevel, int targetLevel) {
-  int step = targetLevel - currentLevel;
+/**
+ * @brief Determines the step value needed to change to the target value
+ *
+ * @param currentLevel the current level
+ * @param targetLevel the target / desired level
+ *
+ * @return the step value needed to change to the target value
+ */
+int16_t calculateStep(uint8_t currentLevel, uint8_t targetLevel) {
+  int16_t step = targetLevel - currentLevel;
   if (step) {
-    step = 1020 / step;
+    step = 1000 / step;
   }
 
   return step;
 }
 
-int calculateVal(int step, int val, int i) {
+/**
+ * @brief Calculates the new value
+ *
+ * @param step the step value needed to change to the target value
+ * @param val the current value in the transitioning loop
+ * @param i the current index in the transitioning loop
+ * @param targetLevel the target / desired level
+ *
+ * @return the new value
+ */
+uint8_t calculateVal(int step, int val, int i, uint8_t targetLevel) {
   if ((step) && i % step == 0) {
     if (step > 0) {
       val++;
+
+      // Prevent overshooting the target level
+      if (val > targetLevel) {
+        val = targetLevel;
+      }
     } else if (step < 0) {
       val--;
+
+      // Prevent undershooting the target level
+      if (val < targetLevel) {
+        val = targetLevel;
+      }
     }
   }
 
-  val = constrain(val, 0, 255); // Force boundaries
+  val = constrain(val, 0, MY9291_LEVEL_MAX); // Force boundaries
 
   return val;
 }

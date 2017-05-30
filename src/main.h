@@ -114,6 +114,7 @@ bool state = false;
 uint16_t transitionTime = 0;
 uint32_t startTransTime = 0;
 int stepR, stepG, stepB;
+int transR, transG, transB;
 int stepCount = 0;
 
 #define SerialPrint(format, ...)                                               \
