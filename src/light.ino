@@ -145,18 +145,18 @@ bool processJson(char *message) {
 
     // In transition/fade
     if (transitionTime > 0) {
-      transR = root[KEY_COLOR][KEY_COLOR_R];
-      transG = root[KEY_COLOR][KEY_COLOR_G];
-      transB = root[KEY_COLOR][KEY_COLOR_B];
+      transColor.red = root[KEY_COLOR][KEY_COLOR_R];
+      transColor.green = root[KEY_COLOR][KEY_COLOR_G];
+      transColor.blue = root[KEY_COLOR][KEY_COLOR_B];
 
       // If light is off, start fading from Zero
       if (!AiLight.getState()) {
         AiLight.setColor(0, 0, 0);
       }
 
-      stepR = calculateStep(AiLight.getColor().red, transR);
-      stepG = calculateStep(AiLight.getColor().green, transG);
-      stepB = calculateStep(AiLight.getColor().blue, transB);
+      stepR = calculateStep(AiLight.getColor().red, transColor.red);
+      stepG = calculateStep(AiLight.getColor().green, transColor.green);
+      stepB = calculateStep(AiLight.getColor().blue, transColor.blue);
 
       stepCount = 0;
     } else {
@@ -246,10 +246,12 @@ void loopLight() {
       if (stepCount < 1000) {
         startTransTime = currentTransTime;
 
-        AiLight.setColor(
-            calculateVal(stepR, AiLight.getColor().red, stepCount, transR),
-            calculateVal(stepG, AiLight.getColor().green, stepCount, transG),
-            calculateVal(stepB, AiLight.getColor().blue, stepCount, transB));
+        AiLight.setColor(calculateVal(stepR, AiLight.getColor().red, stepCount,
+                                      transColor.red),
+                         calculateVal(stepG, AiLight.getColor().green,
+                                      stepCount, transColor.green),
+                         calculateVal(stepB, AiLight.getColor().blue, stepCount,
+                                      transColor.blue));
         stepCount++;
       } else {
         transitionTime = 0;
@@ -257,7 +259,6 @@ void loopLight() {
 
         cfg.is_on = AiLight.getState();
         cfg.brightness = AiLight.getBrightness();
-        cfg.color_temp = AiLight.getColorTemperature();
         cfg.color = {AiLight.getColor().red, AiLight.getColor().green,
                      AiLight.getColor().blue, AiLight.getColor().white};
         EEPROM_write(cfg);
