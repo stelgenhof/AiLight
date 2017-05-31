@@ -167,7 +167,21 @@ bool processJson(char *message) {
   }
 
   if (root.containsKey(KEY_WHITE)) {
-    AiLight.setWhite(root[KEY_WHITE]);
+    // In transition/fade
+    if (transitionTime > 0) {
+      transColor.white = root[KEY_WHITE];
+
+      // If light is off, start fading from Zero
+      if (!AiLight.getState()) {
+        AiLight.setWhite(0);
+      }
+
+      stepW = calculateStep(AiLight.getColor().white, transColor.white);
+
+      stepCount = 0;
+    } else {
+      AiLight.setWhite(root[KEY_WHITE]);
+    }
   }
 
   if (root.containsKey(KEY_COLORTEMP)) {
@@ -252,6 +266,10 @@ void loopLight() {
                                       stepCount, transColor.green),
                          calculateVal(stepB, AiLight.getColor().blue, stepCount,
                                       transColor.blue));
+
+        AiLight.setWhite(calculateVal(stepW, AiLight.getColor().white,
+                                      stepCount, transColor.white));
+
         stepCount++;
       } else {
         transitionTime = 0;

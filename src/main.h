@@ -113,7 +113,7 @@ bool currentState;
 bool state = false;
 uint16_t transitionTime = 0;
 uint32_t startTransTime = 0;
-int stepR, stepG, stepB;
+int stepR, stepG, stepB, stepW;
 uint16_t stepCount = 0;
 Color transColor;
 uint8_t transBrightness = 0;
