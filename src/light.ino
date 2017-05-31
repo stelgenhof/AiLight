@@ -131,7 +131,7 @@ bool processJson(char *message) {
   }
 
   if (root.containsKey(KEY_TRANSITION)) {
-    transitionTime = root[KEY_TRANSITION];
+    transitionTime = root[KEY_TRANSITION]; // Time in seconds
     startTransTime = millis();
   } else {
     transitionTime = 0;
@@ -141,8 +141,14 @@ bool processJson(char *message) {
 
     // In transition/fade
     if (transitionTime > 0) {
-      stepBrightness =
-          calculateStep(AiLight.getBrightness(), root[KEY_BRIGHTNESS]);
+      transBrightness = root[KEY_BRIGHTNESS];
+
+      // If light is off, start fading from Zero
+      if (!AiLight.getState()) {
+        AiLight.setBrightness(0);
+      }
+
+      stepBrightness = calculateStep(AiLight.getBrightness(), transBrightness);
       stepCount = 0;
     } else {
       AiLight.setBrightness(root[KEY_BRIGHTNESS]);
@@ -284,12 +290,12 @@ void loopLight() {
                                           stepCount, transColor.white));
         }
 
-        // if (stepBrightness > 0) {
-        //   AiLight.setBrightness(calculateLevel(stepBrightness,
-        //                                      AiLight.getBrightness(),
-        //                                      stepCount,
-        //                                      transBrightness));
-        //}
+        // Transition/fade brightness (if level is different from current)
+        if (stepBrightness != 0) {
+          AiLight.setBrightness(calculateLevel(stepBrightness,
+                                               AiLight.getBrightness(),
+                                               stepCount, transBrightness));
+        }
 
         stepCount++;
       } else {
