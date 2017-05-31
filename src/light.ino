@@ -138,7 +138,15 @@ bool processJson(char *message) {
   }
 
   if (root.containsKey(KEY_BRIGHTNESS)) {
-    AiLight.setBrightness(root[KEY_BRIGHTNESS]);
+
+    // In transition/fade
+    if (transitionTime > 0) {
+      stepBrightness =
+          calculateStep(AiLight.getBrightness(), root[KEY_BRIGHTNESS]);
+      stepCount = 0;
+    } else {
+      AiLight.setBrightness(root[KEY_BRIGHTNESS]);
+    }
   }
 
   if (root.containsKey(KEY_COLOR)) {
@@ -255,20 +263,33 @@ void loopLight() {
 
     uint32_t currentTransTime = millis();
 
-    // Cross fade the RGB channels every millisecond
+    // Cross fade the RGBW channels every millisecond
     if (currentTransTime - startTransTime > transitionTime) {
       if (stepCount < 1000) {
         startTransTime = currentTransTime;
 
-        AiLight.setColor(calculateVal(stepR, AiLight.getColor().red, stepCount,
-                                      transColor.red),
-                         calculateVal(stepG, AiLight.getColor().green,
-                                      stepCount, transColor.green),
-                         calculateVal(stepB, AiLight.getColor().blue, stepCount,
-                                      transColor.blue));
+        // Transition/fade RGB LEDS (if level is different from current)
+        if (stepR != 0 || stepG != 0 || stepB != 0) {
+          AiLight.setColor(calculateLevel(stepR, AiLight.getColor().red,
+                                          stepCount, transColor.red),
+                           calculateLevel(stepG, AiLight.getColor().green,
+                                          stepCount, transColor.green),
+                           calculateLevel(stepB, AiLight.getColor().blue,
+                                          stepCount, transColor.blue));
+        }
 
-        AiLight.setWhite(calculateVal(stepW, AiLight.getColor().white,
-                                      stepCount, transColor.white));
+        // Transition/fade white LEDS (if level is different from current)
+        if (stepW != 0) {
+          AiLight.setWhite(calculateLevel(stepW, AiLight.getColor().white,
+                                          stepCount, transColor.white));
+        }
+
+        // if (stepBrightness > 0) {
+        //   AiLight.setBrightness(calculateLevel(stepBrightness,
+        //                                      AiLight.getBrightness(),
+        //                                      stepCount,
+        //                                      transBrightness));
+        //}
 
         stepCount++;
       } else {
@@ -287,10 +308,10 @@ void loopLight() {
 }
 
 /**
- * @brief Determines the step value needed to change to the target value
+ * @brief Determines the step needed to change to the target value
  *
  * @param currentLevel the current level
- * @param targetLevel the target / desired level
+ * @param targetLevel the target level
  *
  * @return the step value needed to change to the target value
  */
@@ -304,16 +325,16 @@ int16_t calculateStep(uint8_t currentLevel, uint8_t targetLevel) {
 }
 
 /**
- * @brief Calculates the new value
+ * @brief Calculates the next level of a channel (RGBW/Brightness)
  *
- * @param step the step value needed to change to the target value
+ * @param step the step needed for changing to the target value
  * @param val the current value in the transitioning loop
  * @param i the current index in the transitioning loop
- * @param targetLevel the target / desired level
+ * @param targetLevel the target level
  *
- * @return the new value
+ * @return the next level of a channel (RGBW/Brightness)
  */
-uint8_t calculateVal(int step, int val, uint16_t i, uint8_t targetLevel) {
+uint8_t calculateLevel(int step, int val, uint16_t i, uint8_t targetLevel) {
   if ((step) && i % step == 0) {
     if (step > 0) {
       val++;
