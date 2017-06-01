@@ -61,7 +61,18 @@ void AiLightClass::setWhite(uint8_t white) {
 uint16_t AiLightClass::getColorTemperature(void) { return _colortemp; }
 
 void AiLightClass::setColorTemperature(uint16_t temperature) {
+  Color ctColor = colorTemperature2RGB(temperature);
+
+  _color.red = ctColor.red;
+  _color.green = ctColor.green;
+  _color.blue = ctColor.blue;
+
+  setRGBW();
+}
+
+Color AiLightClass::colorTemperature2RGB(uint16_t temperature) {
   _colortemp = temperature; // Save colour temperature setting
+  Color ctColor;
 
   temperature = (temperature == 0) ? 1 : temperature; // Avoid division by zero
 
@@ -77,14 +88,14 @@ void AiLightClass::setColorTemperature(uint16_t temperature) {
                   ? MY9291_LEVEL_MAX
                   : 329.698727446 * pow((tmpKelvin - 60), -0.1332047592);
 
-  _color.red = constrain(red, 0, MY9291_LEVEL_MAX); // Force boundaries
+  ctColor.red = constrain(red, 0, MY9291_LEVEL_MAX); // Force boundaries
 
   // Green
   float green = (tmpKelvin <= 66)
                     ? 99.4708025861 * log(tmpKelvin) - 161.1195681661
                     : 288.1221695283 * pow(tmpKelvin, -0.0755148492);
 
-  _color.green = constrain(green, 0, MY9291_LEVEL_MAX); // Force boundaries
+  ctColor.green = constrain(green, 0, MY9291_LEVEL_MAX); // Force boundaries
 
   // Blue
   float blue = (tmpKelvin >= 66)
@@ -93,9 +104,9 @@ void AiLightClass::setColorTemperature(uint16_t temperature) {
                                         : 138.5177312231 * log(tmpKelvin - 10) -
                                               305.0447927307);
 
-  _color.blue = constrain(blue, 0, MY9291_LEVEL_MAX); // Force boundaries
+  ctColor.blue = constrain(blue, 0, MY9291_LEVEL_MAX); // Force boundaries
 
-  setRGBW();
+  return ctColor;
 }
 
 bool AiLightClass::hasGammaCorrection(void) { return _gammacorrection; }

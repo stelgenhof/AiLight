@@ -199,7 +199,23 @@ bool processJson(char *message) {
   }
 
   if (root.containsKey(KEY_COLORTEMP)) {
-    AiLight.setColorTemperature(root[KEY_COLORTEMP]);
+    // In transition/fade
+    if (transitionTime > 0) {
+      transColor = AiLight.colorTemperature2RGB(root[KEY_COLORTEMP]);
+
+      // If light is off, start fading from Zero
+      if (!AiLight.getState()) {
+        AiLight.setColor(0, 0, 0);
+      }
+
+      stepR = calculateStep(AiLight.getColor().red, transColor.red);
+      stepG = calculateStep(AiLight.getColor().green, transColor.green);
+      stepB = calculateStep(AiLight.getColor().blue, transColor.blue);
+
+      stepCount = 0;
+    } else {
+      AiLight.setColorTemperature(root[KEY_COLORTEMP]);
+    }
   }
 
   if (root.containsKey(KEY_STATE)) {
@@ -271,7 +287,7 @@ void loopLight() {
 
     // Cross fade the RGBW channels every millisecond
     if (currentTransTime - startTransTime > transitionTime) {
-      if (stepCount < 1000) {
+      if (stepCount <= 1000) {
         startTransTime = currentTransTime;
 
         // Transition/fade RGB LEDS (if level is different from current)
