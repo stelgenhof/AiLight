@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 - Adjusted path to gulp binary in the 'build.py' file to provide better support Windows OS.
 
 ### Fixed
+- Ensured OTA 'complete' message isn't shown multiple times.
 - Fixed issue #8: `[Violation] Added non-passive event listener to a scroll-blocking 'touchmove' event` in Web UI.
 - Included missing gulp-util package in the 'package.json' file.
 
