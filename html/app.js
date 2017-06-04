@@ -74,7 +74,9 @@ function Switch(id) {
   this.init = function() {
     this.el = document.getElementById("switch_" + this.id);
     this.state = this.el.checked;
-    this.el.addEventListener("click", this.toggleState.bind(this), {passive: true});
+    this.el.addEventListener("click", this.toggleState.bind(this), {
+      passive: true
+    });
   };
 
 }).call(Switch.prototype);
@@ -126,16 +128,28 @@ function Slider(id) {
     this.el.style.setProperty('--low', '0%');
     this._sethigh();
 
-    this.el.addEventListener("mousemove", this._sethigh.bind(this), {passive: true});
-    this.el.addEventListener("touchmove", this._sethigh.bind(this), {passive: true});
-    this.el.addEventListener("drag", this._sethigh.bind(this), {passive: true});
-    this.el.addEventListener("click", this._sethigh.bind(this), {passive: true});
+    this.el.addEventListener("mousemove", this._sethigh.bind(this), {
+      passive: true
+    });
+    this.el.addEventListener("touchmove", this._sethigh.bind(this), {
+      passive: true
+    });
+    this.el.addEventListener("drag", this._sethigh.bind(this), {
+      passive: true
+    });
+    this.el.addEventListener("click", this._sethigh.bind(this), {
+      passive: true
+    });
 
     var rgb = [K_R, K_G, K_B];
     if (rgb.includes(this.id)) {
-      this.el.addEventListener("change", sendRGB.bind(this), {passive: true});
+      this.el.addEventListener("change", sendRGB.bind(this), {
+        passive: true
+      });
     } else {
-      this.el.addEventListener("change", this._send.bind(this), {passive: true});
+      this.el.addEventListener("change", this._send.bind(this), {
+        passive: true
+      });
     }
   };
 }).call(Slider.prototype);
@@ -321,9 +335,12 @@ function esConnect() {
       if (e.data.startsWith("p-")) {
         var pb = document.getElementById("op");
         var p = parseInt(e.data.split("-")[1]);
+        var hS = false;
+
         pb.value = p;
 
-        if (p === 100) {
+        if (p === 100 && !hS) {
+          hs = true;
           var f = document.createElement('p');
           f.innerHTML = "Completed successfully! Please wait for your Ai-Thinker RGBW Light to be restarted.";
           pb.parentNode.appendChild(f);
@@ -545,15 +562,27 @@ function toggleNav() {
  * @return void
  */
 document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('button-restart').addEventListener('click', restart, {passive: true});
-  document.getElementById('reset').addEventListener('click', reset, {passive: true});
-  document.getElementById('nav-toggle').addEventListener('click', toggleNav, {passive: true});
-  document.getElementById('save').addEventListener('click', save, {passive: true});
+  document.getElementById('button-restart').addEventListener('click', restart, {
+    passive: true
+  });
+  document.getElementById('reset').addEventListener('click', reset, {
+    passive: true
+  });
+  document.getElementById('nav-toggle').addEventListener('click', toggleNav, {
+    passive: true
+  });
+  document.getElementById('save').addEventListener('click', save, {
+    passive: true
+  });
 
   var pw = document.getElementById("pagescontent").querySelectorAll("i");
   [].forEach.call(pw, function(item) {
-    item.addEventListener('touchstart click', togglePassword, {passive: true});
-    item.addEventListener('click', togglePassword, {passive: true});
+    item.addEventListener('touchstart click', togglePassword, {
+      passive: true
+    });
+    item.addEventListener('click', togglePassword, {
+      passive: true
+    });
   });
 
   initTabs();
