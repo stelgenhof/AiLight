@@ -145,22 +145,29 @@ public:
    * @brief Sets the colour of the AiLight based on the given colour temperature
    *
    * This method sets the colour of the AiLight based on the given colour
-   * temperature and switches on the AiLight. The colour temperature is defined
-   * in mired (micro reciprocal degree, the mired is a unit of measurement used
-   * to express colour temperature). Subsequently, the colour temperature is
-   * converted to equivalent RGB values as based on the algorithm by Tanner
-   * Helland.
+   * temperature and switches on the AiLight.
    *
    * @param temperature the desired colour temperature (in mired)
+   */
+  void setColorTemperature(uint16_t temperature);
+
+  /**
+   * @brief Converts a colour temperature to the equivalent RGB colours
+   *
+   * This method converts a given colour temperature to RGB colour values.
+   * The colour temperature is defined in mired (micro reciprocal degree, the
+   * mired is a unit of measurement used to express colour temperature).
+   * (Conversion is based on the algorithm by Tanner Helland.)
+   *
+   * @param temperature the desired colour temperature (in mired)
+   * @return Color a color object (RGBW) representing the given colour temperature
    *
    * Sources:
    * http://www.tannerhelland.com/4435/convert-temperature-rgb-algorithm-code/
    * https://en.wikipedia.org/wiki/Mired
-   *
    */
-  void setColorTemperature(uint16_t temperature);
-
   Color colorTemperature2RGB(uint16_t temperature);
+
   /**
    * @brief Returns whether Gamma Correction is enabled or disabled
    *
