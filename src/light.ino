@@ -221,7 +221,15 @@ bool processJson(char *message) {
   if (root.containsKey(KEY_STATE)) {
     state = (strcmp(root[KEY_STATE], MQTT_PAYLOAD_ON) == 0) ? true : false;
 
-    if (transitionTime == 0) {
+    if (transitionTime > 0 && !state) {
+      transColor.red = 0;
+      transColor.green = 0;
+      transColor.blue = 0;
+
+      stepR = calculateStep(AiLight.getColor().red, transColor.red);
+      stepG = calculateStep(AiLight.getColor().green, transColor.green);
+      stepB = calculateStep(AiLight.getColor().blue, transColor.blue);
+    } else {
       AiLight.setState(state);
     }
   }
@@ -317,13 +325,16 @@ void loopLight() {
       } else {
         transitionTime = 0;
         stepCount = 0;
+        AiLight.setState(state);
 
+        sendState(); // Notify subscribers again about current state
+
+        // Update settings
         cfg.is_on = AiLight.getState();
         cfg.brightness = AiLight.getBrightness();
         cfg.color = {AiLight.getColor().red, AiLight.getColor().green,
                      AiLight.getColor().blue, AiLight.getColor().white};
         EEPROM_write(cfg);
-        sendState(); // Notify subscribers again about current state
       }
     }
   }
