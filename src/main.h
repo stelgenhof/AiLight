@@ -52,6 +52,7 @@ extern "C" {
 #define KEY_COLOR_B "b"
 #define KEY_HOSTNAME "hostname"
 #define KEY_GAMMA_CORRECTION "gamma"
+#define KEY_TRANSITION "transition"
 #define KEY_WIFI_SSID "wifi_ssid"
 #define KEY_WIFI_PSK "wifi_psk"
 #define KEY_MQTT_SERVER "mqtt_server"
@@ -107,6 +108,15 @@ uint8_t flashBrightness = 0;
 Color currentColor;
 uint8_t currentBrightness;
 bool currentState;
+
+// Globals for transition/fade
+bool state = false;
+uint16_t transitionTime = 0;
+uint32_t startTransTime = 0;
+int stepR, stepG, stepB, stepW, stepBrightness = 0;
+uint16_t stepCount = 0;
+Color transColor;
+uint8_t transBrightness = 0;
 
 #define SerialPrint(format, ...)                                               \
   StreamPrint_progmem(Serial, PSTR(format), ##__VA_ARGS__)

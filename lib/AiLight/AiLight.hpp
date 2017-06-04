@@ -160,6 +160,7 @@ public:
    */
   void setColorTemperature(uint16_t temperature);
 
+  Color colorTemperature2RGB(uint16_t temperature);
   /**
    * @brief Returns whether Gamma Correction is enabled or disabled
    *

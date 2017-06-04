@@ -14,7 +14,7 @@
  */
 
 /**
- * @brief Publish a message to an MQTT topic
+ * @brief Handle the various MQTT Events (Connect, Disconnect, etc.)
  *
  * @param type the MQTT event type (e.g. 'connect', 'message', etc.)
  * @param topic the MQTT topic to which the message has been published
@@ -130,28 +130,107 @@ bool processJson(char *message) {
     flash = false;
   }
 
+  if (root.containsKey(KEY_TRANSITION)) {
+    transitionTime = root[KEY_TRANSITION]; // Time in seconds
+    startTransTime = millis();
+  } else {
+    transitionTime = 0;
+  }
+
   if (root.containsKey(KEY_BRIGHTNESS)) {
-    AiLight.setBrightness(root[KEY_BRIGHTNESS]);
+
+    // In transition/fade
+    if (transitionTime > 0) {
+      transBrightness = root[KEY_BRIGHTNESS];
+
+      // If light is off, start fading from Zero
+      if (!AiLight.getState()) {
+        AiLight.setBrightness(0);
+      }
+
+      stepBrightness = calculateStep(AiLight.getBrightness(), transBrightness);
+      stepCount = 0;
+    } else {
+      AiLight.setBrightness(root[KEY_BRIGHTNESS]);
+    }
   }
 
   if (root.containsKey(KEY_COLOR)) {
-    AiLight.setColor(root[KEY_COLOR][KEY_COLOR_R], root[KEY_COLOR][KEY_COLOR_G],
-                     root[KEY_COLOR][KEY_COLOR_B]);
+
+    // In transition/fade
+    if (transitionTime > 0) {
+      transColor.red = root[KEY_COLOR][KEY_COLOR_R];
+      transColor.green = root[KEY_COLOR][KEY_COLOR_G];
+      transColor.blue = root[KEY_COLOR][KEY_COLOR_B];
+
+      // If light is off, start fading from Zero
+      if (!AiLight.getState()) {
+        AiLight.setColor(0, 0, 0);
+      }
+
+      stepR = calculateStep(AiLight.getColor().red, transColor.red);
+      stepG = calculateStep(AiLight.getColor().green, transColor.green);
+      stepB = calculateStep(AiLight.getColor().blue, transColor.blue);
+
+      stepCount = 0;
+    } else {
+      AiLight.setColor(root[KEY_COLOR][KEY_COLOR_R],
+                       root[KEY_COLOR][KEY_COLOR_G],
+                       root[KEY_COLOR][KEY_COLOR_B]);
+    }
   }
 
   if (root.containsKey(KEY_WHITE)) {
-    AiLight.setWhite(root[KEY_WHITE]);
+    // In transition/fade
+    if (transitionTime > 0) {
+      transColor.white = root[KEY_WHITE];
+
+      // If light is off, start fading from Zero
+      if (!AiLight.getState()) {
+        AiLight.setWhite(0);
+      }
+
+      stepW = calculateStep(AiLight.getColor().white, transColor.white);
+
+      stepCount = 0;
+    } else {
+      AiLight.setWhite(root[KEY_WHITE]);
+    }
   }
 
   if (root.containsKey(KEY_COLORTEMP)) {
-    AiLight.setColorTemperature(root[KEY_COLORTEMP]);
+    // In transition/fade
+    if (transitionTime > 0) {
+      transColor = AiLight.colorTemperature2RGB(root[KEY_COLORTEMP]);
+
+      // If light is off, start fading from Zero
+      if (!AiLight.getState()) {
+        AiLight.setColor(0, 0, 0);
+      }
+
+      stepR = calculateStep(AiLight.getColor().red, transColor.red);
+      stepG = calculateStep(AiLight.getColor().green, transColor.green);
+      stepB = calculateStep(AiLight.getColor().blue, transColor.blue);
+
+      stepCount = 0;
+    } else {
+      AiLight.setColorTemperature(root[KEY_COLORTEMP]);
+    }
   }
 
   if (root.containsKey(KEY_STATE)) {
-    if (strcmp(root[KEY_STATE], MQTT_PAYLOAD_ON) == 0) {
-      AiLight.setState(true);
-    } else if (strcmp(root[KEY_STATE], MQTT_PAYLOAD_OFF) == 0) {
-      AiLight.setState(false);
+    state = (strcmp(root[KEY_STATE], MQTT_PAYLOAD_ON) == 0) ? true : false;
+
+    if (transitionTime > 0 && !state) {
+      transColor.red = 0;
+      transColor.green = 0;
+      transColor.blue = 0;
+
+      stepR = calculateStep(AiLight.getColor().red, transColor.red);
+      stepG = calculateStep(AiLight.getColor().green, transColor.green);
+      stepB = calculateStep(AiLight.getColor().blue, transColor.blue);
+    } else {
+      AiLight.setState(state);
     }
   }
 
@@ -207,4 +286,107 @@ void loopLight() {
       sendState(); // Notify subscribers again about current state
     }
   }
+
+  // Transitioning/Fading
+  if (transitionTime > 0) {
+    AiLight.setState(true);
+
+    uint32_t currentTransTime = millis();
+
+    // Cross fade the RGBW channels every millisecond
+    if (currentTransTime - startTransTime > transitionTime) {
+      if (stepCount <= 1000) {
+        startTransTime = currentTransTime;
+
+        // Transition/fade RGB LEDS (if level is different from current)
+        if (stepR != 0 || stepG != 0 || stepB != 0) {
+          AiLight.setColor(calculateLevel(stepR, AiLight.getColor().red,
+                                          stepCount, transColor.red),
+                           calculateLevel(stepG, AiLight.getColor().green,
+                                          stepCount, transColor.green),
+                           calculateLevel(stepB, AiLight.getColor().blue,
+                                          stepCount, transColor.blue));
+        }
+
+        // Transition/fade white LEDS (if level is different from current)
+        if (stepW != 0) {
+          AiLight.setWhite(calculateLevel(stepW, AiLight.getColor().white,
+                                          stepCount, transColor.white));
+        }
+
+        // Transition/fade brightness (if level is different from current)
+        if (stepBrightness != 0) {
+          AiLight.setBrightness(calculateLevel(stepBrightness,
+                                               AiLight.getBrightness(),
+                                               stepCount, transBrightness));
+        }
+
+        stepCount++;
+      } else {
+        transitionTime = 0;
+        stepCount = 0;
+        AiLight.setState(state);
+
+        sendState(); // Notify subscribers again about current state
+
+        // Update settings
+        cfg.is_on = AiLight.getState();
+        cfg.brightness = AiLight.getBrightness();
+        cfg.color = {AiLight.getColor().red, AiLight.getColor().green,
+                     AiLight.getColor().blue, AiLight.getColor().white};
+        EEPROM_write(cfg);
+      }
+    }
+  }
+}
+
+/**
+ * @brief Determines the step needed to change to the target value
+ *
+ * @param currentLevel the current level
+ * @param targetLevel the target level
+ *
+ * @return the step value needed to change to the target value
+ */
+int16_t calculateStep(uint8_t currentLevel, uint8_t targetLevel) {
+  int16_t step = targetLevel - currentLevel;
+  if (step) {
+    step = 1000 / step;
+  }
+
+  return step;
+}
+
+/**
+ * @brief Calculates the next level of a channel (RGBW/Brightness)
+ *
+ * @param step the step needed for changing to the target value
+ * @param val the current value in the transitioning loop
+ * @param i the current index in the transitioning loop
+ * @param targetLevel the target level
+ *
+ * @return the next level of a channel (RGBW/Brightness)
+ */
+uint8_t calculateLevel(int step, int val, uint16_t i, uint8_t targetLevel) {
+  if ((step) && i % step == 0) {
+    if (step > 0) {
+      val++;
+
+      // Prevent overshooting the target level
+      if (val > targetLevel) {
+        val = targetLevel;
+      }
+    } else if (step < 0) {
+      val--;
+
+      // Prevent undershooting the target level
+      if (val < targetLevel) {
+        val = targetLevel;
+      }
+    }
+  }
+
+  val = constrain(val, 0, MY9291_LEVEL_MAX); // Force boundaries
+
+  return val;
 }
