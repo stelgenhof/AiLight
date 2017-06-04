@@ -6,18 +6,20 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## [Unreleased]
 
 ### Added
+- In stead of immediately switching to a new state, you can now make the transition to the desired state (i.e. colours, brightness, etc.) perform more gradually. This will change the light (cross fade) from the current to the next state given the specified time.
+- Now the html.gz.h file is included for people that are not able to build this file themselves.
 - When an OTA update has been initiated, a message window - with a nice progress bar - is being displayed in the Web UI to indicate the user that an update is in progress. Subsequently, the Web UI is now reloaded automatically.
 - When the user chooses RESTART or RESET, a user friendly message window is being shown in the Web UI.
 
 ### Changed
 - Changed position of password visibility icon to be inside input box.
-- Adjusted path to gulp binary in the 'build.py' file to better support Windows OS.
+- Adjusted path to gulp binary in the 'build.py' file to provide better support Windows OS.
 
 ### Fixed
 - Included missing gulp-util package in the 'package.json' file.
 
 ### Removed
-- SVG font (used for icons) as most browsers started unsupporting it. Helps reducing the size of the firmware.
+- SVG font (used for icons) as most browsers started not supporting it anymore. Helps reducing the size of the firmware.
 
 
 ## [0.3.0] - 2017-05-09
