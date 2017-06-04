@@ -325,7 +325,7 @@ function esConnect() {
 
         if (p === 100) {
           var f = document.createElement('p');
-          f.innerHTML = "Completed successfully! Please wait for this page to be refreshed.";
+          f.innerHTML = "Completed successfully! Please wait for your Ai-Thinker RGBW Light to be restarted.";
           pb.parentNode.appendChild(f);
           reload(false);
         }
@@ -364,7 +364,7 @@ function reload(show) {
  * @return bool true when user approves, false otherwise
  */
 function restart() {
-  var response = window.confirm("Are you sure you want to restart your device?");
+  var response = window.confirm("Are you sure you want to restart your Ai-Thinker RGBW Light?");
   if (response === false) {
     return false;
   }
@@ -383,7 +383,7 @@ function restart() {
  * @return bool true when user approves, false otherwise
  */
 function reset() {
-  var response = window.confirm("You are about to reset your device to the factory defaults!\n Are you sure you want to reset?");
+  var response = window.confirm("You are about to reset your Ai-Thinker RGBW Light to the factory defaults!\n Are you sure you want to reset?");
   if (response === false) {
     return false;
   }
