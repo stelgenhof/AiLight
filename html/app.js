@@ -74,7 +74,7 @@ function Switch(id) {
   this.init = function() {
     this.el = document.getElementById("switch_" + this.id);
     this.state = this.el.checked;
-    this.el.addEventListener("click", this.toggleState.bind(this), false);
+    this.el.addEventListener("click", this.toggleState.bind(this), {passive: true});
   };
 
 }).call(Switch.prototype);
@@ -126,16 +126,16 @@ function Slider(id) {
     this.el.style.setProperty('--low', '0%');
     this._sethigh();
 
-    this.el.addEventListener("mousemove", this._sethigh.bind(this), false);
-    this.el.addEventListener("touchmove", this._sethigh.bind(this), false);
-    this.el.addEventListener("drag", this._sethigh.bind(this), false);
-    this.el.addEventListener("click", this._sethigh.bind(this), false);
+    this.el.addEventListener("mousemove", this._sethigh.bind(this), {passive: true});
+    this.el.addEventListener("touchmove", this._sethigh.bind(this), {passive: true});
+    this.el.addEventListener("drag", this._sethigh.bind(this), {passive: true});
+    this.el.addEventListener("click", this._sethigh.bind(this), {passive: true});
 
     var rgb = [K_R, K_G, K_B];
     if (rgb.includes(this.id)) {
-      this.el.addEventListener("change", sendRGB.bind(this), false);
+      this.el.addEventListener("change", sendRGB.bind(this), {passive: true});
     } else {
-      this.el.addEventListener("change", this._send.bind(this), false);
+      this.el.addEventListener("change", this._send.bind(this), {passive: true});
     }
   };
 }).call(Slider.prototype);
@@ -545,15 +545,15 @@ function toggleNav() {
  * @return void
  */
 document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('button-restart').addEventListener('click', restart, false);
-  document.getElementById('reset').addEventListener('click', reset, false);
-  document.getElementById('nav-toggle').addEventListener('click', toggleNav, false);
-  document.getElementById('save').addEventListener('click', save, false);
+  document.getElementById('button-restart').addEventListener('click', restart, {passive: true});
+  document.getElementById('reset').addEventListener('click', reset, {passive: true});
+  document.getElementById('nav-toggle').addEventListener('click', toggleNav, {passive: true});
+  document.getElementById('save').addEventListener('click', save, {passive: true});
 
   var pw = document.getElementById("pagescontent").querySelectorAll("i");
   [].forEach.call(pw, function(item) {
-    item.addEventListener('touchstart click', togglePassword, false);
-    item.addEventListener('click', togglePassword, false);
+    item.addEventListener('touchstart click', togglePassword, {passive: true});
+    item.addEventListener('click', togglePassword, {passive: true});
   });
 
   initTabs();
