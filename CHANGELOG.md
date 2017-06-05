@@ -1,3 +1,5 @@
+![AiLight](https://raw.githubusercontent.com/wiki/stelgenhof/AiLight/images/ailight_logo.png)
+
 # Change Log
 All notable changes to this project will be documented in this file.
 
