@@ -1,12 +1,12 @@
 ![AiLight](https://raw.githubusercontent.com/wiki/stelgenhof/AiLight/images/ailight_logo.png)
 
-AiLight is a custom firmware for the inexpensive Ai-Thinker RGBW WiFi RGB light bulbs that has the ESP8266 MCU at its core. Xose Pérez has written an excellent [article](http://tinkerman.cat/ailight-hackable-rgbw-light-bulb/) on his blog how you can upload your own firmware to this light.
+**AiLight** is a custom firmware for the inexpensive Ai-Thinker RGBW WiFi RGB light bulbs that has the ESP8266 MCU at its core. Xose Pérez has written an excellent [article](http://tinkerman.cat/ailight-hackable-rgbw-light-bulb/) on his blog how you can upload your own firmware to this light.
 
 ![AiLight](https://www.sachatelgenhof.nl/user/pages/02.blog/ailight/screen_combo_m.png)
 
 ## Features
 
-AiLight allows you to:
+**AiLight** allows you to:
 
 - switch the light on or off
 - set the level of the 4 colour channels (Red, Green, Blue and White)
@@ -24,7 +24,7 @@ This can all be done in [Home Assistant](https://home-assistant.io) (using the M
 - Support for Over The Air (OTA) firmware updates
 - Preserve light settings and configuration after power cycle or restart
 - Perform remote restart using the built-in HTML UI.
-- Reset to factory defaults using the built-in HTML UI (* 'factory' here means the default settings of the AiLight firmware upon compile time)
+- Reset to factory defaults using the built-in HTML UI (* 'factory' here means the default settings of the **AiLight** firmware upon compile time)
 
 
 **Roadmap**
@@ -40,7 +40,7 @@ Making this firmware was largely inspired by the [MY9291](https://github.com/xos
 
 ## Installation/Configuration
 
-1. Clone this AiLight repository and change your current directory to where AiLight is cloned.
+1. Clone this **AiLight** repository and change your current directory to where **AiLight** is cloned.
 2. Make a copy of the `config.example.h` file in the 'src' folder named `config.h`
 3. Depending on your environment, set at least the following values in the `config.h` file:
 
@@ -50,13 +50,13 @@ Making this firmware was largely inspired by the [MY9291](https://github.com/xos
   - MQTT_USER `// The username to connect to your MQTT broker`
   - MQTT_PASSWORD `// The password to connect to your MQTT broker`
 
-  Leaving the WiFi settings blank, will make the AiLight start in AP mode (Access Point). From there you can access the   settings screen and enter your WiFi settings.
+  Leaving the WiFi settings blank, will make the **AiLight** start in AP mode (Access Point). From there you can access the   settings screen and enter your WiFi settings.
 
   Other configuration variables can be left as is, however feel free to adjust as you see fit.
 
 4. Make a copy of the `platformio.example.ini` file name `platformio.ini`. This PlatformIO configuration doesn't require any changes, however it is recommended to change the OTA port number and OTA password when using your Ai-Thinker RGBW Light in production. (In that case don't forget to update the respective variables in your `config.h` file too).
 
-5. In a terminal session (or in PlatformIO), run the command `npm install` (or `yarn install`). This is a required step that will install necessary NodeJS packages for building the UI interface. Make sure you do this in the directory where you cloned AiLight (e.g 'AiLight'), otherwise the NodeJS packages will not get installed.
+5. In a terminal session (or in PlatformIO), run the command `npm install` (or `yarn install`). This is a required step that will install necessary NodeJS packages for building the UI interface. Make sure you do this in the directory where you cloned **AiLight** (e.g 'AiLight'), otherwise the NodeJS packages will not get installed.
 
 6. Click on the "PlatformIO: Build" icon (or issue a "platformio run" command from the PlatformIO terminal).
 
@@ -64,7 +64,7 @@ That's all it takes, you're ready to go!
 
 If no compilation errors popped up, you can start flashing the firmware to your Ai-Thinker RGBW Light using an FTDI (or alike) programmer. This is a required step of course, since your Ai-Thinker RGBW Light still has the factory firmware.
 
-If the upload of he AiLight firmware was successful, it is recommended to restart your Ai-Thinker RGBW Light. This can be done by reconnecting the power of your FTDI programmer.
+If the upload of he **AiLight** firmware was successful, it is recommended to restart your Ai-Thinker RGBW Light. This can be done by reconnecting the power of your FTDI programmer.
 
 While connected to your FTDI programmer, check the output on your Serial Monitor. You should see some messages appear that will tell you details of the firmware, the light, hostname and the assigned IP address.
 
