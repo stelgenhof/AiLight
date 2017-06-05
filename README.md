@@ -128,14 +128,6 @@ The PlatformIO configuration contains 4 environments for building and flashing y
 
 In addition, for each of these 2 environments, an OTA environment is available for uploading the firmware over OTA.
 
-## Dependencies
-
-- [MY9291](https://github.com/xoseperez/my9291) LED driver.
-- AsyncMQTTClient library
-- ArduinoJson library
-- ESPAsyncTCP library
-- ESPAsyncWebServer library
-
 ## Bugs and Feedback
 For bugs, questions and discussions, please use the [Github Issues](https://github.com/stelgenhof/AiLight/issues).
 
