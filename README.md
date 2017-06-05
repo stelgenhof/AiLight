@@ -136,9 +136,12 @@ In addition, for each of these 2 environments, an OTA environment is available f
 - ESPAsyncTCP library
 - ESPAsyncWebServer library
 
+## Bugs and Feedback
+For bugs, questions and discussions, please use the [Github Issues](https://github.com/stelgenhof/AiLight/issues).
+
 ## Contributing
 
-Contributions are encouraged and welcome; I am always happy to get feedback or pull requests on Github :)
+Contributions are encouraged and welcome; I am always happy to get feedback or pull requests on Github :) Create [Github Issues](https://github.com/stelgenhof/AiLight/issues) for bugs and new features and comment on the ones you are interested in.
 
 ## Credits and License
 
