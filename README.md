@@ -31,7 +31,7 @@ This can all be done in [Home Assistant](https://home-assistant.io) (using the M
 
 - MQTT Discovery
 - Effects
-- Transitions
+- ~~Transitions~~
 - ~~Remember light state after power cycle~~
 - ~~MQTT Last Will And Testament~~
 - ~~Gamma Correction~~
