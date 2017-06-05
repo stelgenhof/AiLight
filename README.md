@@ -38,10 +38,6 @@ This can all be done in [Home Assistant](https://home-assistant.io) (using the M
 
 Making this firmware was largely inspired by the [MY9291](https://github.com/xoseperez/my9291) LED driver and the [Espurna](https://bitbucket.org/xoseperez/espurna) firmware of [Xose Pérez](https://github.com/xoseperez).
 
-## Requirements
-
-To build and upload this firmware you need to have [PlatformIO](http://platformio.org/) and [NodeJS](https://nodejs.org/en/) installed. Please check their respective websites for installation instructions.
-
 ## Installation/Configuration
 
 1. Clone this AiLight repository and change your current directory to where AiLight is cloned.
