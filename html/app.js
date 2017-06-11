@@ -446,7 +446,8 @@ function addValidationMessage(el, message) {
  * @return void
  */
 function save() {
-  var s, msg = {};
+  var s = {};
+  var msg = {};
   var isValid = true;
 
   var Valid952HostnameRegex = /^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$/i;
