@@ -14,6 +14,7 @@
 - set the light at a particular [colour temperature](https://github.com/stelgenhof/AiLight/wiki/Colour-Temperature)
 - let the light [flash](https://github.com/stelgenhof/AiLight/wiki/Flashing-the-Light) (i.e. blinking with a given colour and brightness)
 - enable [Gamma Correction](https://github.com/stelgenhof/AiLight/wiki/Gamma-Correction) to make the LED colours appear closer to what our eyes perceive
+- set the light to [transition](https://github.com/stelgenhof/AiLight/wiki/Transition) to the new state, rather than immediately.
 
 This can all be done with the built-in (mobile friendly) Web UI or in [Home Assistant](https://home-assistant.io) (using the MQTT built-in integration via JSON). The Web UI also gives you the ability to configure your Ai-Thinker RGBW Light remotely. You can easily change your WiFi settings or the configuration of your MQTT broker.
 
