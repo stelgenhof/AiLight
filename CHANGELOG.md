@@ -8,6 +8,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## [Unreleased]
 
 ### Added
+
+### Changed
+
+### Fixed
+
+### Removed
+
+
+## [0.4.0] - 2017-06-17
+
+### Added
 - In stead of immediately switching to a new state, you can now make the transition to a desired state (i.e. colours, brightness, etc.) perform more gradually. This will change the light (cross fade) from the current to the next state given the specified time.
 - Now the html.gz.h file is included for people that are not able to build this file themselves.
 - When an OTA update has been initiated, a message window - with a nice progress bar - is being displayed in the Web UI to indicate the user that an update is in progress. Subsequently, the Web UI is now reloaded automatically.
