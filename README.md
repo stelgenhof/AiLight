@@ -4,7 +4,7 @@
 
 ![AiLight](https://www.sachatelgenhof.nl/user/pages/02.blog/ailight/screen_combo_m.png)
 
-## Main Features
+## Features
 
 With **AiLight** you can:
 
@@ -18,7 +18,7 @@ With **AiLight** you can:
 
 This can all be done with the built-in (mobile friendly) Web UI or in [Home Assistant](https://home-assistant.io) (using the MQTT built-in integration via JSON). The Web UI also gives you the ability to configure your Ai-Thinker RGBW Light remotely. You can easily change your WiFi settings or the configuration of your MQTT broker.
 
-### Other Features
+### Other
 
 - MQTT Last Will and Testament enabled
 - Support for Over The Air (OTA) firmware updates
@@ -27,7 +27,7 @@ This can all be done with the built-in (mobile friendly) Web UI or in [Home Assi
 - [Reset](https://github.com/stelgenhof/AiLight/wiki/Restart-%26-Reset) to factory defaults using the built-in HTML UI (* 'factory' here means the default settings of the **AiLight** firmware upon compile time)
 
 
-**Roadmap**
+## Roadmap
 
 - MQTT Discovery
 - Effects
@@ -40,6 +40,7 @@ Making this firmware was largely inspired by the [MY9291](https://github.com/xos
 
 ## Getting started
 Got curious and want to use **AiLight** too? Head over to the [Wiki](https://github.com/stelgenhof/AiLight/wiki) where you can find all relevant topics on how to [connect](https://github.com/stelgenhof/AiLight/wiki/Connection), [flash](https://github.com/stelgenhof/AiLight/wiki/Flashing-the-Firmware) and use the **AiLight** firmware!
+
 
 ## Bugs and Feedback
 For bugs, questions and discussions, please use the [Github Issues](https://github.com/stelgenhof/AiLight/issues).
