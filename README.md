@@ -6,7 +6,7 @@
 
 ## Main Features
 
-**AiLight** allows you to:
+With **AiLight** you can:
 
 - switch the light on or off
 - set the level of the 4 colour channels (Red, Green, Blue and White)
