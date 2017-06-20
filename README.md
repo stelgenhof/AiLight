@@ -39,7 +39,7 @@ This can all be done with the built-in (mobile friendly) Web UI or in [Home Assi
 Making this firmware was largely inspired by the [MY9291](https://github.com/xoseperez/my9291) LED driver and the [Espurna](https://bitbucket.org/xoseperez/espurna) firmware of [Xose Pérez](https://github.com/xoseperez).
 
 ## Getting started
-Curious and want to use **AiLight**? Head over to the Wiki where you can find all relevant topics on how to connect, flash and use the **AiLight** firmware!
+Got curious and want to use **AiLight** too? Head over to the [Wiki](https://github.com/stelgenhof/AiLight/wiki) where you can find all relevant topics on how to [connect](https://github.com/stelgenhof/AiLight/wiki/Connection), [flash](https://github.com/stelgenhof/AiLight/wiki/Flashing-the-Firmware) and use the **AiLight** firmware!
 
 ## Bugs and Feedback
 For bugs, questions and discussions, please use the [Github Issues](https://github.com/stelgenhof/AiLight/issues).
