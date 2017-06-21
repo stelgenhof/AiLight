@@ -1,6 +1,6 @@
 ![AiLight](https://raw.githubusercontent.com/wiki/stelgenhof/AiLight/images/ailight_logo.png)
 
-**AiLight** is a custom firmware for the inexpensive Ai-Thinker RGBW WiFi light bulbs that has the ESP8266 MCU at its core. Xose Pérez has written an excellent [article](http://tinkerman.cat/ailight-hackable-rgbw-light-bulb/) on his blog how you can upload your own firmware to this light.
+**AiLight** is a custom firmware for the inexpensive Ai-Thinker RGBW WiFi light bulbs that has the ESP8266 MCU at its core.
 
 ![Ai-Thinker RGBW Light bulb](https://github.com/stelgenhof/AiLight/wiki/images/aithinker_light.png)
 ![AiLight](https://www.sachatelgenhof.nl/user/pages/02.blog/ailight/screen_combo_m.png)
