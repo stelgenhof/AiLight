@@ -22,7 +22,7 @@ This can all be done with the built-in (mobile friendly) Web UI or in [Home Assi
 ### Other
 
 - MQTT Last Will and Testament enabled
-- Support for Over The Air (OTA) firmware updates
+- Support for [Over The Air](https://github.com/stelgenhof/AiLight/wiki/OTA-Updates) (OTA) firmware updates
 - Preserve light settings and configuration after power cycle or restart
 - Perform remote [restart](https://github.com/stelgenhof/AiLight/wiki/Restart-%26-Reset) using the built-in HTML UI.
 - [Reset](https://github.com/stelgenhof/AiLight/wiki/Restart-%26-Reset) to factory defaults using the built-in HTML UI (* 'factory' here means the default settings of the **AiLight** firmware upon compile time)
