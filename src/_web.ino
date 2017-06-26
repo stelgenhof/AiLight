@@ -124,7 +124,7 @@ void wsProcessMessage(uint8_t num, char *payload, size_t length) {
     }
 
     if (settings.containsKey(KEY_MQTT_PORT)) {
-      uint16_t mqtt_port = (strlen(settings[KEY_MQTT_PORT]) > 0)
+      uint16_t mqtt_port = (os_strlen(settings[KEY_MQTT_PORT]) > 0)
                                ? settings[KEY_MQTT_PORT]
                                : MQTT_PORT;
       if (cfg.mqtt_port != mqtt_port) {
@@ -221,8 +221,8 @@ void wsProcessMessage(uint8_t num, char *payload, size_t length) {
   }
 
   if (root.containsKey(KEY_STATE)) {
-    AiLight.setState((os_strcmp(root[KEY_STATE], MQTT_PAYLOAD_ON) == 0) ? true
-                                                                     : false);
+    AiLight.setState(
+        (os_strcmp(root[KEY_STATE], MQTT_PAYLOAD_ON) == 0) ? true : false);
   }
 
   if (root.containsKey(KEY_GAMMA_CORRECTION)) {

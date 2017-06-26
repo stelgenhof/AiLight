@@ -151,12 +151,12 @@ void StreamPrint_progmem(Print &out, PGM_P format, ...) {
   // null terminate - leave last char since we might need it in worst case for
   // results \0
   formatString[sizeof(formatString) - 2] = '\0';
-  ptr = &formatString[strlen(formatString) + 1]; // our result buffer...
+  ptr = &formatString[os_strlen(formatString) + 1]; // our result buffer...
 
   va_list args;
   va_start(args, format);
-  vsnprintf(ptr, sizeof(formatString) - 1 - strlen(formatString), formatString,
-            args);
+  vsnprintf(ptr, sizeof(formatString) - 1 - os_strlen(formatString),
+            formatString, args);
   va_end(args);
   formatString[sizeof(formatString) - 1] = '\0';
 

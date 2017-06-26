@@ -29,7 +29,7 @@ void mqttPublish(const char *topic, const char *message) {
     return;
   }
 
-  if ((strlen(topic) > 0) && (strlen(message) > 0)) {
+  if ((os_strlen(topic) > 0) && (os_strlen(message) > 0)) {
     mqtt.publish(topic, MQTT_QOS_LEVEL, MQTT_RETAIN, message);
 
     DEBUGLOG("[MQTT] Published message to '%s'\n", topic);
@@ -48,7 +48,7 @@ void mqttSubscribe(const char *topic, uint8_t qos = MQTT_QOS_LEVEL) {
     return;
   }
 
-  if (strlen(topic) > 0) {
+  if (os_strlen(topic) > 0) {
     mqtt.subscribe(topic, qos);
 
     DEBUGLOG("[MQTT] Subscribed to topic '%s'\n", topic);
@@ -66,7 +66,7 @@ void mqttUnsubscribe(const char *topic) {
     return;
   }
 
-  if (strlen(topic) > 0) {
+  if (os_strlen(topic) > 0) {
     mqtt.unsubscribe(topic);
 
     DEBUGLOG("[MQTT] Unsubscribed from topic '%s'\n", topic);
@@ -149,7 +149,7 @@ void mqttConnect() {
     mqtt.setClientId(cfg.hostname);
     mqtt.setWill(cfg.mqtt_lwt_topic, 2, true, MQTT_STATUS_OFFLINE);
 
-    if ((strlen(cfg.mqtt_user) > 0) && (strlen(cfg.mqtt_password) > 0)) {
+    if ((os_strlen(cfg.mqtt_user) > 0) && (os_strlen(cfg.mqtt_password) > 0)) {
       DEBUGLOG(" as user '%s'\n", cfg.mqtt_user);
       mqtt.setCredentials(cfg.mqtt_user, cfg.mqtt_password);
     }
