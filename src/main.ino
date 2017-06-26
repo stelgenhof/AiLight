@@ -24,7 +24,7 @@ const char *getDeviceID() {
 
   char cidBuf[7];
   sprintf(cidBuf, "%06X", ESP.getChipId());
-  strcat(identifier, cidBuf);
+  os_strcat(identifier, cidBuf);
 
   return identifier;
 }
