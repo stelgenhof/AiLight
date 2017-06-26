@@ -27,6 +27,9 @@ void setupOTA() {
   ArduinoOTA.onStart([]() {
     DEBUGLOG("[OTA ] Start\n");
     events.send("start", "ota");
+
+    ws.enable(false); // Disable WebSocket client connections
+    ws.closeAll(); // Close WebSocket client connections    
   });
 
   ArduinoOTA.onEnd([]() {
