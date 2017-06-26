@@ -28,6 +28,8 @@ const S_OFF = 'OFF';
 
 const WAIT = 15000;
 
+var hS = false;
+
 /**
  * Object representing a Switch component
  *
@@ -335,12 +337,11 @@ function esConnect() {
       if (e.data.startsWith("p-")) {
         var pb = document.getElementById("op");
         var p = parseInt(e.data.split("-")[1]);
-        var hS = false;
 
         pb.value = p;
 
         if (p === 100 && !hS) {
-          hs = true;
+          hS = true;
           var f = document.createElement('p');
           f.innerHTML = "Completed successfully! Please wait for your Ai-Thinker RGBW Light to be restarted.";
           pb.parentNode.appendChild(f);
