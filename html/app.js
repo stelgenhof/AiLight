@@ -474,10 +474,12 @@ function save() {
     }
 
     // Validate WiFi PSK
-    if (id === 'wifi_psk' && inputs[i].value.length < 8) {
-      addValidationMessage(inputs[i], 'A WiFi Passphrase Key (Password) must be between 8 and 63 characters.');
-      isValid = false;
-      continue;
+    if (id === 'wifi_psk') {
+      if (inputs[i].value && inputs[i].value.length > 0 && (inputs[i].value.length > 63 || inputs[i].value.length < 8)) {
+        addValidationMessage(inputs[i], 'A WiFi Passphrase Key (Password) must be between 8 and 63 characters.');
+        isValid = false;
+        continue;
+      }
     }
 
     s[id] = inputs[i].value;
