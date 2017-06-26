@@ -473,6 +473,15 @@ function save() {
       continue;
     }
 
+    // Validate WiFi ssid
+    if (id === 'wifi_ssid') {
+      if (!inputs[i].value || inputs[i].value.length === 0 || inputs[i].value > 31) {
+        addValidationMessage(inputs[i], 'A WiFi SSID must be present with a maximum of 31 characters.');
+        isValid = false;
+        continue;
+      }
+    }
+
     // Validate WiFi PSK
     if (id === 'wifi_psk') {
       if (inputs[i].value && inputs[i].value.length > 0 && (inputs[i].value.length > 63 || inputs[i].value.length < 8)) {
