@@ -19,7 +19,7 @@
  */
 const char *getDeviceID() {
   char *identifier = new char[30];
-  strcpy(identifier, HOSTNAME);
+  os_strcpy(identifier, HOSTNAME);
   strcat_P(identifier, PSTR("-"));
 
   char cidBuf[7];
@@ -47,23 +47,23 @@ void loadFactoryDefaults() {
                LIGHT_COLOR_WHITE};
 
   // Device defaults
-  strcpy(cfg.hostname, getDeviceID());
+  os_strcpy(cfg.hostname, getDeviceID());
   cfg.mqtt_port = MQTT_PORT;
-  strcpy(cfg.mqtt_server, MQTT_SERVER);
-  strcpy(cfg.mqtt_user, MQTT_USER);
-  strcpy(cfg.mqtt_password, MQTT_PASSWORD);
-  strcpy(cfg.mqtt_state_topic, getDeviceID());
+  os_strcpy(cfg.mqtt_server, MQTT_SERVER);
+  os_strcpy(cfg.mqtt_user, MQTT_USER);
+  os_strcpy(cfg.mqtt_password, MQTT_PASSWORD);
+  os_strcpy(cfg.mqtt_state_topic, getDeviceID());
 
   char *cmd_topic = new char[128];
   sprintf_P(cmd_topic, PSTR("%s/set"), getDeviceID());
-  strcpy(cfg.mqtt_command_topic, cmd_topic);
+  os_strcpy(cfg.mqtt_command_topic, cmd_topic);
 
   char *lwt_topic = new char[128];
   sprintf_P(lwt_topic, PSTR("%s/status"), getDeviceID());
-  strcpy(cfg.mqtt_lwt_topic, lwt_topic);
+  os_strcpy(cfg.mqtt_lwt_topic, lwt_topic);
 
-  strcpy(cfg.wifi_ssid, WIFI_SSID);
-  strcpy(cfg.wifi_psk, WIFI_PSK);
+  os_strcpy(cfg.wifi_ssid, WIFI_SSID);
+  os_strcpy(cfg.wifi_psk, WIFI_PSK);
 
   EEPROM_write(cfg);
 }

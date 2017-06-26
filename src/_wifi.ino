@@ -24,7 +24,7 @@ void setupWiFi() {
 
   // Set WiFi hostname
   if (strlen(cfg.hostname) == 0) {
-    strcpy(cfg.hostname, getDeviceID());
+    os_strcpy(cfg.hostname, getDeviceID());
     EEPROM_write(cfg);
   }
   WiFi.hostname(cfg.hostname);

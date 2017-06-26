@@ -37,7 +37,7 @@ void lightMQTTCallback(uint8_t type, const char *topic, const char *payload) {
   if (type == MQTT_EVENT_MESSAGE) {
 
     // Listen to this lights' MQTT command topic
-    if (strcmp(topic, cfg.mqtt_command_topic) == 0) {
+    if (os_strcmp(topic, cfg.mqtt_command_topic) == 0) {
 
       // Convert payload into char variable
       uint8_t length = strlen(payload);
@@ -219,7 +219,7 @@ bool processJson(char *message) {
   }
 
   if (root.containsKey(KEY_STATE)) {
-    state = (strcmp(root[KEY_STATE], MQTT_PAYLOAD_ON) == 0) ? true : false;
+    state = (os_strcmp(root[KEY_STATE], MQTT_PAYLOAD_ON) == 0) ? true : false;
 
     if (transitionTime > 0 && !state) {
       transColor.red = 0;

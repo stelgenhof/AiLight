@@ -87,12 +87,12 @@ void wsProcessMessage(uint8_t num, char *payload, size_t length) {
     DEBUGLOG("[WEBSOCKET] Client #%u requested a %s\n", num, command);
 
     // Execute restart command
-    if (strcmp(command, "restart") == 0) {
+    if (os_strcmp(command, "restart") == 0) {
       ESP.restart();
     }
 
     // Execute reset command (load factory defaults)
-    if (strcmp(command, "reset") == 0) {
+    if (os_strcmp(command, "reset") == 0) {
       loadFactoryDefaults();
       ESP.restart();
     }
@@ -109,16 +109,16 @@ void wsProcessMessage(uint8_t num, char *payload, size_t length) {
 
     if (settings.containsKey(KEY_HOSTNAME)) {
       const char *hostname = settings[KEY_HOSTNAME];
-      if (strcmp(cfg.hostname, hostname) != 0) {
-        strcpy(cfg.hostname, hostname);
+      if (os_strcmp(cfg.hostname, hostname) != 0) {
+        os_strcpy(cfg.hostname, hostname);
         needRestart = true;
       }
     }
 
     if (settings.containsKey(KEY_MQTT_SERVER)) {
       const char *mqtt_server = settings[KEY_MQTT_SERVER];
-      if (strcmp(cfg.mqtt_server, mqtt_server) != 0) {
-        strcpy(cfg.mqtt_server, mqtt_server);
+      if (os_strcmp(cfg.mqtt_server, mqtt_server) != 0) {
+        os_strcpy(cfg.mqtt_server, mqtt_server);
         mqtt_changed = true;
       }
     }
@@ -135,56 +135,56 @@ void wsProcessMessage(uint8_t num, char *payload, size_t length) {
 
     if (settings.containsKey(KEY_MQTT_USER)) {
       const char *mqtt_user = settings[KEY_MQTT_USER];
-      if (strcmp(cfg.mqtt_user, mqtt_user) != 0) {
-        strcpy(cfg.mqtt_user, mqtt_user);
+      if (os_strcmp(cfg.mqtt_user, mqtt_user) != 0) {
+        os_strcpy(cfg.mqtt_user, mqtt_user);
         mqtt_changed = true;
       }
     }
 
     if (settings.containsKey(KEY_MQTT_PASSWORD)) {
       const char *mqtt_password = settings[KEY_MQTT_PASSWORD];
-      if (strcmp(cfg.mqtt_password, mqtt_password) != 0) {
-        strcpy(cfg.mqtt_password, mqtt_password);
+      if (os_strcmp(cfg.mqtt_password, mqtt_password) != 0) {
+        os_strcpy(cfg.mqtt_password, mqtt_password);
         mqtt_changed = true;
       }
     }
 
     if (settings.containsKey(KEY_MQTT_STATE_TOPIC)) {
       const char *mqtt_state_topic = settings[KEY_MQTT_STATE_TOPIC];
-      if (strcmp(cfg.mqtt_state_topic, mqtt_state_topic) != 0) {
-        strcpy(cfg.mqtt_state_topic, mqtt_state_topic);
+      if (os_strcmp(cfg.mqtt_state_topic, mqtt_state_topic) != 0) {
+        os_strcpy(cfg.mqtt_state_topic, mqtt_state_topic);
         mqtt_changed = true;
       }
     }
 
     if (settings.containsKey(KEY_MQTT_COMMAND_TOPIC)) {
       const char *mqtt_command_topic = settings[KEY_MQTT_COMMAND_TOPIC];
-      if (strcmp(cfg.mqtt_command_topic, mqtt_command_topic) != 0) {
-        strcpy(cfg.mqtt_command_topic, mqtt_command_topic);
+      if (os_strcmp(cfg.mqtt_command_topic, mqtt_command_topic) != 0) {
+        os_strcpy(cfg.mqtt_command_topic, mqtt_command_topic);
         mqtt_changed = true;
       }
     }
 
     if (settings.containsKey(KEY_MQTT_LWT_TOPIC)) {
       const char *mqtt_lwt_topic = settings[KEY_MQTT_LWT_TOPIC];
-      if (strcmp(cfg.mqtt_lwt_topic, mqtt_lwt_topic) != 0) {
-        strcpy(cfg.mqtt_lwt_topic, mqtt_lwt_topic);
+      if (os_strcmp(cfg.mqtt_lwt_topic, mqtt_lwt_topic) != 0) {
+        os_strcpy(cfg.mqtt_lwt_topic, mqtt_lwt_topic);
         mqtt_changed = true;
       }
     }
 
     if (settings.containsKey(KEY_WIFI_SSID)) {
       const char *wifi_ssid = settings[KEY_WIFI_SSID];
-      if (strcmp(cfg.wifi_ssid, wifi_ssid) != 0) {
-        strcpy(cfg.wifi_ssid, wifi_ssid);
+      if (os_strcmp(cfg.wifi_ssid, wifi_ssid) != 0) {
+        os_strcpy(cfg.wifi_ssid, wifi_ssid);
         wifi_changed = true;
       }
     }
 
     if (settings.containsKey(KEY_WIFI_PSK)) {
       const char *wifi_psk = settings[KEY_WIFI_PSK];
-      if (strcmp(cfg.wifi_psk, wifi_psk) != 0) {
-        strcpy(cfg.wifi_psk, wifi_psk);
+      if (os_strcmp(cfg.wifi_psk, wifi_psk) != 0) {
+        os_strcpy(cfg.wifi_psk, wifi_psk);
         wifi_changed = true;
       }
     }
@@ -221,7 +221,7 @@ void wsProcessMessage(uint8_t num, char *payload, size_t length) {
   }
 
   if (root.containsKey(KEY_STATE)) {
-    AiLight.setState((strcmp(root[KEY_STATE], MQTT_PAYLOAD_ON) == 0) ? true
+    AiLight.setState((os_strcmp(root[KEY_STATE], MQTT_PAYLOAD_ON) == 0) ? true
                                                                      : false);
   }
 
