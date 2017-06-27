@@ -28,8 +28,6 @@ const S_OFF = 'OFF';
 
 const WAIT = 15000;
 
-var hS = false;
-
 /**
  * Object representing a Switch component
  *
@@ -63,8 +61,8 @@ function Switch(id) {
     this.state = !this.state;
     this.setState(this.state);
 
-    var state = {};
-    var value = this.state;
+    let state = {};
+    let value = this.state;
     if (this.id === 'state') {
       value = (this.state) ? S_ON : S_OFF;
     }
@@ -109,7 +107,7 @@ function Slider(id) {
     this._high = (this.el.value - this.el.min) / (this.el.max - this.el.min) * 100 + '%';
     this.el.style.setProperty('--high', this._high);
 
-    var output = this.el.parentNode.getElementsByTagName('output')[0];
+    let output = this.el.parentNode.getElementsByTagName('output')[0];
     if (typeof(output) !== "undefined") {
       output.innerHTML = this.el.value;
     }
@@ -117,7 +115,7 @@ function Slider(id) {
   };
 
   this._send = function() {
-    var msg = {
+    let msg = {
       'state': S_ON
     };
     msg[this.id] = this.el.value;
@@ -143,7 +141,7 @@ function Slider(id) {
       passive: true
     });
 
-    var rgb = [K_R, K_G, K_B];
+    let rgb = [K_R, K_G, K_B];
     if (rgb.includes(this.id)) {
       this.el.addEventListener("change", sendRGB.bind(this), {
         passive: true
@@ -157,15 +155,16 @@ function Slider(id) {
 }).call(Slider.prototype);
 
 // Globals
-var websock;
-var stSwitch = new Switch(K_S);
-var brSlider = new Slider(K_BR);
-var ctSlider = new Slider(K_CT);
-var rSlider = new Slider(K_R);
-var gSlider = new Slider(K_G);
-var bSlider = new Slider(K_B);
-var wSlider = new Slider(K_W);
-var gmSwitch = new Switch(K_GM);
+let websock;
+let stSwitch = new Switch(K_S);
+let brSlider = new Slider(K_BR);
+let ctSlider = new Slider(K_CT);
+let rSlider = new Slider(K_R);
+let gSlider = new Slider(K_G);
+let bSlider = new Slider(K_B);
+let wSlider = new Slider(K_W);
+let gmSwitch = new Switch(K_GM);
+let hS = false;
 
 /**
  * Sends the RGB triplet state to the connected WebSocket clients
@@ -173,7 +172,7 @@ var gmSwitch = new Switch(K_GM);
  * @return void
  */
 function sendRGB() {
-  var msg = {
+  let msg = {
     'state': S_ON
   };
 
@@ -208,16 +207,16 @@ function getJSON(str) {
  * @return void
  */
 function processData(data) {
-  for (var key in data) {
+  for (let key in data) {
 
     // Process Device information
     if (key === 'd') {
       document.title = data.d.app_name;
 
       // Bind data to DOM
-      for (var dev in data[key]) {
+      for (let dev in data[key]) {
         // Bind to span elements
-        var d = document.querySelectorAll("span[data-s='" + dev + "']");
+        let d = document.querySelectorAll("span[data-s='" + dev + "']");
         [].forEach.call(d, function(item) {
           item.innerHTML = data[key][dev];
         });
@@ -229,9 +228,9 @@ function processData(data) {
       document.title += ' - ' + data[key].hostname;
 
       // Bind data to DOM
-      for (var s in data[key]) {
+      for (let s in data[key]) {
         // Bind to span elements
-        var a = document.getElementById("pagescontent").querySelectorAll("span[data-s='" + s + "']");
+        let a = document.getElementById("pagescontent").querySelectorAll("span[data-s='" + s + "']");
         [].forEach.call(a, function(item) {
           item.innerHTML = data[key][s];
         });
@@ -278,8 +277,8 @@ function processData(data) {
  * @return void
  */
 function wsConnect() {
-  var host = window.location.hostname;
-  var port = location.port;
+  let host = window.location.hostname;
+  let port = location.port;
 
   if (websock) {
     websock.close();
@@ -302,7 +301,7 @@ function wsConnect() {
   };
 
   websock.onmessage = function(e) {
-    var data = getJSON(e.data);
+    let data = getJSON(e.data);
     if (data) {
       processData(data);
     }
@@ -316,7 +315,7 @@ function wsConnect() {
  */
 function esConnect() {
   if (!!window.EventSource) {
-    var source = new EventSource('/events');
+    let source = new EventSource('/events');
 
     source.addEventListener('open', function(e) {
       console.log('[EVENTSOURCE] Connected to ' + e.target.url);
@@ -335,14 +334,14 @@ function esConnect() {
     // Handling OTA events
     source.addEventListener('ota', function(e) {
       if (e.data.startsWith("p-")) {
-        var pb = document.getElementById("op");
-        var p = parseInt(e.data.split("-")[1]);
+        let pb = document.getElementById("op");
+        let p = parseInt(e.data.split("-")[1]);
 
         pb.value = p;
 
         if (p === 100 && !hS) {
           hS = true;
-          var f = document.createElement('p');
+          let f = document.createElement('p');
           f.innerHTML = "Completed successfully! Please wait for your Ai-Thinker RGBW Light to be restarted.";
           pb.parentNode.appendChild(f);
           reload(false);
@@ -382,7 +381,7 @@ function reload(show) {
  * @return bool true when user approves, false otherwise
  */
 function restart() {
-  var response = window.confirm("Are you sure you want to restart your Ai-Thinker RGBW Light?");
+  let response = window.confirm("Are you sure you want to restart your Ai-Thinker RGBW Light?");
   if (response === false) {
     return false;
   }
@@ -401,7 +400,7 @@ function restart() {
  * @return bool true when user approves, false otherwise
  */
 function reset() {
-  var response = window.confirm("You are about to reset your Ai-Thinker RGBW Light to the factory defaults!\n Are you sure you want to reset?");
+  let response = window.confirm("You are about to reset your Ai-Thinker RGBW Light to the factory defaults!\n Are you sure you want to reset?");
   if (response === false) {
     return false;
   }
@@ -420,7 +419,7 @@ function reset() {
  * @return void
  */
 function togglePassword() {
-  var ie = document.getElementById(this.dataset.input);
+  let ie = document.getElementById(this.dataset.input);
   ie.type = (ie.type === "text") ? "password" : "text";
 }
 
@@ -434,7 +433,7 @@ function togglePassword() {
  */
 function addValidationMessage(el, message) {
   const CLASS_WARNING = 'is-danger';
-  var v = document.createElement('p');
+  let v = document.createElement('p');
   v.innerHTML = message;
   v.classList.add("help", CLASS_WARNING);
   el.parentNode.appendChild(v);
@@ -447,21 +446,21 @@ function addValidationMessage(el, message) {
  * @return void
  */
 function save() {
-  var s = {};
-  var msg = {};
-  var isValid = true;
+  let s = {};
+  let msg = {};
+  let isValid = true;
 
-  var Valid952HostnameRegex = /^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$/i;
+  let Valid952HostnameRegex = /^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$/i;
 
-  var inputs = document.forms[0].querySelectorAll("input");
-  for (var i = 0; i < inputs.length; i++) {
-    t = inputs[i].id.split('.');
-    id = t.pop();
+  let inputs = document.forms[0].querySelectorAll("input");
+  for (let i = 0; i < inputs.length; i++) {
+    let t = inputs[i].id.split('.');
+    let id = t.pop();
 
     // Clear any validation messages
     inputs[i].classList.remove("is-danger");
-    var p = inputs[i].parentNode;
-    var v = p.querySelectorAll("p.is-danger");
+    let p = inputs[i].parentNode;
+    let v = p.querySelectorAll("p.is-danger");
     [].forEach.call(v, function(item) {
       p.removeChild(item);
     });
@@ -506,26 +505,26 @@ function save() {
  * @return void
  */
 function initTabs() {
-  var container = document.getElementById("menu");
+  let container = document.getElementById("menu");
   const TABS_SELECTOR = "div div a";
 
   // Enable click event to the tabs
-  var tabs = container.querySelectorAll(TABS_SELECTOR);
-  for (var i = 0; i < tabs.length; i++) {
+  let tabs = container.querySelectorAll(TABS_SELECTOR);
+  for (let i = 0; i < tabs.length; i++) {
     tabs[i].onclick = displayPage;
   }
 
   // Set current tab
-  var currentTab = container.querySelector(TABS_SELECTOR);
+  let currentTab = container.querySelector(TABS_SELECTOR);
 
   // Store which tab is current one
-  var id = currentTab.id.split("_")[1];
+  let id = currentTab.id.split("_")[1];
   currentTab.parentNode.setAttribute("data-current", id);
   currentTab.classList.add("is-active");
 
   // Hide tab contents we don't need
-  var pages = document.getElementById("pagescontent").querySelectorAll("section");
-  for (var j = 1; j < pages.length; j++) {
+  let pages = document.getElementById("pagescontent").querySelectorAll("section");
+  for (let j = 1; j < pages.length; j++) {
     pages[j].style.display = "none";
   }
 }
@@ -539,14 +538,14 @@ function displayPage() {
   const CLASS_ACTIVE = "is-active";
   const CURRENT_ATTRIBUTE = "data-current";
   const ID_TABPAGE = "page_";
-  var current = this.parentNode.getAttribute(CURRENT_ATTRIBUTE);
+  let current = this.parentNode.getAttribute(CURRENT_ATTRIBUTE);
 
   // Remove class of active tab and hide contents
   document.getElementById("tab_" + current).classList.remove(CLASS_ACTIVE);
   document.getElementById(ID_TABPAGE + current).style.display = "none";
 
   // Add class to new active tab and show contents
-  var id = this.id.split("_")[1];
+  let id = this.id.split("_")[1];
 
   this.classList.add(CLASS_ACTIVE);
   document.getElementById(ID_TABPAGE + id).style.display = "block";
@@ -560,7 +559,7 @@ function displayPage() {
  */
 function toggleNav() {
   const CLASS_ACTIVE = "is-active";
-  var nav = document.getElementById("nav-menu");
+  let nav = document.getElementById("nav-menu");
 
   if (!nav.classList.contains(CLASS_ACTIVE)) {
     nav.classList.add(CLASS_ACTIVE);
@@ -588,7 +587,7 @@ document.addEventListener('DOMContentLoaded', function() {
     passive: true
   });
 
-  var pw = document.getElementById("pagescontent").querySelectorAll("i");
+  let pw = document.getElementById("pagescontent").querySelectorAll("i");
   [].forEach.call(pw, function(item) {
     item.addEventListener('touchstart click', togglePassword, {
       passive: true

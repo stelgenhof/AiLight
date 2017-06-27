@@ -18,10 +18,13 @@ const htmlmin = require('gulp-htmlmin');
 const cleancss = require('gulp-clean-css');
 const gzip = require('gulp-gzip');
 const inline = require('gulp-inline');
-const uglify = require('gulp-uglify');
 const sass = require('gulp-sass');
 const favicon = require('gulp-base64-favicon');
 const cssBase64 = require('gulp-css-base64');
+
+const uglifyjs = require('uglify-es');
+const composer = require('gulp-uglify/composer');
+const minify = composer(uglifyjs, console);
 
 const sourceFolder = 'src/';
 const targetFolder = 'html/';
@@ -85,7 +88,7 @@ gulp.task('html', ['clean', 'css'], function() {
     .pipe(favicon())
     .pipe(inline({
       js: function() {
-        return uglify({
+        return minify({
           mangle: true
         });
       },
