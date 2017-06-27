@@ -11,6 +11,7 @@
  */
 
 const fs = require('fs');
+const exec = require('child_process').exec;
 const gulp = require('gulp');
 const del = require('del');
 const plumber = require('gulp-plumber');
@@ -140,6 +141,32 @@ gulp.task('gamma', function() {
 
   ws.write(' };\n');
   ws.end();
+});
+
+// Compile firmware binary for release
+gulp.task('release', function() {
+  const binaries_dir = 'binaries';
+  const environment = 'prod';
+
+  if (!fs.existsSync(binaries_dir)) {
+    fs.mkdirSync(binaries_dir);
+  }
+
+  var v_data = fs.readFileSync(sourceFolder + '/main.h');
+  var re = /#define APP_VERSION \"(.+)\"/g;
+  var version = re.exec(v_data.toString())[1];
+
+  // Compile the binary
+  exec('pio run -e ' + environment, function(err, stdout, stderr) {
+    console.log(stdout);
+    console.log(stderr);
+  });
+
+  // Move the compiled binary to the binaries directory
+  fs.renameSync('.pioenvs/' + environment + '/firmware.bin', binaries_dir + '/ailight-' + version, function(err) {
+    if (err) throw err;
+  });
+
 });
 
 // Default task
