@@ -8,10 +8,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## [Unreleased]
 
 ### Added
+-	Altered validation of WiFi Passwords in the Web UI to allow for WiFi networks without a password.
+- Added validation for WiFi SSID in the Web UI (required and cannot exceed 31 characters).
 
 ### Changed
+- The Web UI client side script has been upgraded to ES6 (ES2015).
+-	Replaced core functions like 'strcpy', 'strcmp', etc. with the ESP8266 SDK counterpart.
+- Existing WebSocket client connections are now disconnected upon OTA start.
 
 ### Fixed
+- The OTA complete message in the Web UI was still showing multiple times due to a typo.
 
 ### Removed
 
