@@ -163,7 +163,7 @@ gulp.task('release', function() {
   });
 
   // Move the compiled binary to the binaries directory
-  fs.renameSync('.pioenvs/' + environment + '/firmware.bin', binaries_dir + '/ailight-' + version, function(err) {
+  fs.renameSync('.pioenvs/' + environment + '/firmware.bin', binaries_dir + '/ailight-' + version + '.bin', function(err) {
     if (err) throw err;
   });
 
