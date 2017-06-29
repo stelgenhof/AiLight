@@ -11,7 +11,7 @@
  */
 
 #define APP_NAME "AiLight"
-#define APP_VERSION "0.4.0"
+#define APP_VERSION "0.4.1"
 #define APP_AUTHOR "stelgenhof@gmail.com"
 
 #include "config.h"

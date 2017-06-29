@@ -8,9 +8,19 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## [Unreleased]
 
 ### Added
+
+### Changed
+
+### Fixed
+
+### Removed
+
+## [0.4.1] - 2017-06-29
+
+### Added
 -	Altered validation of WiFi Passwords in the Web UI to allow for WiFi networks without a password.
 - Added validation for WiFi SSID in the Web UI (required and cannot exceed 31 characters).
-- Added Gulp task for compiling release binaries.
+- Added Gulp task for compiling release binaries. Compiled binaries are now available from this version going forward.
 
 ### Changed
 - The Web UI client side script has been upgraded to ES6 (ES2015).
@@ -19,9 +29,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ### Fixed
 - The OTA complete message in the Web UI was still showing multiple times due to a typo.
-
-### Removed
-
 
 ## [0.4.0] - 2017-06-17
 

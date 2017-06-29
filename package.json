@@ -1,6 +1,6 @@
 {
   "name": "AiLight",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "AiLight is a custom firmware for the Ai-Thinker RGBW Light bulbs that has a ESP8266 MCU at its core.",
   "license": "MIT",
   "keywords": [
