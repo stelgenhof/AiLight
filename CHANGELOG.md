@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Added
 -	Altered validation of WiFi Passwords in the Web UI to allow for WiFi networks without a password.
 - Added validation for WiFi SSID in the Web UI (required and cannot exceed 31 characters).
+- Added Gulp task for compiling release binaries.
 
 ### Changed
 - The Web UI client side script has been upgraded to ES6 (ES2015).
