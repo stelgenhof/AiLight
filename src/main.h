@@ -62,6 +62,9 @@ extern "C" {
 #define KEY_MQTT_STATE_TOPIC "mqtt_state_topic"
 #define KEY_MQTT_COMMAND_TOPIC "mqtt_command_topic"
 #define KEY_MQTT_LWT_TOPIC "mqtt_lwt_topic"
+#define KEY_MQTT_HA_USE_DISCOVERY "switch_ha_discovery"
+#define KEY_MQTT_HA_IS_DISCOVERED "mqtt_ha_is_discovered"
+#define KEY_MQTT_HA_DISCOVERY_PREFIX "mqtt_ha_discovery_prefix"
 
 // MQTT Event type definitions
 #define MQTT_EVENT_CONNECT 0
@@ -92,6 +95,9 @@ struct config_t {
   char mqtt_command_topic[128]; // MQTT Topic for receiving commands
   char mqtt_lwt_topic[128]; // MQTT Topic for publising Last Will and Testament
   bool gamma;               // Gamma Correction enabled or not
+  bool mqtt_ha_use_discovery; // Home Assistant MQTT discovery enabled or not
+  bool mqtt_ha_is_discovered; // Has this device already been discovered or not
+  char mqtt_ha_disc_prefix[32]; // MQTT Discovery prefix for Home Assistant
 } cfg;
 
 static const int BUFFER_SIZE = JSON_OBJECT_SIZE(10);

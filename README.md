@@ -22,6 +22,7 @@ This can all be done with the built-in (mobile friendly) Web UI or in [Home Assi
 ### Other
 
 - MQTT Last Will and Testament enabled
+- Support for Home Assistant's [MQTT Discovery](https://github.com/stelgenhof/AiLight/wiki/Home-Assistant-MQTT-Discovery)
 - Support for [Over The Air](https://github.com/stelgenhof/AiLight/wiki/OTA-Updates) (OTA) firmware updates
 - Preserve light settings and configuration after power cycle or restart
 - Perform remote [restart](https://github.com/stelgenhof/AiLight/wiki/Restart-%26-Reset) using the built-in HTML UI.
@@ -30,7 +31,7 @@ This can all be done with the built-in (mobile friendly) Web UI or in [Home Assi
 
 ## Roadmap
 
-- MQTT Discovery
+- ~~MQTT Discovery~~
 - Effects
 - ~~Transitions~~
 - ~~Remember light state after power cycle~~

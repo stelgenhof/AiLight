@@ -66,3 +66,6 @@
 
 #define MQTT_STATUS_ONLINE "online"
 #define MQTT_STATUS_OFFLINE "offline"
+
+#define MQTT_HOMEASSISTANT_DISCOVERY_ENABLED false
+#define MQTT_HOMEASSISTANT_DISCOVERY_PREFIX "homeassistant"

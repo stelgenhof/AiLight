@@ -244,6 +244,34 @@
 
             <div class="field is-horizontal">
               <div class="field-label is-normal">
+                <label class="label">MQTT Discovery</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <label class="switch is-primary">
+                    <input type="checkbox" name="state" id="switch_ha_discovery">
+                  </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="field is-horizontal" id="mqtt_ha_discovery">
+              <div class="field-label is-normal">
+                <label class="label">Discovery Prefix</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <div class="control">
+                    <input class="input" type="text" maxlength="32" size="32" placeholder="Prefix for the Home Assistant Discovery topic" id="mqtt_ha_discovery_prefix">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
                 <label class="label">State Topic</label>
               </div>
               <div class="field-body">

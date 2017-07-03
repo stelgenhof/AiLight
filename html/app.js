@@ -22,6 +22,7 @@ const K_G = "g";
 const K_B = "b";
 const K_W = "white_value";
 const K_GM = "gamma";
+const K_HD = "ha_discovery"
 
 const S_ON = 'ON';
 const S_OFF = 'OFF';
@@ -32,11 +33,13 @@ const WAIT = 15000;
  * Object representing a Switch component
  *
  * @param id the DOM element to be rendered as a Switch component
+ * @param du should the state of the Switch be broadcasted (WebSockets) or not?
  *
  * @return void
  */
-function Switch(id) {
+function Switch(id, du = true) {
   this.id = id;
+  this.du = du;
   this.init();
 }
 
@@ -63,12 +66,22 @@ function Switch(id) {
 
     let state = {};
     let value = this.state;
+
     if (this.id === 'state') {
       value = (this.state) ? S_ON : S_OFF;
     }
+
+    // Handle visibility of HA Discovery settings
+    if (this.id === K_HD) {
+      let ad = document.getElementById('mqtt_ha_discovery');
+      ad.style.display = (this.state) ? 'flex' : 'none';
+    }
+
     state[this.id] = value;
 
-    websock.send(JSON.stringify(state));
+    if (this.du) {
+      websock.send(JSON.stringify(state));
+    }
   };
 
   this.init = function() {
@@ -164,6 +177,7 @@ let gSlider = new Slider(K_G);
 let bSlider = new Slider(K_B);
 let wSlider = new Slider(K_W);
 let gmSwitch = new Switch(K_GM);
+let hdSwitch = new Switch(K_HD, false);
 let hS = false;
 
 /**
@@ -238,6 +252,16 @@ function processData(data) {
         // Bind to specific DOM elements
         if (document.getElementById(s) !== null) {
           document.getElementById(s).value = data[key][s];
+        }
+
+        // Set HA Discovery switch and prefix field
+        if (s === "switch_ha_discovery") {
+          hdSwitch.setState(data[key][s]);
+
+          let ad = document.getElementById('mqtt_ha_discovery');
+          if (!data[key][s]) {
+            ad.style.display = "none";
+          }
         }
       }
     }
@@ -490,7 +514,7 @@ function save() {
       }
     }
 
-    s[id] = inputs[i].value;
+    s[id] = (inputs[i].type === 'checkbox') ? inputs[i].checked : inputs[i].value;
   }
 
   if (isValid) {
@@ -600,4 +624,5 @@ document.addEventListener('DOMContentLoaded', function() {
   initTabs();
   wsConnect();
   esConnect();
+
 });

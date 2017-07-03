@@ -63,6 +63,9 @@ void wsStart(uint8_t id) {
   settings[KEY_MQTT_STATE_TOPIC] = cfg.mqtt_state_topic;
   settings[KEY_MQTT_COMMAND_TOPIC] = cfg.mqtt_command_topic;
   settings[KEY_MQTT_LWT_TOPIC] = cfg.mqtt_lwt_topic;
+  settings[KEY_MQTT_HA_USE_DISCOVERY] = cfg.mqtt_ha_use_discovery;
+  settings[KEY_MQTT_HA_IS_DISCOVERED] = cfg.mqtt_ha_is_discovered;
+  settings[KEY_MQTT_HA_DISCOVERY_PREFIX] = cfg.mqtt_ha_disc_prefix;
 
   char buffer[root.measureLength() + 1];
   root.printTo(buffer, sizeof(buffer));
@@ -111,6 +114,10 @@ void wsProcessMessage(uint8_t num, char *payload, size_t length) {
       const char *hostname = settings[KEY_HOSTNAME];
       if (os_strcmp(cfg.hostname, hostname) != 0) {
         os_strcpy(cfg.hostname, hostname);
+
+        cfg.mqtt_ha_is_discovered =
+            false; // Since hostname is used as name in HA
+
         needRestart = true;
       }
     }
@@ -169,6 +176,28 @@ void wsProcessMessage(uint8_t num, char *payload, size_t length) {
       const char *mqtt_lwt_topic = settings[KEY_MQTT_LWT_TOPIC];
       if (os_strcmp(cfg.mqtt_lwt_topic, mqtt_lwt_topic) != 0) {
         os_strcpy(cfg.mqtt_lwt_topic, mqtt_lwt_topic);
+        mqtt_changed = true;
+      }
+    }
+
+    if (settings.containsKey(KEY_MQTT_HA_USE_DISCOVERY)) {
+      bool mqtt_ha_use_discovery = settings[KEY_MQTT_HA_USE_DISCOVERY];
+      if (cfg.mqtt_ha_use_discovery != mqtt_ha_use_discovery) {
+        cfg.mqtt_ha_use_discovery = mqtt_ha_use_discovery;
+
+        // Reset that light has been discovered already
+        if (!mqtt_ha_use_discovery) {
+          cfg.mqtt_ha_is_discovered = false;
+        }
+
+        mqtt_changed = true;
+      }
+    }
+
+    if (settings.containsKey(KEY_MQTT_HA_DISCOVERY_PREFIX)) {
+      const char *mqtt_ha_disc_prefix = settings[KEY_MQTT_HA_DISCOVERY_PREFIX];
+      if (os_strcmp(cfg.mqtt_ha_disc_prefix, mqtt_ha_disc_prefix) != 0) {
+        os_strcpy(cfg.mqtt_ha_disc_prefix, mqtt_ha_disc_prefix);
         mqtt_changed = true;
       }
     }

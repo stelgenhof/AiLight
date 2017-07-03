@@ -62,6 +62,10 @@ void loadFactoryDefaults() {
   sprintf_P(lwt_topic, PSTR("%s/status"), getDeviceID());
   os_strcpy(cfg.mqtt_lwt_topic, lwt_topic);
 
+  cfg.mqtt_ha_use_discovery = MQTT_HOMEASSISTANT_DISCOVERY_ENABLED;
+  cfg.mqtt_ha_is_discovered = false;
+  os_strcpy(cfg.mqtt_ha_disc_prefix, MQTT_HOMEASSISTANT_DISCOVERY_PREFIX);
+
   os_strcpy(cfg.wifi_ssid, WIFI_SSID);
   os_strcpy(cfg.wifi_psk, WIFI_PSK);
 
