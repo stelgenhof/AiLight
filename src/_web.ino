@@ -310,7 +310,7 @@ void setupWeb() {
       }
 
       // Store data
-      memcpy(message + info->index, data, len);
+      os_memcpy(message + info->index, data, len);
 
       // Last packet
       if (info->index + len == info->len) {

@@ -42,7 +42,7 @@ void lightMQTTCallback(uint8_t type, const char *topic, const char *payload) {
       // Convert payload into char variable
       uint8_t length = os_strlen(payload);
       char message[length + 1];
-      memcpy(message, payload, length);
+      os_memcpy(message, payload, length);
       message[length] = 0;
 
       if (!processJson(message)) {

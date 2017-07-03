@@ -151,7 +151,7 @@ void onMQTTDisconnect() {
 void onMQTTMessage(char *topic, char *payload, uint16_t length) {
   // Convert payload into char variable
   char message[length + 1];
-  memcpy(message, payload, length);
+  os_memcpy(message, payload, length);
   message[length] = 0;
 
   DEBUGLOG("[MQTT] Received message on '%s'\n", topic, message);
