@@ -22,12 +22,12 @@ const K_G = "g";
 const K_B = "b";
 const K_W = "white_value";
 const K_GM = "gamma";
-const K_HD = "ha_discovery"
+const K_HD = "ha_discovery";
 
 const S_ON = 'ON';
 const S_OFF = 'OFF';
 
-const WAIT = 15000;
+const WAIT = 10000;
 
 /**
  * Object representing a Switch component
