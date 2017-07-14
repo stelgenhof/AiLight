@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Changed
 
 ### Fixed
+- Decreased refresh time as UI is available again within 10 seconds.
 
 ### Removed
 
