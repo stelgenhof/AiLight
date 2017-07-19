@@ -65,6 +65,11 @@ void wsStart(uint8_t id) {
   settings[KEY_MQTT_LWT_TOPIC] = cfg.mqtt_lwt_topic;
   settings[KEY_MQTT_HA_USE_DISCOVERY] = cfg.mqtt_ha_use_discovery;
   settings[KEY_MQTT_HA_IS_DISCOVERED] = cfg.mqtt_ha_is_discovered;
+
+  // Ensure HA MQTT Discovery Prefix has a proper value
+  if (cfg.mqtt_ha_disc_prefix == NULL || cfg.mqtt_ha_disc_prefix[0] == 0xFF) {
+    os_strcpy(cfg.mqtt_ha_disc_prefix, MQTT_HOMEASSISTANT_DISCOVERY_PREFIX);
+  }
   settings[KEY_MQTT_HA_DISCOVERY_PREFIX] = cfg.mqtt_ha_disc_prefix;
 
   char buffer[root.measureLength() + 1];
