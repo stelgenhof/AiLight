@@ -38,6 +38,12 @@ const char *getDeviceID() {
  * @return void
  */
 void loadFactoryDefaults() {
+  // Clear EEPROM space
+  for (uint16_t i = 0; i < SPI_FLASH_SEC_SIZE; i++) {
+    EEPROM.write(i, 0xFF);
+  }
+  EEPROM.commit();
+
   // Light defaults
   cfg.ic = INIT_HASH;
   cfg.is_on = LIGHT_STATE;
