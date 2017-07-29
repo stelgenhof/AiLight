@@ -2,7 +2,7 @@
 
 **AiLight** is a custom firmware for the inexpensive Ai-Thinker (or equivalent) RGBW WiFi light bulbs that has a ESP8266 onboard and controlled by the MY9291 LED driver.
 
-Current Stable Release is **v0.4.1**, read the [changelog](https://github.com/stelgenhof/AiLight/blob/master/README.md) for detailed information.
+Current Stable Release: **v0.4.1** (Please read the [changelog](https://github.com/stelgenhof/AiLight/blob/master/README.md) for detailed information).
 
 ![Ai-Thinker RGBW Light bulb](https://github.com/stelgenhof/AiLight/wiki/images/aithinker_light.png)
 ![AiLight](https://www.sachatelgenhof.nl/user/pages/02.blog/ailight/screen_combo_m.png)
