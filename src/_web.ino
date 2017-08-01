@@ -85,30 +85,22 @@ void createAboutJSON(JsonObject &object) {
 }
 
 /**
- * @brief Create a JSON string holding the current state of this light
+ * @brief Populate the given JsonObject with the current state of this light
  *
- * @return std::string JSON string holding the current state of this light
+ * @param object the JsonObject that will hold the current state of this light
  */
-std::string createStateJSON() {
-  StaticJsonBuffer<BUFFER_SIZE> jsonBuffer;
-  JsonObject &root = jsonBuffer.createObject();
+void createStateJSON(JsonObject &object) {
+  object[KEY_STATE] = AiLight.getState() ? MQTT_PAYLOAD_ON : MQTT_PAYLOAD_OFF;
+  object[KEY_BRIGHTNESS] = AiLight.getBrightness();
+  object[KEY_WHITE] = AiLight.getColor().white;
+  object[KEY_COLORTEMP] = AiLight.getColorTemperature();
 
-  root[KEY_STATE] = AiLight.getState() ? MQTT_PAYLOAD_ON : MQTT_PAYLOAD_OFF;
-  root[KEY_BRIGHTNESS] = AiLight.getBrightness();
-  root[KEY_WHITE] = AiLight.getColor().white;
-  root[KEY_COLORTEMP] = AiLight.getColorTemperature();
-
-  JsonObject &color = root.createNestedObject(KEY_COLOR);
+  JsonObject &color = object.createNestedObject(KEY_COLOR);
   color[KEY_COLOR_R] = AiLight.getColor().red;
   color[KEY_COLOR_G] = AiLight.getColor().green;
   color[KEY_COLOR_B] = AiLight.getColor().blue;
 
-  root[KEY_GAMMA_CORRECTION] = AiLight.hasGammaCorrection();
-
-  char buffer[root.measureLength() + 1];
-  root.printTo(buffer, sizeof(buffer));
-
-  return buffer;
+  object[KEY_GAMMA_CORRECTION] = AiLight.hasGammaCorrection();
 }
 
 /**
@@ -492,8 +484,16 @@ void setupWeb() {
 
         sendState(); // Notify subscribers about the new state
 
-        AsyncWebServerResponse *response = request->beginResponse(
-            200, PSTR(HTTP_MIMETYPE_JSON), createStateJSON().c_str());
+        // Send response
+        DynamicJsonBuffer jsonBuffer;
+        JsonObject &root = jsonBuffer.createObject();
+        createStateJSON(root);
+
+        char buffer[root.measureLength() + 1];
+        root.printTo(buffer, sizeof(buffer));
+
+        AsyncWebServerResponse *response =
+            request->beginResponse(200, PSTR(HTTP_MIMETYPE_JSON), buffer);
         response->addHeader(PSTR(HTTP_HEADER_SERVER), SERVER_SIGNATURE);
         request->send(response);
       }
@@ -521,8 +521,16 @@ void setupWeb() {
             return;
           }
 
-          AsyncWebServerResponse *response = request->beginResponse(
-              200, PSTR(HTTP_MIMETYPE_JSON), createStateJSON().c_str());
+          // Send response
+          DynamicJsonBuffer jsonBuffer;
+          JsonObject &root = jsonBuffer.createObject();
+          createStateJSON(root);
+
+          char buffer[root.measureLength() + 1];
+          root.printTo(buffer, sizeof(buffer));
+
+          AsyncWebServerResponse *response =
+              request->beginResponse(200, PSTR(HTTP_MIMETYPE_JSON), buffer);
           response->addHeader(PSTR(HTTP_HEADER_SERVER), SERVER_SIGNATURE);
           request->send(response);
         });
