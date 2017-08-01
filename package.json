@@ -1,7 +1,7 @@
 {
   "name": "AiLight",
-  "version": "0.4.1",
-  "description": "AiLight is a custom firmware for the Ai-Thinker RGBW Light bulbs that has a ESP8266 MCU at its core.",
+  "version": "0.4.1-dev",
+  "description": "AiLight is a custom firmware for the inexpensive Ai-Thinker (or equivalent) RGBW WiFi light bulbs that has a ESP8266 onboard and controlled by the MY9291 LED driver.",
   "license": "MIT",
   "keywords": [
     "AiLight",
@@ -30,11 +30,11 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
-    "bulma": "^0.4.1",
-    "del": "^2.2.2",
+    "bulma": "^0.4.4",
+    "del": "^3.0.0",
     "gulp": "^3.9.1",
     "gulp-base64-favicon": "^1.0.2",
-    "gulp-clean-css": "^3.0.4",
+    "gulp-clean-css": "^3.7.0",
     "gulp-css-base64": "^1.3.4",
     "gulp-gzip": "^1.4.0",
     "gulp-htmlmin": "^3.0.0",
@@ -44,6 +44,6 @@
     "gulp-uglify": "^3.0.0",
     "gulp-util": "^3.0.8",
     "lite-server": "^2.3.0",
-    "uglify-es": "^3.0.20"
+    "uglify-es": "^3.0.27"
   }
 }
