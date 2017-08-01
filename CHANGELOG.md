@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## [Unreleased]
 
 ### Added
+- REST API
 - Support for Home Assistant's MQTT Discovery. Have **AiLight** set up your light automatically!
 
 ### Changed
