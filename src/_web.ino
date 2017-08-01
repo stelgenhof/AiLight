@@ -13,6 +13,105 @@
  */
 
 /**
+ * @brief Check whether the requestor is authorized using the requested API
+ * endpoint
+ *
+ * @param request the API endpoint request object
+ *
+ * @return bool true if authorized, otherwise false
+ */
+bool authorizeAPI(AsyncWebServerRequest *request) {
+
+  // Check if API Key is provided
+  if (!request->hasHeader(PSTR(HTTP_HEADER_APIKEY))) {
+    DynamicJsonBuffer jsonBuffer;
+    JsonObject &root = jsonBuffer.createObject();
+    root["error"] = "400";
+    root["message"] = "The required API Key is missing";
+
+    char buffer[root.measureLength() + 1];
+    root.printTo(buffer, sizeof(buffer));
+
+    AsyncWebServerResponse *response =
+        request->beginResponse(400, PSTR(HTTP_MIMETYPE_JSON), buffer);
+    response->addHeader(PSTR(HTTP_HEADER_SERVER), SERVER_SIGNATURE);
+    request->send(response);
+
+    return false;
+  } else {
+    AsyncWebHeader *h = request->getHeader(PSTR(HTTP_HEADER_APIKEY));
+    if (!h->value().equals(cfg.api_key)) {
+
+      DynamicJsonBuffer jsonBuffer;
+      JsonObject &root = jsonBuffer.createObject();
+      root["error"] = "401";
+      root["message"] = "The given API Key is incorrect";
+
+      char buffer[root.measureLength() + 1];
+      root.printTo(buffer, sizeof(buffer));
+
+      AsyncWebServerResponse *response =
+          request->beginResponse(401, PSTR(HTTP_MIMETYPE_JSON), buffer);
+      response->addHeader(PSTR(HTTP_HEADER_SERVER), SERVER_SIGNATURE);
+      request->send(response);
+
+      return false;
+    }
+  }
+
+  return true;
+}
+
+/**
+ * @brief Populate the given JsonObject with details about this firmware
+ *
+ * @param object the JsonObject that will hold details about this firmware
+ *
+ * @return void
+ */
+void createAboutJSON(JsonObject &object) {
+  object["app_name"] = APP_NAME;
+  object["app_version"] = APP_VERSION;
+  object["build_date"] = __DATE__;
+  object["build_time"] = __TIME__;
+  object["memory"] = ESP.getFlashChipSize();
+  object["free_heap"] = ESP.getFreeHeap();
+  object["cpu_frequency"] = ESP.getCpuFreqMHz();
+  object["manufacturer"] = "Ai-Thinker";
+  object["model"] = "RGBW Light";
+  object["device_ip"] = (WiFi.getMode() == WIFI_AP) ? WiFi.softAPIP().toString()
+                                                    : WiFi.localIP().toString();
+  object["mac"] = WiFi.macAddress();
+}
+
+/**
+ * @brief Create a JSON string holding the current state of this light
+ *
+ * @return std::string JSON string holding the current state of this light
+ */
+std::string createStateJSON() {
+  StaticJsonBuffer<BUFFER_SIZE> jsonBuffer;
+  JsonObject &root = jsonBuffer.createObject();
+
+  root[KEY_STATE] = AiLight.getState() ? MQTT_PAYLOAD_ON : MQTT_PAYLOAD_OFF;
+  root[KEY_BRIGHTNESS] = AiLight.getBrightness();
+  root[KEY_WHITE] = AiLight.getColor().white;
+  root[KEY_COLORTEMP] = AiLight.getColorTemperature();
+
+  JsonObject &color = root.createNestedObject(KEY_COLOR);
+  color[KEY_COLOR_R] = AiLight.getColor().red;
+  color[KEY_COLOR_G] = AiLight.getColor().green;
+  color[KEY_COLOR_B] = AiLight.getColor().blue;
+
+  root[KEY_GAMMA_CORRECTION] = AiLight.hasGammaCorrection();
+
+  char buffer[root.measureLength() + 1];
+  root.printTo(buffer, sizeof(buffer));
+
+  return buffer;
+}
+
+/**
  * @brief Publishes data to WebSocket client upon connection
  *
  * @param id the WebSocket client identifier
@@ -38,18 +137,7 @@ void wsStart(uint8_t id) {
 
   // Device settings/state
   JsonObject &device = root.createNestedObject("d");
-  device["app_name"] = APP_NAME;
-  device["app_version"] = APP_VERSION;
-  device["build_date"] = __DATE__;
-  device["build_time"] = __TIME__;
-  device["memory"] = ESP.getFlashChipSize();
-  device["free_heap"] = ESP.getFreeHeap();
-  device["cpu_frequency"] = ESP.getCpuFreqMHz();
-  device["manufacturer"] = "Ai-Thinker";
-  device["model"] = "RGBW Light";
-  device["device_ip"] = (WiFi.getMode() == WIFI_AP) ? WiFi.softAPIP().toString()
-                                                    : WiFi.localIP().toString();
-  device["mac"] = WiFi.macAddress();
+  createAboutJSON(device);
 
   // User settings
   JsonObject &settings = root.createNestedObject("s");
@@ -72,8 +160,16 @@ void wsStart(uint8_t id) {
   }
   settings[KEY_MQTT_HA_DISCOVERY_PREFIX] = cfg.mqtt_ha_disc_prefix;
 
+  // REST API
+  settings[KEY_REST_API_ENABLED] = cfg.api;
+  if (cfg.api_key == NULL || cfg.api_key[0] == 0xFF) {
+    os_strcpy(cfg.api_key, ADMIN_PASSWORD);
+  }
+  settings[KEY_REST_API_KEY] = cfg.api_key;
+
   char buffer[root.measureLength() + 1];
   root.printTo(buffer, sizeof(buffer));
+
   ws.text(id, buffer);
 }
 
@@ -223,7 +319,23 @@ void wsProcessMessage(uint8_t num, char *payload, size_t length) {
       }
     }
 
-    // Restart the MQTT broker due to new settings
+    // REST API
+    if (settings.containsKey(KEY_REST_API_ENABLED)) {
+      bool rest_api_enabled = settings[KEY_REST_API_ENABLED];
+      if (cfg.api != rest_api_enabled) {
+        cfg.api = rest_api_enabled;
+        needRestart = true;
+      }
+    }
+
+    if (settings.containsKey(KEY_REST_API_KEY)) {
+      const char *api_key = settings[KEY_REST_API_KEY];
+      if (os_strcmp(cfg.api_key, api_key) != 0) {
+        os_strcpy(cfg.api_key, api_key);
+      }
+    }
+
+    // Reconnect to the MQTT broker due to new settings
     if (mqtt_changed) {
       EEPROM_write(cfg);
       mqtt.disconnect();
@@ -328,19 +440,137 @@ void setupWeb() {
   server->addHandler(&ws);
   server->addHandler(&events);
 
-  server->rewrite("/", "/index.html");
+  server->rewrite(PSTR("/"), HTTP_ROUTE_INDEX);
 
   // Send a file when /index is requested
-  server->on("/index.html", HTTP_ANY, [](AsyncWebServerRequest *request) {
+  server->on(HTTP_ROUTE_INDEX, HTTP_GET, [](AsyncWebServerRequest *request) {
     AsyncWebServerResponse *response =
-        request->beginResponse_P(200, "text/html", html_gz, html_gz_len);
-    response->addHeader("Content-Encoding", "gzip");
+        request->beginResponse_P(200, HTTP_MIMETYPE_HTML, html_gz, html_gz_len);
+
+    response->addHeader(PSTR("Content-Encoding"), PSTR("gzip"));
+    response->addHeader(PSTR(HTTP_HEADER_SERVER), SERVER_SIGNATURE);
+
     request->send(response);
   });
 
+  if (cfg.api) {
+    server->onRequestBody([](AsyncWebServerRequest *request, uint8_t *data,
+                             size_t len, size_t index, size_t total) {
+
+      // Process requested changes for the light
+      if (request->url().equals(HTTP_APIROUTE_LIGHT)) {
+
+        // Check for appropriate HTTP method
+        if (request->method() != HTTP_PATCH) {
+          AsyncWebServerResponse *response =
+              request->beginResponse(405, PSTR(HTTP_MIMETYPE_JSON));
+          response->addHeader(PSTR(HTTP_HEADER_SERVER), SERVER_SIGNATURE);
+          response->addHeader(PSTR(HTTP_HEADER_ALLOW), PSTR("GET, PATCH"));
+          request->send(response);
+        }
+
+        if (!authorizeAPI(request)) {
+          return;
+        }
+
+        if (!processJson((char *)data)) {
+          DynamicJsonBuffer jsonBuffer;
+          JsonObject &root = jsonBuffer.createObject();
+          root["error"] = "400";
+          root["message"] = "Unable to process the JSON message";
+
+          char buffer[root.measureLength() + 1];
+          root.printTo(buffer, sizeof(buffer));
+
+          AsyncWebServerResponse *response =
+              request->beginResponse(400, PSTR(HTTP_MIMETYPE_JSON), buffer);
+          response->addHeader(PSTR(HTTP_HEADER_SERVER), SERVER_SIGNATURE);
+          request->send(response);
+
+          return;
+        }
+
+        sendState(); // Notify subscribers about the new state
+
+        AsyncWebServerResponse *response = request->beginResponse(
+            200, PSTR(HTTP_MIMETYPE_JSON), createStateJSON().c_str());
+        response->addHeader(PSTR(HTTP_HEADER_SERVER), SERVER_SIGNATURE);
+        request->send(response);
+      }
+    });
+  }
+
+  if (cfg.api) {
+
+    // 'Light' API Endpoint
+    server->on(
+        HTTP_APIROUTE_LIGHT, HTTP_GET, [](AsyncWebServerRequest *request) {
+
+          // Check for appropriate HTTP method
+          if (request->method() != HTTP_GET) {
+            AsyncWebServerResponse *response =
+                request->beginResponse(405, PSTR(HTTP_MIMETYPE_JSON));
+            response->addHeader(PSTR(HTTP_HEADER_SERVER), SERVER_SIGNATURE);
+            response->addHeader(PSTR(HTTP_HEADER_ALLOW), PSTR("GET, PATCH"));
+            request->send(response);
+
+            return;
+          }
+
+          if (!authorizeAPI(request)) {
+            return;
+          }
+
+          AsyncWebServerResponse *response = request->beginResponse(
+              200, PSTR(HTTP_MIMETYPE_JSON), createStateJSON().c_str());
+          response->addHeader(PSTR(HTTP_HEADER_SERVER), SERVER_SIGNATURE);
+          request->send(response);
+        });
+
+    // 'About' API Endpoint
+    server->on(
+        HTTP_APIROUTE_ABOUT, HTTP_ANY, [](AsyncWebServerRequest *request) {
+
+          // Only allow HTTP_GET method
+          if (request->method() != HTTP_GET) {
+            AsyncWebServerResponse *response =
+                request->beginResponse(405, PSTR(HTTP_MIMETYPE_JSON));
+            response->addHeader(PSTR(HTTP_HEADER_SERVER), SERVER_SIGNATURE);
+            response->addHeader(PSTR(HTTP_HEADER_ALLOW), PSTR("GET"));
+            request->send(response);
+
+            return;
+          }
+
+          if (!authorizeAPI(request)) {
+            return;
+          }
+
+          DynamicJsonBuffer jsonBuffer;
+          JsonObject &root = jsonBuffer.createObject();
+          createAboutJSON(root);
+
+          AsyncResponseStream *response =
+              request->beginResponseStream(PSTR(HTTP_MIMETYPE_JSON));
+          response->addHeader(PSTR(HTTP_HEADER_SERVER), SERVER_SIGNATURE);
+          root.printTo(*response);
+
+          request->send(response);
+        });
+  }
+
   // Handle unknown URI
-  server->onNotFound(
-      [](AsyncWebServerRequest *request) { request->send(404); });
+  server->onNotFound([](AsyncWebServerRequest *request) {
+    const char *mime_type = PSTR(HTTP_MIMETYPE_HTML);
+
+    if (cfg.api && request->url().startsWith(HTTP_APIROUTE_ROOT)) {
+      mime_type = PSTR(HTTP_MIMETYPE_JSON);
+    }
+
+    AsyncWebServerResponse *response = request->beginResponse(404, mime_type);
+    response->addHeader(PSTR(HTTP_HEADER_SERVER), SERVER_SIGNATURE);
+    request->send(response);
+  });
 
   server->begin();
   DEBUGLOG("[HTTP] Webserver running...\n");

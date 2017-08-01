@@ -65,6 +65,8 @@ extern "C" {
 #define KEY_MQTT_HA_USE_DISCOVERY "switch_ha_discovery"
 #define KEY_MQTT_HA_IS_DISCOVERED "mqtt_ha_is_discovered"
 #define KEY_MQTT_HA_DISCOVERY_PREFIX "mqtt_ha_discovery_prefix"
+#define KEY_REST_API_ENABLED "switch_rest_api"
+#define KEY_REST_API_KEY "api_key"
 
 // MQTT Event type definitions
 #define MQTT_EVENT_CONNECT 0
@@ -98,6 +100,8 @@ struct config_t {
   bool mqtt_ha_use_discovery; // Home Assistant MQTT discovery enabled or not
   bool mqtt_ha_is_discovered; // Has this device already been discovered or not
   char mqtt_ha_disc_prefix[32]; // MQTT Discovery prefix for Home Assistant
+  bool api;                     // REST API enabled or not
+  char api_key[32];             // API Key
 } cfg;
 
 static const int BUFFER_SIZE = JSON_OBJECT_SIZE(10);
@@ -134,6 +138,23 @@ uint8_t transBrightness = 0;
 #else
 #define DEBUGLOG(...)
 #endif
+
+// HTTP
+#define HTTP_WEB_INDEX "index.html"
+#define HTTP_API_ROOT "api"
+#define HTTP_HEADER_APIKEY "API-Key"
+#define HTTP_HEADER_SERVER "Server"
+#define HTTP_HEADER_CONTENTTYPE "Content-Type"
+#define HTTP_HEADER_ALLOW "Allow"
+#define HTTP_MIMETYPE_HTML "text/html"
+#define HTTP_MIMETYPE_JSON "application/json"
+
+const char *SERVER_SIGNATURE = APP_NAME "/" APP_VERSION;
+
+const char *HTTP_ROUTE_INDEX = "/" HTTP_WEB_INDEX;
+const char *HTTP_APIROUTE_ROOT = "/" HTTP_API_ROOT;
+const char *HTTP_APIROUTE_ABOUT = "/" HTTP_API_ROOT "/about";
+const char *HTTP_APIROUTE_LIGHT = "/" HTTP_API_ROOT "/light";
 
 /**
  * @brief A program memory version of printf

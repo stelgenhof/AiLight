@@ -23,6 +23,7 @@ const K_B = "b";
 const K_W = "white_value";
 const K_GM = "gamma";
 const K_HD = "ha_discovery";
+const K_RA = "rest_api";
 
 const S_ON = 'ON';
 const S_OFF = 'OFF';
@@ -75,6 +76,12 @@ function Switch(id, du = true) {
     if (this.id === K_HD) {
       let ad = document.getElementById('mqtt_ha_discovery');
       ad.style.display = (this.state) ? 'flex' : 'none';
+    }
+
+    // Handle visibility of REST API settings
+    if (this.id === K_RA) {
+      let ap = document.getElementById('rest_api_key');
+      ap.style.display = (this.state) ? 'flex' : 'none';
     }
 
     state[this.id] = value;
@@ -178,6 +185,7 @@ let bSlider = new Slider(K_B);
 let wSlider = new Slider(K_W);
 let gmSwitch = new Switch(K_GM);
 let hdSwitch = new Switch(K_HD, false);
+let raSwitch = new Switch(K_RA, false);
 let hS = false;
 
 /**
@@ -261,6 +269,16 @@ function processData(data) {
           let ad = document.getElementById('mqtt_ha_discovery');
           if (!data[key][s]) {
             ad.style.display = "none";
+          }
+        }
+
+        // Set REST API switch and API Key field
+        if (s === "switch_rest_api") {
+          raSwitch.setState(data[key][s]);
+
+          let ap = document.getElementById('rest_api_key');
+          if (!data[key][s]) {
+            ap.style.display = "none";
           }
         }
       }
@@ -514,6 +532,15 @@ function save() {
       }
     }
 
+    // Validate API Key
+    if (id === 'api_key') {
+      if (inputs[i].value && inputs[i].value.length > 0 && (inputs[i].value.length > 32 || inputs[i].value.length < 8)) {
+        addValidationMessage(inputs[i], 'An API Key must be between 8 and 32 characters.');
+        isValid = false;
+        continue;
+      }
+    }
+
     s[id] = (inputs[i].type === 'checkbox') ? inputs[i].checked : inputs[i].value;
   }
 
@@ -593,6 +620,22 @@ function toggleNav() {
 }
 
 /**
+ * Handler for generating an API Key
+ *
+ * The generated key is a standard UUID value excluding the hyphens.
+ * Source: https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
+ *
+ * @return void
+ */
+function generateAPIKey() {
+  let akv = document.getElementById('api_key');
+
+  akv.value = ([1e7] + 1e3 + 4e3 + 8e3 + 1e11).replace(/[018]/g, c =>
+    (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+  );
+}
+
+/**
  * Main
  *
  * @return void
@@ -611,14 +654,22 @@ document.addEventListener('DOMContentLoaded', function() {
     passive: true
   });
 
-  let pw = document.getElementById("pagescontent").querySelectorAll("i");
+  let pw = document.getElementById("pagescontent").querySelectorAll("i.icon-eye");
   [].forEach.call(pw, function(item) {
-    item.addEventListener('touchstart click', togglePassword, {
+    item.addEventListener('touchstart', togglePassword, {
       passive: true
     });
     item.addEventListener('click', togglePassword, {
       passive: true
     });
+  });
+
+  let ak = document.getElementById("pagescontent").querySelector("i.icon-arrow-sync");
+  ak.addEventListener('touchstart', generateAPIKey, {
+    passive: true
+  });
+  ak.addEventListener('click', generateAPIKey, {
+    passive: true
   });
 
   initTabs();

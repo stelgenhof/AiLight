@@ -72,6 +72,11 @@ i {
   content: "\e902";
 }
 
+.icon-arrow-sync:before {
+  content: "\e903";
+  color: $grey;
+}
+
 .footer {
   padding: 2rem 1.5rem;
   margin-top: 3rem;

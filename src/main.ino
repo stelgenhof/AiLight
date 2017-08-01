@@ -75,6 +75,10 @@ void loadFactoryDefaults() {
   os_strcpy(cfg.wifi_ssid, WIFI_SSID);
   os_strcpy(cfg.wifi_psk, WIFI_PSK);
 
+  // REST API
+  cfg.api = MQTT_HOMEASSISTANT_DISCOVERY_ENABLED;
+  os_strcpy(cfg.api_key, ADMIN_PASSWORD);
+
   EEPROM_write(cfg);
 }
 

@@ -66,26 +66,10 @@ void lightMQTTCallback(uint8_t type, const char *topic, const char *payload) {
  * @brief Publish the current state of the AiLight
  */
 void sendState() {
-  StaticJsonBuffer<BUFFER_SIZE> jsonBuffer;
-  JsonObject &root = jsonBuffer.createObject();
+  const char *state = createStateJSON().c_str();
 
-  root[KEY_STATE] = AiLight.getState() ? MQTT_PAYLOAD_ON : MQTT_PAYLOAD_OFF;
-  root[KEY_BRIGHTNESS] = AiLight.getBrightness();
-  root[KEY_WHITE] = AiLight.getColor().white;
-  root[KEY_COLORTEMP] = AiLight.getColorTemperature();
-
-  JsonObject &color = root.createNestedObject(KEY_COLOR);
-  color[KEY_COLOR_R] = AiLight.getColor().red;
-  color[KEY_COLOR_G] = AiLight.getColor().green;
-  color[KEY_COLOR_B] = AiLight.getColor().blue;
-
-  root[KEY_GAMMA_CORRECTION] = AiLight.hasGammaCorrection();
-
-  char buffer[root.measureLength() + 1];
-  root.printTo(buffer, sizeof(buffer));
-
-  mqttPublish(cfg.mqtt_state_topic, buffer); // Notify all MQTT subscribers
-  ws.textAll(buffer);                        // Notify all WebSocket clients
+  mqttPublish(cfg.mqtt_state_topic, state); // Notify all MQTT subscribers
+  ws.textAll(state);                        // Notify all WebSocket clients
 }
 
 /**
