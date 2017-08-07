@@ -22,7 +22,7 @@ With **AiLight** you can:
 This can all be done with the built-in (mobile friendly) Web UI or in [Home Assistant](https://home-assistant.io) (using the MQTT built-in integration via JSON). The Web UI also gives you the ability to configure your Ai-Thinker RGBW Light remotely. You can easily change your WiFi settings or the configuration of your MQTT broker.
 
 ### Other
-
+- [REST API](https://github.com/stelgenhof/AiLight/wiki/REST-API)
 - MQTT Last Will and Testament enabled
 - Support for Home Assistant's [MQTT Discovery](https://github.com/stelgenhof/AiLight/wiki/Home-Assistant-MQTT-Discovery)
 - Support for [Over The Air](https://github.com/stelgenhof/AiLight/wiki/OTA-Updates) (OTA) firmware updates
@@ -33,8 +33,9 @@ This can all be done with the built-in (mobile friendly) Web UI or in [Home Assi
 
 ## Roadmap
 
-- ~~MQTT Discovery~~
 - Effects
+- ~~REST API~~
+- ~~MQTT Discovery~~
 - ~~Transitions~~
 - ~~Remember light state after power cycle~~
 - ~~MQTT Last Will And Testament~~
