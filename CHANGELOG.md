@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 - Support for Home Assistant's MQTT Discovery. Have **AiLight** set up your light automatically!
 
 ### Changed
+- Changed signature use of MQTT callback handlers (based on AsyncMQTT's own examples.)
 - Updated Bulma CSS Framework to 0.4.4 (including other NPM packages).
 - Clear EEPROM space before loading factory defaults.
 - Replaced core function 'memcpy' with the ESP8266 SDK counterpart.
