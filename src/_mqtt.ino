@@ -88,8 +88,10 @@ void mqttRegister(void (*callback)(uint8_t, const char *, const char *)) {
 
 /**
  * @brief Event handler for when a connection to the MQTT has been established.
+ *
+ * @param bool sessionPresent
  */
-void onMQTTConnect() {
+void onMQTTConnect(bool sessionPresent) {
   DEBUGLOG("[MQTT] Connected\n");
 
   // Notify subscribers (connected)
@@ -132,8 +134,8 @@ void onMQTTConnect() {
  * @brief Event handler for when the connection to the MQTT broker has been
  * disconnected.
  */
-void onMQTTDisconnect() {
-  DEBUGLOG("[MQTT] Disconnected\n");
+void onMQTTDisconnect(AsyncMqttClientDisconnectReason reason) {
+  DEBUGLOG("[MQTT] Disconnected. Reason: %d\n", reason);
 
   // Notify subscribers (disconnected)
   for (uint8_t i = 0; i < _mqtt_callbacks.size(); i++) {
@@ -146,9 +148,15 @@ void onMQTTDisconnect() {
  *
  * @param topic the MQTT topic to which the message has been published
  * @param payload the contents/message that has been published
+ * @param properties additional properties of the published message
  * @param length size of the published message
+ * @param index ?
+ * @param total ?
  */
-void onMQTTMessage(char *topic, char *payload, uint16_t length) {
+void onMQTTMessage(char *topic, char *payload,
+                   AsyncMqttClientMessageProperties properties, size_t length,
+                   size_t index, size_t total) {
+
   // Convert payload into char variable
   char message[length + 1];
   os_memcpy(message, payload, length);
@@ -196,15 +204,9 @@ void mqttConnect() {
  * @brief Bootstrap function for the MQTT connection
  */
 void setupMQTT() {
-  mqtt.onConnect([](bool sessionPresent) { onMQTTConnect(); });
-
-  mqtt.onDisconnect(
-      [](AsyncMqttClientDisconnectReason reason) { onMQTTDisconnect(); });
-
-  mqtt.onMessage([](char *topic, char *payload,
-                    AsyncMqttClientMessageProperties properties, size_t len,
-                    size_t index,
-                    size_t total) { onMQTTMessage(topic, payload, len); });
+  mqtt.onConnect(onMQTTConnect);
+  mqtt.onDisconnect(onMQTTDisconnect);
+  mqtt.onMessage(onMQTTMessage);
 }
 
 /**
