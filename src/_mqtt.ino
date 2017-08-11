@@ -13,10 +13,6 @@
  * Copyright (c) 2016 - 2017 Sacha Telgenhof
  */
 
-// ---------------------------
-// 'External' functions
-// ---------------------------
-
 /**
  * @brief Publish a message to an MQTT topic
  *
@@ -82,10 +78,6 @@ void mqttRegister(void (*callback)(uint8_t, const char *, const char *)) {
   _mqtt_callbacks.push_back(callback);
 }
 
-// ---------------------------
-// Internal functions
-// ---------------------------
-
 /**
  * @brief Event handler for when a connection to the MQTT has been established.
  *
@@ -141,6 +133,8 @@ void onMQTTDisconnect(AsyncMqttClientDisconnectReason reason) {
   for (uint8_t i = 0; i < _mqtt_callbacks.size(); i++) {
     (*_mqtt_callbacks[i])(MQTT_EVENT_DISCONNECT, NULL, NULL);
   }
+
+  mqttReconnectTimer.once(RECONNECT_TIME, mqttConnect);
 }
 
 /**
@@ -175,30 +169,15 @@ void onMQTTMessage(char *topic, char *payload,
  */
 void mqttConnect() {
 
-  // Try to make a connection to the MQTT broker
-  if (!mqtt.connected()) {
+  DEBUGLOG("[MQTT] Connecting to broker '%s:%i'", cfg.mqtt_server,
+           cfg.mqtt_port);
 
-    DEBUGLOG("[MQTT] Connecting to broker '%s:%i'", cfg.mqtt_server,
-             cfg.mqtt_port);
-
-    mqtt.setServer(cfg.mqtt_server, cfg.mqtt_port);
-    mqtt.setKeepAlive(MQTT_KEEPALIVE);
-    mqtt.setCleanSession(false);
-    mqtt.setClientId(cfg.hostname);
-    mqtt.setWill(cfg.mqtt_lwt_topic, 2, true, MQTT_STATUS_OFFLINE);
-
-    if ((os_strlen(cfg.mqtt_user) > 0) && (os_strlen(cfg.mqtt_password) > 0)) {
-      DEBUGLOG(" as user '%s'\n", cfg.mqtt_user);
-      mqtt.setCredentials(cfg.mqtt_user, cfg.mqtt_password);
-    }
+  if ((os_strlen(cfg.mqtt_user) > 0) && (os_strlen(cfg.mqtt_password) > 0)) {
+    DEBUGLOG(" as user '%s'\n", cfg.mqtt_user);
   }
 
   mqtt.connect();
 }
-
-// ---------------------------
-// Core functions
-// ---------------------------
 
 /**
  * @brief Bootstrap function for the MQTT connection
@@ -207,22 +186,11 @@ void setupMQTT() {
   mqtt.onConnect(onMQTTConnect);
   mqtt.onDisconnect(onMQTTDisconnect);
   mqtt.onMessage(onMQTTMessage);
-}
 
-/**
- * @brief Try to reconnect if connection to MQTT broker is lost
- */
-void loopMQTT() {
-  if (WiFi.status() == WL_CONNECTED) {
-    if (!mqtt.connected()) {
-
-      // Wait 10 seconds before trying to connect again
-      unsigned long currPeriod = millis() / MQTT_RECONNECT_TIME;
-      static unsigned long lastPeriod = 0;
-      if (currPeriod != lastPeriod) {
-        lastPeriod = currPeriod;
-        mqttConnect();
-      }
-    }
-  }
+  mqtt.setServer(cfg.mqtt_server, cfg.mqtt_port);
+  mqtt.setKeepAlive(MQTT_KEEPALIVE);
+  mqtt.setCleanSession(false);
+  mqtt.setClientId(cfg.hostname);
+  mqtt.setWill(cfg.mqtt_lwt_topic, 2, true, MQTT_STATUS_OFFLINE);
+  mqtt.setCredentials(cfg.mqtt_user, cfg.mqtt_password);
 }

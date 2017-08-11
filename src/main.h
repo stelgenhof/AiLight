@@ -29,6 +29,7 @@
 #include <ESPAsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include <Hash.h>
+#include <Ticker.h>
 #include <WiFiUdp.h>
 #include <vector>
 
@@ -41,6 +42,7 @@ extern "C" {
 #define EEPROM_START_ADDRESS 0
 #define INIT_HASH 0x4B
 static const int BUFFER_SIZE = JSON_OBJECT_SIZE(10);
+#define RECONNECT_TIME 10
 
 // Key names as used internally and in the WebUI
 #define KEY_SETTINGS "s"
@@ -101,6 +103,8 @@ AsyncEventSource events("/events");
 AsyncWebServer *server;
 AsyncMqttClient mqtt;
 std::vector<void (*)(uint8_t, const char *, const char *)> _mqtt_callbacks;
+Ticker wifiReconnectTimer;
+Ticker mqttReconnectTimer;
 
 // Configuration structure that gets stored to the EEPROM
 struct config_t {

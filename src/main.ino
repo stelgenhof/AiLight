@@ -106,14 +106,10 @@ void setup() {
 #endif
 
   setupLight();
+  setupMQTT();
   setupWiFi();
   setupOTA();
-  setupMQTT();
   setupWeb();
-
-#ifdef DEBUG
-  wifiStatus();
-#endif
 
   sendState(); // Notify subscribers about current state
 }
@@ -122,7 +118,6 @@ void setup() {
  * @brief Main loop
  */
 void loop() {
-  loopMQTT();
   loopOTA();
   loopLight();
 }
