@@ -14,6 +14,9 @@
 #define APP_VERSION "0.4.1-dev"
 #define APP_AUTHOR "stelgenhof@gmail.com"
 
+#define DEVICE_MANUFACTURER "Ai-Thinker"
+#define DEVICE_MODEL "RGBW Light"
+
 #include "config.h"
 
 #include "AiLight.hpp"
@@ -37,10 +40,12 @@ extern "C" {
 
 #define EEPROM_START_ADDRESS 0
 #define INIT_HASH 0x4B
+static const int BUFFER_SIZE = JSON_OBJECT_SIZE(10);
 
-// Key names as used internally and in Home Assistant
+// Key names as used internally and in the WebUI
 #define KEY_SETTINGS "s"
 #define KEY_DEVICE "d"
+
 #define KEY_STATE "state"
 #define KEY_BRIGHTNESS "brightness"
 #define KEY_WHITE "white_value"
@@ -50,9 +55,10 @@ extern "C" {
 #define KEY_COLOR_R "r"
 #define KEY_COLOR_G "g"
 #define KEY_COLOR_B "b"
-#define KEY_HOSTNAME "hostname"
 #define KEY_GAMMA_CORRECTION "gamma"
 #define KEY_TRANSITION "transition"
+
+#define KEY_HOSTNAME "hostname"
 #define KEY_WIFI_SSID "wifi_ssid"
 #define KEY_WIFI_PSK "wifi_psk"
 #define KEY_MQTT_SERVER "mqtt_server"
@@ -72,6 +78,23 @@ extern "C" {
 #define MQTT_EVENT_CONNECT 0
 #define MQTT_EVENT_DISCONNECT 1
 #define MQTT_EVENT_MESSAGE 2
+
+// HTTP
+#define HTTP_WEB_INDEX "index.html"
+#define HTTP_API_ROOT "api"
+#define HTTP_HEADER_APIKEY "API-Key"
+#define HTTP_HEADER_SERVER "Server"
+#define HTTP_HEADER_CONTENTTYPE "Content-Type"
+#define HTTP_HEADER_ALLOW "Allow"
+#define HTTP_MIMETYPE_HTML "text/html"
+#define HTTP_MIMETYPE_JSON "application/json"
+
+const char *SERVER_SIGNATURE = APP_NAME "/" APP_VERSION;
+
+const char *HTTP_ROUTE_INDEX = "/" HTTP_WEB_INDEX;
+const char *HTTP_APIROUTE_ROOT = "/" HTTP_API_ROOT;
+const char *HTTP_APIROUTE_ABOUT = "/" HTTP_API_ROOT "/about";
+const char *HTTP_APIROUTE_LIGHT = "/" HTTP_API_ROOT "/light";
 
 AsyncWebSocket ws("/ws");
 AsyncEventSource events("/events");
@@ -103,8 +126,6 @@ struct config_t {
   bool api;                     // REST API enabled or not
   char api_key[32];             // API Key
 } cfg;
-
-static const int BUFFER_SIZE = JSON_OBJECT_SIZE(10);
 
 // Globals for flash
 bool flash = false;
@@ -138,23 +159,6 @@ uint8_t transBrightness = 0;
 #else
 #define DEBUGLOG(...)
 #endif
-
-// HTTP
-#define HTTP_WEB_INDEX "index.html"
-#define HTTP_API_ROOT "api"
-#define HTTP_HEADER_APIKEY "API-Key"
-#define HTTP_HEADER_SERVER "Server"
-#define HTTP_HEADER_CONTENTTYPE "Content-Type"
-#define HTTP_HEADER_ALLOW "Allow"
-#define HTTP_MIMETYPE_HTML "text/html"
-#define HTTP_MIMETYPE_JSON "application/json"
-
-const char *SERVER_SIGNATURE = APP_NAME "/" APP_VERSION;
-
-const char *HTTP_ROUTE_INDEX = "/" HTTP_WEB_INDEX;
-const char *HTTP_APIROUTE_ROOT = "/" HTTP_API_ROOT;
-const char *HTTP_APIROUTE_ABOUT = "/" HTTP_API_ROOT "/about";
-const char *HTTP_APIROUTE_LIGHT = "/" HTTP_API_ROOT "/light";
 
 /**
  * @brief A program memory version of printf

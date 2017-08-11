@@ -228,6 +228,47 @@ bool processJson(char *message) {
 }
 
 /**
+ * @brief Populate the given JsonObject with details about this firmware
+ *
+ * @param object the JsonObject that will hold details about this firmware
+ *
+ * @return void
+ */
+void createAboutJSON(JsonObject &object) {
+  object["app_name"] = APP_NAME;
+  object["app_version"] = APP_VERSION;
+  object["build_date"] = __DATE__;
+  object["build_time"] = __TIME__;
+  object["memory"] = ESP.getFlashChipSize();
+  object["free_heap"] = ESP.getFreeHeap();
+  object["cpu_frequency"] = ESP.getCpuFreqMHz();
+  object["manufacturer"] = DEVICE_MANUFACTURER;
+  object["model"] = DEVICE_MODEL;
+  object["device_ip"] = (WiFi.getMode() == WIFI_AP) ? WiFi.softAPIP().toString()
+                                                    : WiFi.localIP().toString();
+  object["mac"] = WiFi.macAddress();
+}
+
+/**
+ * @brief Populate the given JsonObject with the current state of this light
+ *
+ * @param object the JsonObject that will hold the current state of this light
+ */
+void createStateJSON(JsonObject &object) {
+  object[KEY_STATE] = AiLight.getState() ? MQTT_PAYLOAD_ON : MQTT_PAYLOAD_OFF;
+  object[KEY_BRIGHTNESS] = AiLight.getBrightness();
+  object[KEY_WHITE] = AiLight.getColor().white;
+  object[KEY_COLORTEMP] = AiLight.getColorTemperature();
+
+  JsonObject &color = object.createNestedObject(KEY_COLOR);
+  color[KEY_COLOR_R] = AiLight.getColor().red;
+  color[KEY_COLOR_G] = AiLight.getColor().green;
+  color[KEY_COLOR_B] = AiLight.getColor().blue;
+
+  object[KEY_GAMMA_CORRECTION] = AiLight.hasGammaCorrection();
+}
+
+/**
  * @brief Bootstrap function for the RGBW light
  */
 void setupLight() {
