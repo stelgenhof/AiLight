@@ -20,7 +20,7 @@
  * @param topic the MQTT topic to which the message has been published
  * @param payload the contents/message that has been published
  */
-void lightMQTTCallback(uint8_t type, const char *topic, const char *payload) {
+void deviceMQTTCallback(uint8_t type, const char *topic, const char *payload) {
 
   // Handling the event of connecting to the MQTT broker
   if (type == MQTT_EVENT_CONNECT) {
@@ -57,7 +57,7 @@ void lightMQTTCallback(uint8_t type, const char *topic, const char *payload) {
                    AiLight.getColor().blue, AiLight.getColor().white};
 
       EEPROM_write(cfg);
-      sendState(); // Notify subscribers about new state
+      sendState(); // Notify subscribers about the new state
     }
   }
 }
@@ -281,7 +281,7 @@ void setupLight() {
   AiLight.useGammaCorrection(cfg.gamma);
   AiLight.setState(cfg.is_on);
 
-  mqttRegister(lightMQTTCallback);
+  mqttRegister(deviceMQTTCallback);
 }
 
 /**

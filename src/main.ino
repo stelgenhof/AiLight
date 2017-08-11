@@ -44,7 +44,7 @@ void loadFactoryDefaults() {
   }
   EEPROM.commit();
 
-  // Light defaults
+  // Device defaults
   cfg.ic = INIT_HASH;
   cfg.is_on = LIGHT_STATE;
   cfg.brightness = LIGHT_BRIGHTNESS;
@@ -52,7 +52,7 @@ void loadFactoryDefaults() {
   cfg.color = {LIGHT_COLOR_RED, LIGHT_COLOR_GREEN, LIGHT_COLOR_BLUE,
                LIGHT_COLOR_WHITE};
 
-  // Device defaults
+  // Configuration defaults
   os_strcpy(cfg.hostname, getDeviceID());
   cfg.mqtt_port = MQTT_PORT;
   os_strcpy(cfg.mqtt_server, MQTT_SERVER);
@@ -60,6 +60,7 @@ void loadFactoryDefaults() {
   os_strcpy(cfg.mqtt_password, MQTT_PASSWORD);
   os_strcpy(cfg.mqtt_state_topic, getDeviceID());
 
+  // MQTT Topics
   char *cmd_topic = new char[128];
   sprintf_P(cmd_topic, PSTR("%s/set"), getDeviceID());
   os_strcpy(cfg.mqtt_command_topic, cmd_topic);
