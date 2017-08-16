@@ -90,36 +90,6 @@ void onMQTTConnect(bool sessionPresent) {
   for (uint8_t i = 0; i < _mqtt_callbacks.size(); i++) {
     (*_mqtt_callbacks[i])(MQTT_EVENT_CONNECT, NULL, NULL);
   }
-
-  // MQTT discovery for Home Assistant
-  if (cfg.mqtt_ha_use_discovery && !cfg.mqtt_ha_is_discovered) {
-    static const int BUFFER_SIZE = JSON_OBJECT_SIZE(8);
-    StaticJsonBuffer<BUFFER_SIZE> mqttJsonBuffer;
-    JsonObject &md_root = mqttJsonBuffer.createObject();
-
-    md_root["name"] = cfg.hostname;
-    md_root["platform"] = "mqtt_json";
-    md_root["state_topic"] = cfg.mqtt_state_topic;
-    md_root["command_topic"] = cfg.mqtt_command_topic;
-    md_root["brightness"] = true;
-    md_root["rgb"] = true;
-    md_root["white_value"] = true;
-    md_root["color_temp"] = true;
-
-    // Build the payload
-    char md_buffer[md_root.measureLength() + 1];
-    md_root.printTo(md_buffer, sizeof(md_buffer));
-
-    // Construct the topic name for HA MQTT discovery
-    char *dc_topic = new char[128];
-    sprintf_P(dc_topic, PSTR("%s/light/%s/config"), cfg.mqtt_ha_disc_prefix,
-              cfg.hostname);
-
-    mqttPublish(dc_topic, md_buffer);
-
-    cfg.mqtt_ha_is_discovered = true;
-    EEPROM_write(cfg);
-  }
 }
 
 /**
@@ -133,8 +103,6 @@ void onMQTTDisconnect(AsyncMqttClientDisconnectReason reason) {
   for (uint8_t i = 0; i < _mqtt_callbacks.size(); i++) {
     (*_mqtt_callbacks[i])(MQTT_EVENT_DISCONNECT, NULL, NULL);
   }
-
-  mqttReconnectTimer.once(RECONNECT_TIME, mqttConnect);
 }
 
 /**
@@ -191,6 +159,6 @@ void setupMQTT() {
   mqtt.setKeepAlive(MQTT_KEEPALIVE);
   mqtt.setCleanSession(false);
   mqtt.setClientId(cfg.hostname);
-  mqtt.setWill(cfg.mqtt_lwt_topic, 2, true, MQTT_STATUS_OFFLINE);
+  mqtt.setWill(cfg.mqtt_lwt_topic, 2, MQTT_RETAIN, MQTT_STATUS_OFFLINE);
   mqtt.setCredentials(cfg.mqtt_user, cfg.mqtt_password);
 }
