@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 - Support for Home Assistant's MQTT Discovery. Have **AiLight** set up your light automatically!
 
 ### Changed
+- Moved MQTT Discovery notify event and reconnect timer to device callback function. MQTT functions become decoupled from device implementation.
 - Refactored MQTT and WiFi connections using event driven methods that are executed asynchronously.
 - Changed signature use of MQTT callback handlers (based on AsyncMQTT's own examples.)
 - Updated Bulma CSS Framework to 0.4.4 (including other NPM packages).
