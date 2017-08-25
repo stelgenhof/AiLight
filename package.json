@@ -1,6 +1,6 @@
 {
   "name": "AiLight",
-  "version": "0.4.1-dev",
+  "version": "0.5.0",
   "description": "AiLight is a custom firmware for the inexpensive Ai-Thinker (or equivalent) RGBW WiFi light bulbs that has a ESP8266 onboard and controlled by the MY9291 LED driver.",
   "license": "MIT",
   "keywords": [
