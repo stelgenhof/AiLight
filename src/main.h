@@ -19,6 +19,19 @@
 
 #include "config.h"
 
+// Fallback
+#ifndef MQTT_HOMEASSISTANT_DISCOVERY_ENABLED
+#define MQTT_HOMEASSISTANT_DISCOVERY_ENABLED false
+#endif
+
+#ifndef MQTT_HOMEASSISTANT_DISCOVERY_PREFIX
+#define MQTT_HOMEASSISTANT_DISCOVERY_PREFIX "homeassistant"
+#endif
+
+#ifndef REST_API_ENABLED
+#define REST_API_ENABLED false
+#endif
+
 #include "AiLight.hpp"
 #include "ArduinoOTA.h"
 #include <ArduinoJson.h>
