@@ -73,7 +73,7 @@
 /**
  * HTTP
  * ---------------------------
- * Use the below variables to set HTTP settings of your Ai-Thinker
+ * Use the below variables to set HTTP related settings of your Ai-Thinker
  * RGBW Light. These will be used as the factory defaults of your device.
  */
 #define REST_API_ENABLED false
