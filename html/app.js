@@ -7,7 +7,7 @@
 
  * Created by Sacha Telgenhof <stelgenhof at gmail dot com>
  * (https://www.sachatelgenhof.nl)
- * Copyright (c) 2016 - 2017 Sacha Telgenhof
+ * Copyright (c) 2016 - 2018 Sacha Telgenhof
  */
 
 /* jshint curly: true, undef: true, unused: true, eqeqeq: true, esversion: 6, varstmt: true, browser: true, devel: true */

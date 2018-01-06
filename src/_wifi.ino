@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  * Created by Sacha Telgenhof <stelgenhof at gmail dot com>
  * (https://www.sachatelgenhof.nl)
- * Copyright (c) 2016 - 2017 Sacha Telgenhof
+ * Copyright (c) 2016 - 2018 Sacha Telgenhof
  */
 
 /**

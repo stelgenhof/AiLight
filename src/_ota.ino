@@ -10,7 +10,7 @@
 
  * Created by Sacha Telgenhof <stelgenhof at gmail dot com>
  * (https://www.sachatelgenhof.nl)
- * Copyright (c) 2016 - 2017 Sacha Telgenhof
+ * Copyright (c) 2016 - 2018 Sacha Telgenhof
  */
 
 /**
@@ -29,7 +29,7 @@ void setupOTA() {
     events.send("start", "ota");
 
     ws.enable(false); // Disable WebSocket client connections
-    ws.closeAll(); // Close WebSocket client connections    
+    ws.closeAll(); // Close WebSocket client connections
   });
 
   ArduinoOTA.onEnd([]() {
