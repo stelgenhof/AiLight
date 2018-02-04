@@ -13,7 +13,7 @@
 /**
  * Light
  * ---------------------------
- * Use the below variables to set the behaviour of your Ai-Thinker RGBW
+ * Use the below variables to set the default behaviour of your Ai-Thinker RGBW
  * Light. These will be used as the factory defaults of your device.
  */
 #define LIGHT_STATE false
@@ -36,18 +36,18 @@
 /**
  * WiFi
  * ---------------------------
- * Use the below variables to set WiFi settings of your Ai-Thinker
+ * Use the below variables to set the default WiFi settings of your Ai-Thinker
  * RGBW Light. These will be used as the factory defaults of your device. If no
  * SSID/PSK are provided, your Ai-Thinker RGBW light will start in AP mode.
  */
 #define WIFI_SSID ""
 #define WIFI_PSK ""
-#define WIFI_OUTPUT_POWER 20.5 // 20.5 is the maximum output power
+#define WIFI_OUTPUT_POWER 1.0 // 20.5 is the maximum output power
 
 /**
  * MQTT
  * ---------------------------
- * Use the below variables to set MQTT settings of your Ai-Thinker
+ * Use the below variables to set the default MQTT settings of your Ai-Thinker
  * RGBW Light. These will be used as the factory defaults of your device and
  * making the connection to your Home Assistant instance. Most of these settings
  * can also be changed in the UI environment.
@@ -73,7 +73,7 @@
 /**
  * HTTP
  * ---------------------------
- * Use the below variables to set HTTP related settings of your Ai-Thinker
+ * Use the below variables to set the default HTTP settings of your Ai-Thinker
  * RGBW Light. These will be used as the factory defaults of your device.
  */
 #define REST_API_ENABLED false
