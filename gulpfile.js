@@ -157,7 +157,8 @@ gulp.task('release', function() {
   var version = re.exec(v_data.toString())[1];
 
   // Compile the binary
-  exec('pio run -e ' + environment, function(err, stdout, stderr) {
+  exec('pio run --silent -t clean -e' + environment);
+  exec('pio run --silent -e ' + environment, function(err, stdout, stderr) {
     console.log(stdout);
     console.log(stderr);
   });
