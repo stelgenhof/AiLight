@@ -166,10 +166,12 @@ uint16_t stepCount = 0;
 Color transColor;
 uint8_t transBrightness = 0;
 
+#ifdef DEBUG
 #define SerialPrint(format, ...)                                               \
   StreamPrint_progmem(Serial, PSTR(format), ##__VA_ARGS__)
 #define StreamPrint(stream, format, ...)                                       \
   StreamPrint_progmem(stream, PSTR(format), ##__VA_ARGS__)
+#endif
 
 #ifdef DEBUG
 #define DEBUGLOG(...) SerialPrint(__VA_ARGS__)
@@ -177,6 +179,7 @@ uint8_t transBrightness = 0;
 #define DEBUGLOG(...)
 #endif
 
+#ifdef DEBUG
 /**
  * @brief A program memory version of printf
  *
@@ -210,6 +213,7 @@ void StreamPrint_progmem(Print &out, PGM_P format, ...) {
 
   out.print(ptr);
 }
+#endif
 
 /**
  * @brief Template to allow any type of data to be written to the EEPROM
