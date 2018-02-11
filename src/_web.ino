@@ -23,7 +23,7 @@
 bool authorizeAPI(AsyncWebServerRequest *request) {
 
   // Check if API Key is provided
-  if (!request->hasHeader(PSTR(HTTP_HEADER_APIKEY))) {
+  if (!request->hasHeader(HTTP_HEADER_APIKEY)) {
     DynamicJsonBuffer jsonBuffer;
     JsonObject &root = jsonBuffer.createObject();
     root["error"] = "400";
@@ -33,13 +33,13 @@ bool authorizeAPI(AsyncWebServerRequest *request) {
     root.printTo(buffer, sizeof(buffer));
 
     AsyncWebServerResponse *response =
-        request->beginResponse(400, PSTR(HTTP_MIMETYPE_JSON), buffer);
-    response->addHeader(PSTR(HTTP_HEADER_SERVER), SERVER_SIGNATURE);
+        request->beginResponse(400, HTTP_MIMETYPE_JSON, buffer);
+    response->addHeader(HTTP_HEADER_SERVER, SERVER_SIGNATURE);
     request->send(response);
 
     return false;
   } else {
-    AsyncWebHeader *h = request->getHeader(PSTR(HTTP_HEADER_APIKEY));
+    AsyncWebHeader *h = request->getHeader(HTTP_HEADER_APIKEY);
     if (!h->value().equals(cfg.api_key)) {
 
       DynamicJsonBuffer jsonBuffer;
@@ -51,8 +51,8 @@ bool authorizeAPI(AsyncWebServerRequest *request) {
       root.printTo(buffer, sizeof(buffer));
 
       AsyncWebServerResponse *response =
-          request->beginResponse(401, PSTR(HTTP_MIMETYPE_JSON), buffer);
-      response->addHeader(PSTR(HTTP_HEADER_SERVER), SERVER_SIGNATURE);
+          request->beginResponse(401, HTTP_MIMETYPE_JSON, buffer);
+      response->addHeader(HTTP_HEADER_SERVER, SERVER_SIGNATURE);
       request->send(response);
 
       return false;
@@ -391,15 +391,15 @@ void setupWeb() {
   server->addHandler(&ws);
   server->addHandler(&events);
 
-  server->rewrite(PSTR("/"), HTTP_ROUTE_INDEX);
+  server->rewrite("/", HTTP_ROUTE_INDEX);
 
   // Send a file when /index is requested
   server->on(HTTP_ROUTE_INDEX, HTTP_GET, [](AsyncWebServerRequest *request) {
     AsyncWebServerResponse *response =
         request->beginResponse_P(200, HTTP_MIMETYPE_HTML, html_gz, html_gz_len);
 
-    response->addHeader(PSTR("Content-Encoding"), PSTR("gzip"));
-    response->addHeader(PSTR(HTTP_HEADER_SERVER), SERVER_SIGNATURE);
+    response->addHeader("Content-Encoding", "gzip");
+    response->addHeader(HTTP_HEADER_SERVER, SERVER_SIGNATURE);
 
     request->send(response);
   });
@@ -414,9 +414,9 @@ void setupWeb() {
         // Check for appropriate HTTP method
         if (request->method() != HTTP_PATCH) {
           AsyncWebServerResponse *response =
-              request->beginResponse(405, PSTR(HTTP_MIMETYPE_JSON));
-          response->addHeader(PSTR(HTTP_HEADER_SERVER), SERVER_SIGNATURE);
-          response->addHeader(PSTR(HTTP_HEADER_ALLOW), PSTR("GET, PATCH"));
+              request->beginResponse(405, HTTP_MIMETYPE_JSON);
+          response->addHeader(HTTP_HEADER_SERVER, SERVER_SIGNATURE);
+          response->addHeader(HTTP_HEADER_ALLOW, "GET, PATCH");
           request->send(response);
         }
 
@@ -434,8 +434,8 @@ void setupWeb() {
           root.printTo(buffer, sizeof(buffer));
 
           AsyncWebServerResponse *response =
-              request->beginResponse(400, PSTR(HTTP_MIMETYPE_JSON), buffer);
-          response->addHeader(PSTR(HTTP_HEADER_SERVER), SERVER_SIGNATURE);
+              request->beginResponse(400, HTTP_MIMETYPE_JSON, buffer);
+          response->addHeader(HTTP_HEADER_SERVER, SERVER_SIGNATURE);
           request->send(response);
 
           return;
@@ -452,8 +452,8 @@ void setupWeb() {
         root.printTo(buffer, sizeof(buffer));
 
         AsyncWebServerResponse *response =
-            request->beginResponse(200, PSTR(HTTP_MIMETYPE_JSON), buffer);
-        response->addHeader(PSTR(HTTP_HEADER_SERVER), SERVER_SIGNATURE);
+            request->beginResponse(200, HTTP_MIMETYPE_JSON, buffer);
+        response->addHeader(HTTP_HEADER_SERVER, SERVER_SIGNATURE);
         request->send(response);
       }
     });
@@ -462,80 +462,80 @@ void setupWeb() {
   if (cfg.api) {
 
     // 'Light' API Endpoint
-    server->on(
-        HTTP_APIROUTE_LIGHT, HTTP_GET, [](AsyncWebServerRequest *request) {
+    server->on(HTTP_APIROUTE_LIGHT, HTTP_GET,
+               [](AsyncWebServerRequest *request) {
 
-          // Check for appropriate HTTP method
-          if (request->method() != HTTP_GET) {
-            AsyncWebServerResponse *response =
-                request->beginResponse(405, PSTR(HTTP_MIMETYPE_JSON));
-            response->addHeader(PSTR(HTTP_HEADER_SERVER), SERVER_SIGNATURE);
-            response->addHeader(PSTR(HTTP_HEADER_ALLOW), PSTR("GET, PATCH"));
-            request->send(response);
+                 // Check for appropriate HTTP method
+                 if (request->method() != HTTP_GET) {
+                   AsyncWebServerResponse *response =
+                       request->beginResponse(405, HTTP_MIMETYPE_JSON);
+                   response->addHeader(HTTP_HEADER_SERVER, SERVER_SIGNATURE);
+                   response->addHeader(HTTP_HEADER_ALLOW, "GET, PATCH");
+                   request->send(response);
 
-            return;
-          }
+                   return;
+                 }
 
-          if (!authorizeAPI(request)) {
-            return;
-          }
+                 if (!authorizeAPI(request)) {
+                   return;
+                 }
 
-          // Send response
-          DynamicJsonBuffer jsonBuffer;
-          JsonObject &root = jsonBuffer.createObject();
-          createStateJSON(root);
+                 // Send response
+                 DynamicJsonBuffer jsonBuffer;
+                 JsonObject &root = jsonBuffer.createObject();
+                 createStateJSON(root);
 
-          char buffer[root.measureLength() + 1];
-          root.printTo(buffer, sizeof(buffer));
+                 char buffer[root.measureLength() + 1];
+                 root.printTo(buffer, sizeof(buffer));
 
-          AsyncWebServerResponse *response =
-              request->beginResponse(200, PSTR(HTTP_MIMETYPE_JSON), buffer);
-          response->addHeader(PSTR(HTTP_HEADER_SERVER), SERVER_SIGNATURE);
-          request->send(response);
-        });
+                 AsyncWebServerResponse *response =
+                     request->beginResponse(200, HTTP_MIMETYPE_JSON, buffer);
+                 response->addHeader(HTTP_HEADER_SERVER, SERVER_SIGNATURE);
+                 request->send(response);
+               });
 
     // 'About' API Endpoint
-    server->on(
-        HTTP_APIROUTE_ABOUT, HTTP_ANY, [](AsyncWebServerRequest *request) {
+    server->on(HTTP_APIROUTE_ABOUT, HTTP_ANY,
+               [](AsyncWebServerRequest *request) {
 
-          // Only allow HTTP_GET method
-          if (request->method() != HTTP_GET) {
-            AsyncWebServerResponse *response =
-                request->beginResponse(405, PSTR(HTTP_MIMETYPE_JSON));
-            response->addHeader(PSTR(HTTP_HEADER_SERVER), SERVER_SIGNATURE);
-            response->addHeader(PSTR(HTTP_HEADER_ALLOW), PSTR("GET"));
-            request->send(response);
+                 // Only allow HTTP_GET method
+                 if (request->method() != HTTP_GET) {
+                   AsyncWebServerResponse *response =
+                       request->beginResponse(405, HTTP_MIMETYPE_JSON);
+                   response->addHeader(HTTP_HEADER_SERVER, SERVER_SIGNATURE);
+                   response->addHeader(HTTP_HEADER_ALLOW, "GET");
+                   request->send(response);
 
-            return;
-          }
+                   return;
+                 }
 
-          if (!authorizeAPI(request)) {
-            return;
-          }
+                 if (!authorizeAPI(request)) {
+                   return;
+                 }
 
-          DynamicJsonBuffer jsonBuffer;
-          JsonObject &root = jsonBuffer.createObject();
-          createAboutJSON(root);
+                 DynamicJsonBuffer jsonBuffer;
+                 JsonObject &root = jsonBuffer.createObject();
+                 createAboutJSON(root);
 
-          AsyncResponseStream *response =
-              request->beginResponseStream(PSTR(HTTP_MIMETYPE_JSON));
-          response->addHeader(PSTR(HTTP_HEADER_SERVER), SERVER_SIGNATURE);
-          root.printTo(*response);
+                 AsyncResponseStream *response =
+                     request->beginResponseStream(HTTP_MIMETYPE_JSON);
+                 response->addHeader(HTTP_HEADER_SERVER, SERVER_SIGNATURE);
+                 root.printTo(*response);
 
-          request->send(response);
-        });
+                 request->send(response);
+               });
   }
 
   // Handle unknown URI
   server->onNotFound([](AsyncWebServerRequest *request) {
-    const char *mime_type = PSTR(HTTP_MIMETYPE_HTML);
+    const char *mime_type = HTTP_MIMETYPE_HTML;
 
     if (cfg.api && request->url().startsWith(HTTP_APIROUTE_ROOT)) {
-      mime_type = PSTR(HTTP_MIMETYPE_JSON);
+      mime_type = HTTP_MIMETYPE_JSON;
     }
 
     AsyncWebServerResponse *response = request->beginResponse(404, mime_type);
-    response->addHeader(PSTR(HTTP_HEADER_SERVER), SERVER_SIGNATURE);
+    response->addHeader(HTTP_HEADER_SERVER, SERVER_SIGNATURE);
     request->send(response);
   });
 
