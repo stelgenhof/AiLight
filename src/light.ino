@@ -30,7 +30,7 @@ void deviceMQTTCallback(uint8_t type, const char *topic, const char *payload) {
     // MQTT discovery for Home Assistant
     if (cfg.mqtt_ha_use_discovery && !cfg.mqtt_ha_is_discovered) {
       static const int BUFFER_SIZE =
-          JSON_OBJECT_SIZE(8) + 128; // '128' is an arbritrary number. Increase
+          JSON_OBJECT_SIZE(9) + 128; // '128' is an arbritrary number. Increase
                                      // if required by the payload
       StaticJsonBuffer<BUFFER_SIZE> mqttJsonBuffer;
       JsonObject &md_root = mqttJsonBuffer.createObject();
@@ -43,6 +43,7 @@ void deviceMQTTCallback(uint8_t type, const char *topic, const char *payload) {
       md_root[KEY_COLORTEMP] = true;
       md_root[KEY_BRIGHTNESS] = true;
       md_root[KEY_WHITE] = true;
+      md_root["availability_topic"] = cfg.mqtt_lwt_topic;
 
       // Build the payload
       char md_buffer[md_root.measureLength() + 1];
