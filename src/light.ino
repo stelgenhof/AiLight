@@ -261,6 +261,11 @@ bool processJson(char *message) {
     }
   }
 
+  if (root.containsKey(KEY_GAMMA_CORRECTION)) {
+    bool use_gamma_correction = root[KEY_GAMMA_CORRECTION];
+    AiLight.useGammaCorrection(use_gamma_correction);
+  }
+
   return true;
 }
 
