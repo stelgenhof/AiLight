@@ -8,10 +8,22 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## [Unreleased]
 
 ### Added
+- Allow Gamma Correction option to be set via REST API and MQTT. [\#23](https://github.com/stelgenhof/AiLight/issues/23)
+- Possibility to define the state (ON/OFF) of the light upon power on / reset. Three options are available: Always On, Always Off and As Before. This can be extremely useful if for example you have your light connected to a regular switch and like it to behave like a general light switch. [\#24](https://github.com/stelgenhof/AiLight/issues/24).
+- MQTT availability topic for HomeAssistant is included and set to the same topic as the Last Will and Testament topic. [\#35](https://github.com/stelgenhof/AiLight/issues/35).
 
 ### Changed
+- Renamed the 'extra_script' parameter to 'extra_scripts' in the platformio.ini configuration file as 'extra_script' will be deprecated.
+- Increased buffer for MQTT discovery payload. Payload was too small causing Home Assistant not to recognize all configuration options.
+- Added DEBUG block for code parts that are only required in debug mode.
+- Surpressed message during build and included step to remove prior generated files for the WebUI (gulpfile.js).
+- Changed the name of the ESPAsyncWebServer library in the platformio.ini configuration file since original project has changed their naming.
+- Updated e-mail address and copyright year.
 
 ### Fixed
+- When settings in the Web UI were saved, the Lights tab was made active. This made verifying your changed settings quite cumbersome. After saving, the Settings tab now stays active. [\#14](https://github.com/stelgenhof/AiLight/issues/14).
+- Removed the Program Memory Macros for all constants used with AsyncWebServer methods. These were causing random Software WDT resets and removing these were the remedy. [\#27](https://github.com/stelgenhof/AiLight/issues/27).
+- Corrected debug flag in the platformio.ini configuration file.
 
 ### Removed
 
