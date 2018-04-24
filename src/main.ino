@@ -80,6 +80,8 @@ void loadFactoryDefaults() {
   cfg.api = REST_API_ENABLED;
   os_strcpy(cfg.api_key, ADMIN_PASSWORD);
 
+  cfg.powerup_mode = POWERUP_MODE;
+
   EEPROM_write(cfg);
 }
 

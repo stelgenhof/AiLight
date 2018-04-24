@@ -309,6 +309,7 @@ void createStateJSON(JsonObject &object) {
  * @brief Bootstrap function for the RGBW light
  */
 void setupLight() {
+
   // Restore last used settings (Note: set colour temperature first as it
   // changed the RGB channels!)
   AiLight.setColorTemperature(cfg.color_temp);
@@ -316,7 +317,19 @@ void setupLight() {
   AiLight.setWhite(cfg.color.white);
   AiLight.setBrightness(cfg.brightness);
   AiLight.useGammaCorrection(cfg.gamma);
-  AiLight.setState(cfg.is_on);
+
+  switch (cfg.powerup_mode) {
+  case POWERUP_ON:
+    AiLight.setState(true);
+    break;
+  case POWERUP_SAME:
+    AiLight.setState(cfg.is_on);
+    break;
+  case POWERUP_OFF:
+  default:
+    AiLight.setState(false);
+    break;
+  }
 
   mqttRegister(deviceMQTTCallback);
 }

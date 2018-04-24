@@ -24,6 +24,7 @@ const K_W = "white_value";
 const K_GM = "gamma";
 const K_HD = "ha_discovery";
 const K_RA = "rest_api";
+const K_PM = "powerup_mode";
 
 const S_ON = 'ON';
 const S_OFF = 'OFF';
@@ -494,10 +495,10 @@ function save() {
 
   let Valid952HostnameRegex = /^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$/i;
 
+  // Parse all input fields and validate where needed
   let inputs = document.forms[0].querySelectorAll("input");
   for (let i = 0; i < inputs.length; i++) {
-    let t = inputs[i].id.split('.');
-    let id = t.pop();
+    let id = inputs[i].id.split('.').pop();
 
     // Clear any validation messages
     inputs[i].classList.remove("is-danger");
@@ -542,6 +543,13 @@ function save() {
     }
 
     s[id] = (inputs[i].type === 'checkbox') ? inputs[i].checked : inputs[i].value;
+  }
+
+  // Parse all select fields
+  let selects = document.forms[0].querySelectorAll("select");
+  for (let j = 0; j < selects.length; j++) {
+    let id = selects[j].id.split('.').pop();
+    s[id] = selects[j].value;
   }
 
   if (isValid) {

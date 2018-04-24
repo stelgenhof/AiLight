@@ -27,6 +27,8 @@
 #define HOSTNAME "AiLight"
 #define ADMIN_PASSWORD "hinotori"
 
+#define POWERUP_MODE POWERUP_OFF
+
 /**
  * OTA (Over The Air) Updates
  * ---------------------------

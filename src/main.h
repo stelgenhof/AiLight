@@ -17,6 +17,11 @@
 #define DEVICE_MANUFACTURER "Ai-Thinker"
 #define DEVICE_MODEL "RGBW Light"
 
+// Power Up Modes
+#define POWERUP_OFF 0
+#define POWERUP_ON 1
+#define POWERUP_SAME 2
+
 #include "config.h"
 
 // Fallback
@@ -30,6 +35,10 @@
 
 #ifndef REST_API_ENABLED
 #define REST_API_ENABLED false
+#endif
+
+#ifndef POWERUP_MODE
+#define POWERUP_MODE POWERUP_OFF
 #endif
 
 #include "AiLight.hpp"
@@ -53,7 +62,7 @@ extern "C" {
 #include "html.gz.h"
 
 #define EEPROM_START_ADDRESS 0
-#define INIT_HASH 0x4B
+#define INIT_HASH 0x5F
 static const int BUFFER_SIZE = JSON_OBJECT_SIZE(10);
 #define RECONNECT_TIME 10
 
@@ -88,6 +97,7 @@ static const int BUFFER_SIZE = JSON_OBJECT_SIZE(10);
 #define KEY_MQTT_HA_DISCOVERY_PREFIX "mqtt_ha_discovery_prefix"
 #define KEY_REST_API_ENABLED "switch_rest_api"
 #define KEY_REST_API_KEY "api_key"
+#define KEY_POWERUP_MODE "powerup_mode"
 
 // MQTT Event type definitions
 #define MQTT_EVENT_CONNECT 0
@@ -142,6 +152,7 @@ struct config_t {
   char mqtt_ha_disc_prefix[32]; // MQTT Discovery prefix for Home Assistant
   bool api;                     // REST API enabled or not
   char api_key[32];             // API Key
+  uint8_t powerup_mode;         // Power Up Mode
 } cfg;
 
 // Globals for flash

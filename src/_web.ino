@@ -118,6 +118,8 @@ void wsStart(uint8_t id) {
   }
   settings[KEY_REST_API_KEY] = cfg.api_key;
 
+  settings[KEY_POWERUP_MODE] = cfg.powerup_mode;
+
   char buffer[root.measureLength() + 1];
   root.printTo(buffer, sizeof(buffer));
 
@@ -286,6 +288,15 @@ void wsProcessMessage(uint8_t num, char *payload, size_t length) {
       }
     }
 
+    if (settings.containsKey(KEY_POWERUP_MODE)) {
+      uint8_t powerup_mode = (os_strlen(settings[KEY_POWERUP_MODE]) > 0)
+                                 ? settings[KEY_POWERUP_MODE]
+                                 : POWERUP_MODE;
+      if (cfg.powerup_mode != powerup_mode) {
+        cfg.powerup_mode = powerup_mode;
+      }
+    }
+
     // Reconnect to the MQTT broker due to new settings
     if (mqtt_changed) {
       EEPROM_write(cfg);
@@ -354,7 +365,6 @@ void setupWeb() {
   // Setup WebSocket and handle WebSocket events
   ws.onEvent([](AsyncWebSocket *server, AsyncWebSocketClient *client,
                 AwsEventType type, void *arg, uint8_t *data, size_t len) {
-
     if (type == WS_EVT_CONNECT) {
       IPAddress ip = client->remoteIP();
       DEBUGLOG("[WEBSOCKET] client #%u connected (IP: %s)\n", client->id(),
@@ -386,7 +396,6 @@ void setupWeb() {
         free(message);
       }
     }
-
   });
   server->addHandler(&ws);
   server->addHandler(&events);
@@ -407,7 +416,6 @@ void setupWeb() {
   if (cfg.api) {
     server->onRequestBody([](AsyncWebServerRequest *request, uint8_t *data,
                              size_t len, size_t index, size_t total) {
-
       // Process requested changes for the light
       if (request->url().equals(HTTP_APIROUTE_LIGHT)) {
 
@@ -464,7 +472,6 @@ void setupWeb() {
     // 'Light' API Endpoint
     server->on(HTTP_APIROUTE_LIGHT, HTTP_GET,
                [](AsyncWebServerRequest *request) {
-
                  // Check for appropriate HTTP method
                  if (request->method() != HTTP_GET) {
                    AsyncWebServerResponse *response =
@@ -497,7 +504,6 @@ void setupWeb() {
     // 'About' API Endpoint
     server->on(HTTP_APIROUTE_ABOUT, HTTP_ANY,
                [](AsyncWebServerRequest *request) {
-
                  // Only allow HTTP_GET method
                  if (request->method() != HTTP_GET) {
                    AsyncWebServerResponse *response =
