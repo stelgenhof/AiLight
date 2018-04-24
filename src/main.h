@@ -11,7 +11,7 @@
  */
 
 #define APP_NAME "AiLight"
-#define APP_VERSION "0.5.1-dev"
+#define APP_VERSION "0.6.0-dev"
 #define APP_AUTHOR "stelgenhof@gmail.com"
 
 #define DEVICE_MANUFACTURER "Ai-Thinker"
