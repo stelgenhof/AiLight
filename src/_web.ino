@@ -366,9 +366,14 @@ void setupWeb() {
   ws.onEvent([](AsyncWebSocket *server, AsyncWebSocketClient *client,
                 AwsEventType type, void *arg, uint8_t *data, size_t len) {
     if (type == WS_EVT_CONNECT) {
+
+#ifdef DEBUG
       IPAddress ip = client->remoteIP();
+#endif
+
       DEBUGLOG("[WEBSOCKET] client #%u connected (IP: %s)\n", client->id(),
                ip.toString().c_str());
+
       wsStart(client->id());
     } else if (type == WS_EVT_DISCONNECT) {
       DEBUGLOG("[WEBSOCKET] client #%u disconnected\n", client->id());
