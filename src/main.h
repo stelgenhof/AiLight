@@ -237,7 +237,7 @@ void StreamPrint_progmem(Print &out, PGM_P format, ...) {
  * @return void
  */
 template <class T> void EEPROM_write(const T &value) {
-  int ee = EEPROM_START_ADDRESS;
+  uint16_t ee = EEPROM_START_ADDRESS;
   const byte *p = (const byte *)(const void *)&value;
   for (uint16_t i = 0; i < sizeof(value); i++)
     EEPROM.write(ee++, *p++);
@@ -256,7 +256,7 @@ template <class T> void EEPROM_write(const T &value) {
  * @return void
  */
 template <class T> void EEPROM_read(T &value) {
-  int ee = EEPROM_START_ADDRESS;
+  uint16_t ee = EEPROM_START_ADDRESS;
   byte *p = (byte *)(void *)&value;
   for (uint16_t i = 0; i < sizeof(value); i++)
     *p++ = EEPROM.read(ee++);
