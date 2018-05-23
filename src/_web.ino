@@ -168,10 +168,7 @@ void wsProcessMessage(uint8_t num, char *payload, size_t length) {
       const char *hostname = settings[KEY_HOSTNAME];
       if (os_strcmp(cfg.hostname, hostname) != 0) {
         os_strcpy(cfg.hostname, hostname);
-
-        cfg.mqtt_ha_is_discovered =
-            false; // Since hostname is used as name in HA
-
+        cfg.mqtt_ha_is_discovered = false; // Re-register the device via MQTT HASS Autodiscovery
         needRestart = true;
       }
     }
@@ -215,6 +212,7 @@ void wsProcessMessage(uint8_t num, char *payload, size_t length) {
       if (os_strcmp(cfg.mqtt_state_topic, mqtt_state_topic) != 0) {
         os_strcpy(cfg.mqtt_state_topic, mqtt_state_topic);
         mqtt_changed = true;
+        cfg.mqtt_ha_is_discovered = false; // Re-register the device via MQTT HASS Autodiscovery
       }
     }
 
@@ -223,6 +221,7 @@ void wsProcessMessage(uint8_t num, char *payload, size_t length) {
       if (os_strcmp(cfg.mqtt_command_topic, mqtt_command_topic) != 0) {
         os_strcpy(cfg.mqtt_command_topic, mqtt_command_topic);
         mqtt_changed = true;
+        cfg.mqtt_ha_is_discovered = false; // Re-register the device via MQTT HASS Autodiscovery
       }
     }
 
@@ -231,6 +230,7 @@ void wsProcessMessage(uint8_t num, char *payload, size_t length) {
       if (os_strcmp(cfg.mqtt_lwt_topic, mqtt_lwt_topic) != 0) {
         os_strcpy(cfg.mqtt_lwt_topic, mqtt_lwt_topic);
         mqtt_changed = true;
+        cfg.mqtt_ha_is_discovered = false; // Re-register the device via MQTT HASS Autodiscovery
       }
     }
 

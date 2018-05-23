@@ -13,10 +13,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 - MQTT availability topic for HomeAssistant is included and set to the same topic as the Last Will and Testament topic. [\#35](https://github.com/stelgenhof/AiLight/issues/35).
 
 ### Changed
+- In addition to the hostname, if the MQTT state topic, command topic or state topic are changed, the device will re-register itself on Home Assistant via the MQTT Auto discovery (if enabled). These settings are part of the Home Assistant device configuration and therefor need to be re-initialized if they are changed.   
 - Renamed the 'extra_script' parameter to 'extra_scripts' in the platformio.ini configuration file as 'extra_script' will be deprecated.
 - Increased buffer for MQTT discovery payload. Payload was too small causing Home Assistant not to recognize all configuration options.
 - Added DEBUG block for code parts that are only required in debug mode.
-- Surpressed message during build and included step to remove prior generated files for the WebUI (gulpfile.js).
+- Suppressed message during build and included step to remove prior generated files for the WebUI (gulpfile.js).
 - Changed the name of the ESPAsyncWebServer library in the platformio.ini configuration file since original project has changed their naming.
 - Updated e-mail address and copyright year.
 
@@ -35,7 +36,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ### Changed
 - Moved MQTT Discovery notify event and reconnect timer to device callback function. MQTT functions become decoupled from device implementation.
-- Refactored MQTT and WiFi connections using event driven methods that are executed asynchronously.
+- Re-factored MQTT and WiFi connections using event driven methods that are executed asynchronously.
 - Changed signature use of MQTT callback handlers (based on AsyncMQTT's own examples.)
 - Updated Bulma CSS Framework to 0.4.4 (including other NPM packages).
 - Clear EEPROM space before loading factory defaults.
@@ -83,7 +84,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ### Removed
 - SVG font (used for icons) as most browsers started not supporting it anymore. Helps reducing the size of the firmware.
-- Removed unnecessary onConnect handler.
+- Removed unnecessary 'onConnect' handler.
 
 
 ## [0.3.0] - 2017-05-09
@@ -103,7 +104,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ### Fixed
 - Reset button now properly performs a factory reset. Previously it was executing a restart.
-- OTA upload was behaving erratically caused by incorrectly implementing the asynchronous 'onProgress' method (Wrong datatypes used).
+- OTA upload was behaving erratically caused by incorrectly implementing the asynchronous 'onProgress' method (Wrong data-types used).
 
 ### Removed
 
