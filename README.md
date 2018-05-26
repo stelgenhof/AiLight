@@ -41,7 +41,7 @@ This can all be done with the built-in (mobile friendly) Web UI or in [Home Assi
 - ~~MQTT Last Will And Testament~~
 - ~~Gamma Correction~~
 
-Making this firmware was largely inspired by the [MY9291](https://github.com/xoseperez/my9291) LED driver and the [Espurna](https://bitbucket.org/xoseperez/espurna) firmware of [Xose Pérez](https://github.com/xoseperez).
+Making this firmware was largely inspired by the [MY9291](https://github.com/xoseperez/my9291) LED driver and the [Espurna](https://github.com/xoseperez/espurna) firmware of [Xose Pérez](https://github.com/xoseperez).
 
 ## Getting started
 Got curious and want to use **AiLight** too? Head over to the [Wiki](https://github.com/stelgenhof/AiLight/wiki) where you can find all relevant topics on how to [connect](https://github.com/stelgenhof/AiLight/wiki/Connection), [flash](https://github.com/stelgenhof/AiLight/wiki/Flashing-the-Firmware) and use the **AiLight** firmware!
