@@ -8,5 +8,8 @@ cache:
 install:
   - pip install -U platformio
   - platformio update
+before_script:
+  - cp src/config.example.h src/config.h
+  - cp platformio.example.ini platformio.ini
 script:
   - platformio run
