@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## [Unreleased]
 
 ### Added
+- Enabled Travis CI so the AiLight firmware gets build and tested with each change.
 - Allow Gamma Correction option to be set via REST API and MQTT. [\#23](https://github.com/stelgenhof/AiLight/issues/23)
 - Possibility to define the state (ON/OFF) of the light upon power on / reset. Three options are available: Always On, Always Off and As Before. This can be extremely useful if for example you have your light connected to a regular switch and like it to behave like a general light switch. [\#24](https://github.com/stelgenhof/AiLight/issues/24).
 - MQTT availability topic for HomeAssistant is included and set to the same topic as the Last Will and Testament topic. [\#35](https://github.com/stelgenhof/AiLight/issues/35).
