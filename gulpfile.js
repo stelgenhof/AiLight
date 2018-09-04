@@ -31,7 +31,7 @@ const sourceFolder = 'src/';
 const targetFolder = 'html/';
 
 // Clean the generated output files
-gulp.task('clean', function() {
+gulp.task('clean', function () {
   del([sourceFolder + 'html.*']);
   del([sourceFolder + '*.html']);
   del([targetFolder + '*.css']);
@@ -39,13 +39,13 @@ gulp.task('clean', function() {
 });
 
 // Build the C++ include header file
-gulp.task('build', ['html'], function() {
+gulp.task('build', ['html'], function () {
   var source = sourceFolder + 'index.html.gz';
   var destination = sourceFolder + 'html.gz.h';
 
   var ws = fs.createWriteStream(destination);
 
-  ws.on('error', function(err) {
+  ws.on('error', function (err) {
     console.log(err);
   });
 
@@ -69,7 +69,7 @@ gulp.task('build', ['html'], function() {
 });
 
 // Convert the SCSS to CSS
-gulp.task('sass', function() {
+gulp.task('sass', function () {
   return gulp.src(targetFolder + 'style.scss')
     .pipe(plumber())
     .pipe(sass().on('error', sass.logError))
@@ -77,18 +77,18 @@ gulp.task('sass', function() {
 });
 
 // Base 64
-gulp.task('css', ['sass'], function() {
+gulp.task('css', ['sass'], function () {
   return gulp.src(targetFolder + 'style.css')
     .pipe(cssBase64())
     .pipe(gulp.dest('html'));
 });
 
 // Process HTML files
-gulp.task('html', ['clean', 'css'], function() {
+gulp.task('html', ['clean', 'css'], function () {
   return gulp.src(targetFolder + '*.html')
     .pipe(favicon())
     .pipe(inline({
-      js: function() {
+      js: function () {
         return minify({
           mangle: true
         });
@@ -110,7 +110,7 @@ gulp.task('html', ['clean', 'css'], function() {
 
 // Creates a gamma correction table
 // Copy the contents of this file in the lib/AiLight/AiLight.hpp file
-gulp.task('gamma', function() {
+gulp.task('gamma', function () {
   var gamma = 2.8; // Correction factor
   var MAX_IN = 255; // Tope end of INPUT range
   var MAX_OUT = 255; // Tope end of OUTPUT range
@@ -118,7 +118,7 @@ gulp.task('gamma', function() {
 
   var ws = fs.createWriteStream(destination);
 
-  ws.on('error', function(err) {
+  ws.on('error', function (err) {
     console.log(err);
   });
 
@@ -144,7 +144,7 @@ gulp.task('gamma', function() {
 });
 
 // Compile firmware binary for release
-gulp.task('release', function() {
+gulp.task('release', function () {
   const binaries_dir = 'binaries';
   const environment = 'prod';
 
@@ -158,13 +158,13 @@ gulp.task('release', function() {
 
   // Compile the binary
   exec('pio run --silent -t clean -e' + environment);
-  exec('pio run --silent -e ' + environment, function(err, stdout, stderr) {
+  exec('pio run --silent -e ' + environment, function (err, stdout, stderr) {
     console.log(stdout);
     console.log(stderr);
   });
 
   // Move the compiled binary to the binaries directory
-  fs.renameSync('.pioenvs/' + environment + '/firmware.bin', binaries_dir + '/ailight-' + version + '.bin', function(err) {
+  fs.renameSync('.pioenvs/' + environment + '/firmware.bin', binaries_dir + '/ailight-' + version + '.bin', function (err) {
     if (err) throw err;
   });
 

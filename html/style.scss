@@ -15,6 +15,7 @@
  * (https://www.sachatelgenhof.nl)
  * Copyright (c) 2016 - 2018 Sacha Telgenhof
  */
+
 @charset "utf-8";
 @import './node_modules/bulma/sass/utilities/_all';
 @import './node_modules/bulma/sass/base/_all';
@@ -41,7 +42,7 @@
 
 i {
   font-family: 'ailight' !important;
-  speak: none;
+  speak-as: none;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
@@ -91,19 +92,16 @@ i {
   p {
     margin-bottom: 2rem;
   }
-
   .table {
     tr {
       &:hover {
         background: none;
       }
     }
-
     th {
       text-align: right;
       border: none;
     }
-
     td {
       vertical-align: middle;
       border: none;
@@ -115,19 +113,16 @@ i {
   div:first-child {
     margin-bottom: 1rem;
   }
-
   .table {
     tr {
       &:hover {
         background: none;
       }
     }
-
     th {
       text-align: right;
       border: none;
     }
-
     td {
       vertical-align: middle;
       border: none;
@@ -142,11 +137,10 @@ i {
 .nav-item img {
   max-height: 3.75rem;
 }
-// Switch Component
 
+// Switch Component
 .switch {
   --height: 22px;
-
   input {
     opacity: 0;
     display: inline-block;
@@ -168,7 +162,6 @@ i {
   box-sizing: border-box;
   display: inline-block;
   -webkit-tap-highlight-color: transparent;
-
   &:after,
   &:before {
     content: " ";
@@ -179,34 +172,29 @@ i {
     border-radius: calc((var(--height) - 2px) / 2);
     transition: 0.233s;
   }
-
   &:before {
     width: calc(1.625 * var(--height) - 2px);
     background-color: $grey-lighter;
   }
-
   &:after {
     width: calc(var(--height) - 2px);
     background-color: #FFF;
     box-shadow: 0 2px 3px rgba(17, 17, 17, 0.1);
   }
-
   &.checked {
     border-color: $text;
     background-color: $text;
-
     &:before {
       transform: scale(0);
     }
-
     &:after {
       transform: translateX(calc(0.625 * var(--height)));
     }
-  }
-  // Colors
-  @each $name, $pair in ("primary": ($primary, $primary-invert)) {
+  } // Colors
+  @each $name,
+  $pair in ("primary": ($primary,
+  $primary-invert)) {
     $color: nth($pair, 1);
-
     &.is-#{$name} {
       &.checked {
         border-color: $color;
@@ -215,12 +203,11 @@ i {
     }
   }
 }
-// Slider Component
 
+// Slider Component
 input[type=range].slider {
   $radius: 290486px;
   --height: 8px;
-
   &.is-fullwidth {
     width: 100%;
   }
@@ -233,15 +220,12 @@ input[type=range].slider {
   outline: none;
   background: $border;
   -webkit-tap-highlight-color: transparent;
-
   &:focus {
     outline: none;
-  }
-  // http://stackoverflow.com/questions/18794026/remove-dotted-outline-from-range-input-element-in-firefox
+  } // http://stackoverflow.com/questions/18794026/remove-dotted-outline-from-range-input-element-in-firefox
   &::-moz-focus-outer {
     border: none;
   }
-
   &,
   &::-webkit-slider-runnable-track,
   &::-webkit-slider-thumb {
@@ -258,7 +242,6 @@ input[type=range].slider {
     transform: translateZ(0);
     transition: (0.233s / 2) ease-in-out;
     box-sizing: border-box;
-
     &:hover {
       transform: scale(1.25);
     }
@@ -276,36 +259,28 @@ input[type=range].slider {
     transform: translateZ(0);
     transition: (0.233s / 2);
   }
-
   &::-webkit-slider-thumb {
     @include thumb-base();
-
     &:active {
       @include thumb-base-active();
     }
   }
-
   &::-webkit-slider-runnable-track {
     @include track();
   }
-
   &::-moz-range-thumb {
     @include thumb-base();
-
     &:active {
       @include thumb-base-active();
     }
   }
-
   &::-moz-range-progress:focus {
     outline: 0;
     border: 0;
   }
-
   &::-moz-range-track {
     background: transparent;
   }
-
   &::-moz-range-progress {
     display: flex;
     align-items: center;
@@ -314,52 +289,50 @@ input[type=range].slider {
     border-radius: $radius;
     background-color: $text;
   }
-
   &::-ms-thumb {
     @include thumb-base();
-
     &:active {
       @include thumb-base-active();
     }
   }
-
   &::-ms-tooltip {
     display: none;
-  }
-  // Colors
-  @each $name, $pair in ("primary": ($primary, $primary-invert), "info": ($info, $info-invert), "success": ($success, $success-invert), "danger": ($danger, $danger-invert)) {
+  } // Colors
+  @each $name,
+  $pair in ("primary": ($primary,
+  $primary-invert),
+  "info": ($info,
+  $info-invert),
+  "success": ($success,
+  $success-invert),
+  "danger": ($danger,
+  $danger-invert)) {
     $color: nth($pair, 1);
-
     &.is-#{$name} {
       &::-webkit-slider-thumb {
         border-color: $color;
       }
-
       &::-webkit-slider-runnable-track {
         --track-background: linear-gradient(to right, transparent var(--low), $color calc(0%), $color var(--high), transparent calc(0%)) no-repeat 0 100%;
         background: var(--track-background);
-      }
-      // http://www.quirksmode.org/blog/archives/2015/11/styling_and_scr.html
+      } // http://www.quirksmode.org/blog/archives/2015/11/styling_and_scr.html
       &::-moz-range-thumb {
         border-color: $color;
       }
-
       &::-moz-range-progress {
         background-color: $color;
       }
-
       &::-ms-thumb {
         border-color: $color;
       }
-
       &::-ms-fill-lower {
         background-color: $color;
       }
     }
   }
 }
-// Bubble showing slider's numerical value
 
+// Bubble showing slider's numerical value
 output {
   min-width: 2.6rem;
   margin-left: 0.5rem;
