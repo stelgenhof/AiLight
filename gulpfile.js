@@ -143,32 +143,5 @@ gulp.task('gamma', function () {
   ws.end();
 });
 
-// Compile firmware binary for release
-gulp.task('release', function () {
-  const binaries_dir = 'binaries';
-  const environment = 'prod';
-
-  if (!fs.existsSync(binaries_dir)) {
-    fs.mkdirSync(binaries_dir);
-  }
-
-  var v_data = fs.readFileSync(sourceFolder + '/main.h');
-  var re = /#define APP_VERSION \"(.+)\"/g;
-  var version = re.exec(v_data.toString())[1];
-
-  // Compile the binary
-  exec('pio run --silent -t clean -e' + environment);
-  exec('pio run --silent -e ' + environment, function (err, stdout, stderr) {
-    console.log(stdout);
-    console.log(stderr);
-  });
-
-  // Move the compiled binary to the binaries directory
-  fs.renameSync('.pioenvs/' + environment + '/firmware.bin', binaries_dir + '/ailight-' + version + '.bin', function (err) {
-    if (err) throw err;
-  });
-
-});
-
 // Default task
 gulp.task('default', ['build']);
