@@ -44,7 +44,11 @@ void AiLightClass::setBrightness(uint16_t level)
 
 bool AiLightClass::getState(void) { return _my92xx->getState(); }
 
-void AiLightClass::setState(bool state) { _my92xx->setState(state); }
+void AiLightClass::setState(bool state)
+ {
+    _my92xx->setState(state); 
+    _my92xx->update();
+    }
 
 Color AiLightClass::getColor(void) { return _color; }
 
@@ -138,6 +142,8 @@ void AiLightClass::setRGBW()
   _my92xx->setChannel(MY92XX_GREEN, (uint32_t)map(green, 0, MY92XX_LEVEL_MAX, 0, _brightness));
   _my92xx->setChannel(MY92XX_BLUE, (uint32_t)map(blue, 0, MY92XX_LEVEL_MAX, 0, _brightness));
   _my92xx->setChannel(MY92XX_WHITE, (uint32_t)map(_color.white, 0, MY92XX_LEVEL_MAX, 0, _brightness));
+  _my92xx->setChannel(MY92XX_WHITE+1, (uint32_t)map(_color.white, 0, MY92XX_LEVEL_MAX, 0, _brightness));
+
   _my92xx->update();
 }
 
