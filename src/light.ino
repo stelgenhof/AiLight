@@ -87,11 +87,11 @@ void deviceMQTTCallback(uint8_t type, const char *topic, const char *payload) {
       }
 
       // Store light parameters for persistance
-      cfg.is_on = AiLight.getState();
-      cfg.brightness = AiLight.getBrightness();
-      cfg.color_temp = AiLight.getColorTemperature();
-      cfg.color = {AiLight.getColor().red, AiLight.getColor().green,
-                   AiLight.getColor().blue, AiLight.getColor().white};
+      cfg.is_on = AiLight->getState();
+      cfg.brightness = AiLight->getBrightness();
+      cfg.color_temp = AiLight->getColorTemperature();
+      cfg.color = {AiLight->getColor().red, AiLight->getColor().green,
+                   AiLight->getColor().blue, AiLight->getColor().white};
 
       EEPROM_write(cfg);
       sendState(); // Notify subscribers about the new state
@@ -131,9 +131,9 @@ bool processJson(char *message) {
   if (root.containsKey(KEY_FLASH)) {
 
     // Save current settings to be restored later
-    currentColor = AiLight.getColor();
-    currentBrightness = AiLight.getBrightness();
-    currentState = AiLight.getState();
+    currentColor = AiLight->getColor();
+    currentBrightness = AiLight->getBrightness();
+    currentState = AiLight->getState();
 
     flashLength = (uint16_t)root[KEY_FLASH] * 1000U;
 
@@ -171,14 +171,14 @@ bool processJson(char *message) {
       transBrightness = root[KEY_BRIGHTNESS];
 
       // If light is off, start fading from Zero
-      if (!AiLight.getState()) {
-        AiLight.setBrightness(0);
+      if (!AiLight->getState()) {
+        AiLight->setBrightness(0);
       }
 
-      stepBrightness = calculateStep(AiLight.getBrightness(), transBrightness);
+      stepBrightness = calculateStep(AiLight->getBrightness(), transBrightness);
       stepCount = 0;
     } else {
-      AiLight.setBrightness(root[KEY_BRIGHTNESS]);
+      AiLight->setBrightness(root[KEY_BRIGHTNESS]);
     }
   }
 
@@ -191,17 +191,17 @@ bool processJson(char *message) {
       transColor.blue = root[KEY_COLOR][KEY_COLOR_B];
 
       // If light is off, start fading from Zero
-      if (!AiLight.getState()) {
-        AiLight.setColor(0, 0, 0);
+      if (!AiLight->getState()) {
+        AiLight->setColor(0, 0, 0);
       }
 
-      stepR = calculateStep(AiLight.getColor().red, transColor.red);
-      stepG = calculateStep(AiLight.getColor().green, transColor.green);
-      stepB = calculateStep(AiLight.getColor().blue, transColor.blue);
+      stepR = calculateStep(AiLight->getColor().red, transColor.red);
+      stepG = calculateStep(AiLight->getColor().green, transColor.green);
+      stepB = calculateStep(AiLight->getColor().blue, transColor.blue);
 
       stepCount = 0;
     } else {
-      AiLight.setColor(root[KEY_COLOR][KEY_COLOR_R],
+      AiLight->setColor(root[KEY_COLOR][KEY_COLOR_R],
                        root[KEY_COLOR][KEY_COLOR_G],
                        root[KEY_COLOR][KEY_COLOR_B]);
     }
@@ -213,35 +213,35 @@ bool processJson(char *message) {
       transColor.white = root[KEY_WHITE];
 
       // If light is off, start fading from Zero
-      if (!AiLight.getState()) {
-        AiLight.setWhite(0);
+      if (!AiLight->getState()) {
+        AiLight->setWhite(0);
       }
 
-      stepW = calculateStep(AiLight.getColor().white, transColor.white);
+      stepW = calculateStep(AiLight->getColor().white, transColor.white);
 
       stepCount = 0;
     } else {
-      AiLight.setWhite(root[KEY_WHITE]);
+      AiLight->setWhite(root[KEY_WHITE]);
     }
   }
 
   if (root.containsKey(KEY_COLORTEMP)) {
     // In transition/fade
     if (transitionTime > 0) {
-      transColor = AiLight.colorTemperature2RGB(root[KEY_COLORTEMP]);
+      transColor = AiLight->colorTemperature2RGB(root[KEY_COLORTEMP]);
 
       // If light is off, start fading from Zero
-      if (!AiLight.getState()) {
-        AiLight.setColor(0, 0, 0);
+      if (!AiLight->getState()) {
+        AiLight->setColor(0, 0, 0);
       }
 
-      stepR = calculateStep(AiLight.getColor().red, transColor.red);
-      stepG = calculateStep(AiLight.getColor().green, transColor.green);
-      stepB = calculateStep(AiLight.getColor().blue, transColor.blue);
+      stepR = calculateStep(AiLight->getColor().red, transColor.red);
+      stepG = calculateStep(AiLight->getColor().green, transColor.green);
+      stepB = calculateStep(AiLight->getColor().blue, transColor.blue);
 
       stepCount = 0;
     } else {
-      AiLight.setColorTemperature(root[KEY_COLORTEMP]);
+      AiLight->setColorTemperature(root[KEY_COLORTEMP]);
     }
   }
 
@@ -253,17 +253,17 @@ bool processJson(char *message) {
       transColor.green = 0;
       transColor.blue = 0;
 
-      stepR = calculateStep(AiLight.getColor().red, transColor.red);
-      stepG = calculateStep(AiLight.getColor().green, transColor.green);
-      stepB = calculateStep(AiLight.getColor().blue, transColor.blue);
+      stepR = calculateStep(AiLight->getColor().red, transColor.red);
+      stepG = calculateStep(AiLight->getColor().green, transColor.green);
+      stepB = calculateStep(AiLight->getColor().blue, transColor.blue);
     } else {
-      AiLight.setState(state);
+      AiLight->setState(state);
     }
   }
 
   if (root.containsKey(KEY_GAMMA_CORRECTION)) {
     bool use_gamma_correction = root[KEY_GAMMA_CORRECTION];
-    AiLight.useGammaCorrection(use_gamma_correction);
+    AiLight->useGammaCorrection(use_gamma_correction);
   }
 
   return true;
@@ -297,17 +297,17 @@ void createAboutJSON(JsonObject &object) {
  * @param object the JsonObject that will hold the current state of this light
  */
 void createStateJSON(JsonObject &object) {
-  object[KEY_STATE] = AiLight.getState() ? MQTT_PAYLOAD_ON : MQTT_PAYLOAD_OFF;
-  object[KEY_BRIGHTNESS] = AiLight.getBrightness();
-  object[KEY_WHITE] = AiLight.getColor().white;
-  object[KEY_COLORTEMP] = AiLight.getColorTemperature();
+  object[KEY_STATE] = AiLight->getState() ? MQTT_PAYLOAD_ON : MQTT_PAYLOAD_OFF;
+  object[KEY_BRIGHTNESS] = AiLight->getBrightness();
+  object[KEY_WHITE] = AiLight->getColor().white;
+  object[KEY_COLORTEMP] = AiLight->getColorTemperature();
 
   JsonObject &color = object.createNestedObject(KEY_COLOR);
-  color[KEY_COLOR_R] = AiLight.getColor().red;
-  color[KEY_COLOR_G] = AiLight.getColor().green;
-  color[KEY_COLOR_B] = AiLight.getColor().blue;
+  color[KEY_COLOR_R] = AiLight->getColor().red;
+  color[KEY_COLOR_G] = AiLight->getColor().green;
+  color[KEY_COLOR_B] = AiLight->getColor().blue;
 
-  object[KEY_GAMMA_CORRECTION] = AiLight.hasGammaCorrection();
+  object[KEY_GAMMA_CORRECTION] = AiLight->hasGammaCorrection();
 }
 
 /**
@@ -317,22 +317,22 @@ void setupLight() {
 
   // Restore last used settings (Note: set colour temperature first as it
   // changed the RGB channels!)
-  AiLight.setColorTemperature(cfg.color_temp);
-  AiLight.setColor(cfg.color.red, cfg.color.green, cfg.color.blue);
-  AiLight.setWhite(cfg.color.white);
-  AiLight.setBrightness(cfg.brightness);
-  AiLight.useGammaCorrection(cfg.gamma);
+  AiLight->setColorTemperature(cfg.color_temp);
+  AiLight->setColor(cfg.color.red, cfg.color.green, cfg.color.blue);
+  AiLight->setWhite(cfg.color.white);
+  AiLight->setBrightness(cfg.brightness);
+  AiLight->useGammaCorrection(cfg.gamma);
 
   switch (cfg.powerup_mode) {
   case POWERUP_ON:
-    AiLight.setState(true);
+    AiLight->setState(true);
     break;
   case POWERUP_SAME:
-    AiLight.setState(cfg.is_on);
+    AiLight->setState(cfg.is_on);
     break;
   case POWERUP_OFF:
   default:
-    AiLight.setState(false);
+    AiLight->setState(false);
     break;
   }
 
@@ -349,25 +349,25 @@ void loopLight() {
     if (startFlash) {
       startFlash = false;
       flashStartTime = millis();
-      AiLight.setState(false);
+      AiLight->setState(false);
     }
 
     // Run the flash sequence for the defined period.
     if ((millis() - flashStartTime) <= (flashLength - 100U)) {
       if ((millis() - flashStartTime) % 1000 <= 500) {
-        AiLight.setColor(flashColor.red, flashColor.green, flashColor.blue);
-        AiLight.setBrightness(flashBrightness);
-        AiLight.setState(true);
+        AiLight->setColor(flashColor.red, flashColor.green, flashColor.blue);
+        AiLight->setBrightness(flashBrightness);
+        AiLight->setState(true);
       } else {
-        AiLight.setState(false);
+        AiLight->setState(false);
       }
     } else {
       // Return to the state before the flash
       flash = false;
 
-      AiLight.setState(currentState);
-      AiLight.setColor(currentColor.red, currentColor.green, currentColor.blue);
-      AiLight.setBrightness(currentBrightness);
+      AiLight->setState(currentState);
+      AiLight->setColor(currentColor.red, currentColor.green, currentColor.blue);
+      AiLight->setBrightness(currentBrightness);
 
       sendState(); // Notify subscribers again about current state
     }
@@ -375,7 +375,7 @@ void loopLight() {
 
   // Transitioning/Fading
   if (transitionTime > 0) {
-    AiLight.setState(true);
+    AiLight->setState(true);
 
     uint32_t currentTransTime = millis();
 
@@ -386,24 +386,24 @@ void loopLight() {
 
         // Transition/fade RGB LEDS (if level is different from current)
         if (stepR != 0 || stepG != 0 || stepB != 0) {
-          AiLight.setColor(calculateLevel(stepR, AiLight.getColor().red,
+          AiLight->setColor(calculateLevel(stepR, AiLight->getColor().red,
                                           stepCount, transColor.red),
-                           calculateLevel(stepG, AiLight.getColor().green,
+                           calculateLevel(stepG, AiLight->getColor().green,
                                           stepCount, transColor.green),
-                           calculateLevel(stepB, AiLight.getColor().blue,
+                           calculateLevel(stepB, AiLight->getColor().blue,
                                           stepCount, transColor.blue));
         }
 
         // Transition/fade white LEDS (if level is different from current)
         if (stepW != 0) {
-          AiLight.setWhite(calculateLevel(stepW, AiLight.getColor().white,
+          AiLight->setWhite(calculateLevel(stepW, AiLight->getColor().white,
                                           stepCount, transColor.white));
         }
 
         // Transition/fade brightness (if level is different from current)
         if (stepBrightness != 0) {
-          AiLight.setBrightness(calculateLevel(stepBrightness,
-                                               AiLight.getBrightness(),
+          AiLight->setBrightness(calculateLevel(stepBrightness,
+                                               AiLight->getBrightness(),
                                                stepCount, transBrightness));
         }
 
@@ -411,15 +411,15 @@ void loopLight() {
       } else {
         transitionTime = 0;
         stepCount = 0;
-        AiLight.setState(state);
+        AiLight->setState(state);
 
         sendState(); // Notify subscribers again about current state
 
         // Update settings
-        cfg.is_on = AiLight.getState();
-        cfg.brightness = AiLight.getBrightness();
-        cfg.color = {AiLight.getColor().red, AiLight.getColor().green,
-                     AiLight.getColor().blue, AiLight.getColor().white};
+        cfg.is_on = AiLight->getState();
+        cfg.brightness = AiLight->getBrightness();
+        cfg.color = {AiLight->getColor().red, AiLight->getColor().green,
+                     AiLight->getColor().blue, AiLight->getColor().white};
         EEPROM_write(cfg);
       }
     }

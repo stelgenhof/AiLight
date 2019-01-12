@@ -233,5 +233,4 @@ private:
   bool _gammacorrection = false;
 };
 
-extern AiLightClass AiLight;
 #endif

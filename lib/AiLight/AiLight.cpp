@@ -141,4 +141,4 @@ void AiLightClass::setRGBW()
 
 }
 
-AiLightClass AiLight(MY92XX_MODEL_MY9231, 2);
+

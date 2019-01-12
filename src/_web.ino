@@ -74,17 +74,17 @@ void wsStart(uint8_t id) {
   JsonObject &root = jsonBuffer.createObject();
 
   // Operational state
-  root[KEY_STATE] = AiLight.getState() ? MQTT_PAYLOAD_ON : MQTT_PAYLOAD_OFF;
-  root[KEY_BRIGHTNESS] = AiLight.getBrightness();
-  root[KEY_WHITE] = AiLight.getColor().white;
-  root[KEY_COLORTEMP] = AiLight.getColorTemperature();
+  root[KEY_STATE] = AiLight->getState() ? MQTT_PAYLOAD_ON : MQTT_PAYLOAD_OFF;
+  root[KEY_BRIGHTNESS] = AiLight->getBrightness();
+  root[KEY_WHITE] = AiLight->getColor().white;
+  root[KEY_COLORTEMP] = AiLight->getColorTemperature();
 
   JsonObject &color = root.createNestedObject(KEY_COLOR);
-  color[KEY_COLOR_R] = AiLight.getColor().red;
-  color[KEY_COLOR_G] = AiLight.getColor().green;
-  color[KEY_COLOR_B] = AiLight.getColor().blue;
+  color[KEY_COLOR_R] = AiLight->getColor().red;
+  color[KEY_COLOR_G] = AiLight->getColor().green;
+  color[KEY_COLOR_B] = AiLight->getColor().blue;
 
-  root[KEY_GAMMA_CORRECTION] = AiLight.hasGammaCorrection();
+  root[KEY_GAMMA_CORRECTION] = AiLight->hasGammaCorrection();
 
   // Device settings/state
   JsonObject &device = root.createNestedObject("d");
@@ -312,39 +312,39 @@ void wsProcessMessage(uint8_t num, char *payload, size_t length) {
 
   // Process light parameters
   if (root.containsKey(KEY_BRIGHTNESS)) {
-    AiLight.setBrightness(root[KEY_BRIGHTNESS]);
+    AiLight->setBrightness(root[KEY_BRIGHTNESS]);
   }
 
   if (root.containsKey(KEY_COLORTEMP)) {
-    AiLight.setColorTemperature(root[KEY_COLORTEMP]);
+    AiLight->setColorTemperature(root[KEY_COLORTEMP]);
   }
 
   if (root.containsKey(KEY_COLOR)) {
-    AiLight.setColor(root[KEY_COLOR][KEY_COLOR_R], root[KEY_COLOR][KEY_COLOR_G],
+    AiLight->setColor(root[KEY_COLOR][KEY_COLOR_R], root[KEY_COLOR][KEY_COLOR_G],
                      root[KEY_COLOR][KEY_COLOR_B]);
   }
 
   if (root.containsKey(KEY_WHITE)) {
-    AiLight.setWhite(root[KEY_WHITE]);
+    AiLight->setWhite(root[KEY_WHITE]);
   }
 
   if (root.containsKey(KEY_STATE)) {
-    AiLight.setState(
+    AiLight->setState(
         (os_strcmp(root[KEY_STATE], MQTT_PAYLOAD_ON) == 0) ? true : false);
   }
 
   if (root.containsKey(KEY_GAMMA_CORRECTION)) {
     bool gamma = root[KEY_GAMMA_CORRECTION];
-    AiLight.useGammaCorrection(gamma);
+    AiLight->useGammaCorrection(gamma);
   }
 
   // Store light parameters for persistance
-  cfg.is_on = AiLight.getState();
-  cfg.brightness = AiLight.getBrightness();
-  cfg.color_temp = AiLight.getColorTemperature();
-  cfg.color = {AiLight.getColor().red, AiLight.getColor().green,
-               AiLight.getColor().blue, AiLight.getColor().white};
-  cfg.gamma = AiLight.hasGammaCorrection();
+  cfg.is_on = AiLight->getState();
+  cfg.brightness = AiLight->getBrightness();
+  cfg.color_temp = AiLight->getColorTemperature();
+  cfg.color = {AiLight->getColor().red, AiLight->getColor().green,
+               AiLight->getColor().blue, AiLight->getColor().white};
+  cfg.gamma = AiLight->hasGammaCorrection();
   EEPROM_write(cfg);
 
   if (needRestart) {

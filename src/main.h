@@ -153,8 +153,11 @@ struct config_t {
   bool api;                     // REST API enabled or not
   char api_key[32];             // API Key
   uint8_t powerup_mode;         // Power Up Mode
-  uint8_t device_type;          // Device Type
+  my92xx_model_t chip_type;          // Device Type
+  unsigned char chip_count;
 } cfg;
+
+AiLightClass *AiLight;
 
 // Globals for flash
 bool flash = false;
