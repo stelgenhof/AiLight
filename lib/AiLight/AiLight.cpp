@@ -138,7 +138,7 @@ void AiLightClass::setRGBW()
   _my92xx->setChannel(MY92XX_GREEN, (uint32_t)map(green, 0, MY92XX_LEVEL_MAX, 0, _brightness));
   _my92xx->setChannel(MY92XX_BLUE, (uint32_t)map(blue, 0, MY92XX_LEVEL_MAX, 0, _brightness));
   _my92xx->setChannel(MY92XX_WHITE, (uint32_t)map(_color.white, 0, MY92XX_LEVEL_MAX, 0, _brightness));
-
+  _my92xx->update();
 }
 
 
