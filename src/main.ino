@@ -51,6 +51,7 @@ void loadFactoryDefaults() {
   cfg.color_temp = LIGHT_COLOR_TEMPERATURE;
   cfg.color = {LIGHT_COLOR_RED, LIGHT_COLOR_GREEN, LIGHT_COLOR_BLUE,
                LIGHT_COLOR_WHITE};
+  cfg.device_type = MY92XX_MODEL_MY9291; 
 
   // Configuration defaults
   os_strcpy(cfg.hostname, getDeviceID());

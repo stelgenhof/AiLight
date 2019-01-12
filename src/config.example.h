@@ -30,6 +30,14 @@
 #define POWERUP_MODE POWERUP_OFF
 
 /**
+ * LedDriver
+ * --------------------------
+ * Define type and number of chips used. Allow firmware use with multiple types/designs of lights
+ */
+#define MY92XX_TYPE MY92XX_MODEL_MY9291
+#define MY92XX_AMOUNT 1
+
+/**
  * OTA (Over The Air) Updates
  * ---------------------------
  */

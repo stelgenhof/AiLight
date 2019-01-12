@@ -153,6 +153,7 @@ struct config_t {
   bool api;                     // REST API enabled or not
   char api_key[32];             // API Key
   uint8_t powerup_mode;         // Power Up Mode
+  uint8_t device_type;          // Device Type
 } cfg;
 
 // Globals for flash

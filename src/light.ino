@@ -472,7 +472,7 @@ uint8_t calculateLevel(int step, int val, uint16_t i, uint8_t targetLevel) {
     }
   }
 
-  val = constrain(val, 0, MY9291_LEVEL_MAX); // Force boundaries
+  val = constrain(val, 0, MY92XX_LEVEL_MAX); // Force boundaries
 
   return val;
 }

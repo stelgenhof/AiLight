@@ -15,35 +15,36 @@
 
 #include "AiLight.hpp"
 
-AiLightClass::AiLightClass(void)
+AiLightClass::AiLightClass(my92xx_model_t model, unsigned char count)
 {
-  _my9291 = new my9291(MY9291_DI_PIN, MY9291_DCKI_PIN, MY9291_COMMAND_DEFAULT);
+  _my92xx = new my92xx(model, count, MY92XX_DI_PIN, MY92XX_DCKI_PIN, MY92XX_COMMAND_DEFAULT);
 
   setRGBW(); // Initialise colour channels
 }
 
-AiLightClass::AiLightClass(const AiLightClass &obj)
+AiLightClass::AiLightClass(my92xx_model_t model, unsigned char count, const AiLightClass &obj)
 {
-  _my9291 = new my9291(MY9291_DI_PIN, MY9291_DCKI_PIN, MY9291_COMMAND_DEFAULT);
-  *_my9291 = *obj._my9291;
+
+  _my92xx = new my92xx(model, count, MY92XX_DI_PIN, MY92XX_DCKI_PIN, MY92XX_COMMAND_DEFAULT); 
+  *_my92xx = *obj._my92xx;
 
   setRGBW(); // Initialise colour channels
 }
 
-AiLightClass::~AiLightClass(void) { delete _my9291; }
+AiLightClass::~AiLightClass(void) { delete _my92xx; }
 
 uint8_t AiLightClass::getBrightness(void) { return _brightness; }
 
 void AiLightClass::setBrightness(uint16_t level)
 {
-  _brightness = constrain(level, 0, MY9291_LEVEL_MAX); // Force boundaries
+  _brightness = constrain(level, 0, MY92XX_LEVEL_MAX); // Force boundaries
 
   setRGBW();
 }
 
-bool AiLightClass::getState(void) { return _my9291->getState(); }
+bool AiLightClass::getState(void) { return _my92xx->getState(); }
 
-void AiLightClass::setState(bool state) { _my9291->setState(state); }
+void AiLightClass::setState(bool state) { _my92xx->setState(state); }
 
 Color AiLightClass::getColor(void) { return _color; }
 
@@ -92,26 +93,26 @@ Color AiLightClass::colorTemperature2RGB(uint16_t temperature)
 
   // Red
   float red = (tmpKelvin <= 66)
-                  ? MY9291_LEVEL_MAX
+                  ? MY92XX_LEVEL_MAX
                   : 329.698727446 * pow((tmpKelvin - 60), -0.1332047592);
 
-  ctColor.red = constrain(red, 0, MY9291_LEVEL_MAX); // Force boundaries
+  ctColor.red = constrain(red, 0, MY92XX_LEVEL_MAX); // Force boundaries
 
   // Green
   float green = (tmpKelvin <= 66)
                     ? 99.4708025861 * log(tmpKelvin) - 161.1195681661
                     : 288.1221695283 * pow(tmpKelvin, -0.0755148492);
 
-  ctColor.green = constrain(green, 0, MY9291_LEVEL_MAX); // Force boundaries
+  ctColor.green = constrain(green, 0, MY92XX_LEVEL_MAX); // Force boundaries
 
   // Blue
   float blue = (tmpKelvin >= 66)
-                   ? MY9291_LEVEL_MAX
+                   ? MY92XX_LEVEL_MAX
                    : ((tmpKelvin <= 19) ? 0
                                         : 138.5177312231 * log(tmpKelvin - 10) -
                                               305.0447927307);
 
-  ctColor.blue = constrain(blue, 0, MY9291_LEVEL_MAX); // Force boundaries
+  ctColor.blue = constrain(blue, 0, MY92XX_LEVEL_MAX); // Force boundaries
 
   return ctColor;
 }
@@ -133,11 +134,11 @@ void AiLightClass::setRGBW()
   uint8_t blue =
       (_gammacorrection) ? pgm_read_byte(&gamma8[_color.blue]) : _color.blue;
 
-  _my9291->setColor((my9291_color_t){
-      (uint32_t)map(red, 0, MY9291_LEVEL_MAX, 0, _brightness),
-      (uint32_t)map(green, 0, MY9291_LEVEL_MAX, 0, _brightness),
-      (uint32_t)map(blue, 0, MY9291_LEVEL_MAX, 0, _brightness),
-      (uint32_t)map(_color.white, 0, MY9291_LEVEL_MAX, 0, _brightness)});
+  _my92xx->setChannel(MY92XX_RED, (uint32_t)map(red, 0, MY92XX_LEVEL_MAX, 0, _brightness));
+  _my92xx->setChannel(MY92XX_GREEN, (uint32_t)map(green, 0, MY92XX_LEVEL_MAX, 0, _brightness));
+  _my92xx->setChannel(MY92XX_BLUE, (uint32_t)map(blue, 0, MY92XX_LEVEL_MAX, 0, _brightness));
+  _my92xx->setChannel(MY92XX_WHITE, (uint32_t)map(_color.white, 0, MY92XX_LEVEL_MAX, 0, _brightness));
+
 }
 
-AiLightClass AiLight;
+AiLightClass AiLight(MY92XX_MODEL_MY9231, 2);
