@@ -33,6 +33,10 @@
 #define MQTT_HOMEASSISTANT_DISCOVERY_PREFIX "homeassistant"
 #endif
 
+#ifndef MQTT_HOMEASSISTANT_USE_LEGACY_DISCOVERY
+#define MQTT_HOMEASSISTANT_USE_LEGACY_DISCOVERY false
+#endif
+
 #ifndef REST_API_ENABLED
 #define REST_API_ENABLED false
 #endif
@@ -95,6 +99,7 @@ static const int BUFFER_SIZE = JSON_OBJECT_SIZE(10);
 #define KEY_MQTT_HA_USE_DISCOVERY "switch_ha_discovery"
 #define KEY_MQTT_HA_IS_DISCOVERED "mqtt_ha_is_discovered"
 #define KEY_MQTT_HA_DISCOVERY_PREFIX "mqtt_ha_discovery_prefix"
+#define KEY_MQTT_HA_USE_LEGACY_DISCOVERY "mqtt_ha_use_legacy_discovery"
 #define KEY_REST_API_ENABLED "switch_rest_api"
 #define KEY_REST_API_KEY "api_key"
 #define KEY_POWERUP_MODE "powerup_mode"
@@ -150,6 +155,7 @@ struct config_t {
   bool mqtt_ha_use_discovery; // Home Assistant MQTT discovery enabled or not
   bool mqtt_ha_is_discovered; // Has this device already been discovered or not
   char mqtt_ha_disc_prefix[32]; // MQTT Discovery prefix for Home Assistant
+  bool mqtt_ha_use_legacy_discovery; // For HA <= 0.84, use "platform: mqtt_json" for discovery
   bool api;                     // REST API enabled or not
   char api_key[32];             // API Key
   uint8_t powerup_mode;         // Power Up Mode

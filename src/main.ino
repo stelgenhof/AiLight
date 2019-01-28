@@ -72,6 +72,7 @@ void loadFactoryDefaults() {
   cfg.mqtt_ha_use_discovery = MQTT_HOMEASSISTANT_DISCOVERY_ENABLED;
   cfg.mqtt_ha_is_discovered = false;
   os_strcpy(cfg.mqtt_ha_disc_prefix, MQTT_HOMEASSISTANT_DISCOVERY_PREFIX);
+  cfg.mqtt_ha_use_legacy_discovery = MQTT_HOMEASSISTANT_USE_LEGACY_DISCOVERY;
 
   os_strcpy(cfg.wifi_ssid, WIFI_SSID);
   os_strcpy(cfg.wifi_psk, WIFI_PSK);

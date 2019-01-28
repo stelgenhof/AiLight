@@ -104,6 +104,7 @@ void wsStart(uint8_t id) {
   settings[KEY_MQTT_LWT_TOPIC] = cfg.mqtt_lwt_topic;
   settings[KEY_MQTT_HA_USE_DISCOVERY] = cfg.mqtt_ha_use_discovery;
   settings[KEY_MQTT_HA_IS_DISCOVERED] = cfg.mqtt_ha_is_discovered;
+  settings[KEY_MQTT_HA_USE_LEGACY_DISCOVERY] = cfg.mqtt_ha_use_legacy_discovery;
 
   // Ensure HA MQTT Discovery Prefix has a proper value
   if (cfg.mqtt_ha_disc_prefix == NULL || cfg.mqtt_ha_disc_prefix[0] == 0xFF) {
