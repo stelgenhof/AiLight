@@ -73,6 +73,14 @@
 #define MQTT_HOMEASSISTANT_DISCOVERY_PREFIX "homeassistant"
 
 /**
+ * Home Assistant 0.84 removed the "mqtt_json" platform type, replacing it with
+ * a combination of "platform: mqtt" and "schema: json". If you are using version 0.84
+ * or older of Home Assistant and using the MQTT discovery feature, set the following
+ * directive to "true" 
+ */
+#define MQTT_HOMEASSISTANT_DISCOVERY_PRE_0_84 false
+
+/**
  * HTTP
  * ---------------------------
  * Use the below variables to set the default HTTP settings of your Ai-Thinker

@@ -33,6 +33,10 @@
 #define MQTT_HOMEASSISTANT_DISCOVERY_PREFIX "homeassistant"
 #endif
 
+#ifndef MQTT_HOMEASSISTANT_DISCOVERY_PRE_0_84
+#define MQTT_HOMEASSISTANT_DISCOVERY_PRE_0_84 false
+#endif
+
 #ifndef REST_API_ENABLED
 #define REST_API_ENABLED false
 #endif
