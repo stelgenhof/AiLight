@@ -36,7 +36,12 @@ void deviceMQTTCallback(uint8_t type, const char *topic, const char *payload) {
       JsonObject &md_root = mqttJsonBuffer.createObject();
 
       md_root["name"] = cfg.hostname;
+#ifdef MQTT_HOMEASSISTANT_DISCOVERY_PRE_0_84
       md_root["platform"] = "mqtt_json";
+#else
+      md_root["platform"] = "mqtt";
+      md_root["platform"] = "json";
+#endif
       md_root["state_topic"] = cfg.mqtt_state_topic;
       md_root["command_topic"] = cfg.mqtt_command_topic;
       md_root["rgb"] = true;

@@ -11,7 +11,7 @@
  */
 
 #define APP_NAME "AiLight"
-#define APP_VERSION "0.5.1-dev"
+#define APP_VERSION "0.6-dev"
 #define APP_AUTHOR "me@sachatelgenhof.com"
 
 #define DEVICE_MANUFACTURER "Ai-Thinker"
@@ -31,6 +31,10 @@
 
 #ifndef MQTT_HOMEASSISTANT_DISCOVERY_PREFIX
 #define MQTT_HOMEASSISTANT_DISCOVERY_PREFIX "homeassistant"
+#endif
+
+#ifndef MQTT_HOMEASSISTANT_DISCOVERY_PRE_0_84
+#define MQTT_HOMEASSISTANT_DISCOVERY_PRE_0_84 false
 #endif
 
 #ifndef REST_API_ENABLED
