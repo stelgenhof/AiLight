@@ -18,7 +18,7 @@
  *
  * @param event WiFiEventStationModeGotIP Event
  */
-void onSTAGotIP(WiFiEventStationModeGotIP event)
+void onSTAGotIP(const WiFiEventStationModeGotIP &event)
 {
 
 #ifdef DEBUG
@@ -45,7 +45,7 @@ void onSTAGotIP(WiFiEventStationModeGotIP event)
  *
  * @param event WiFiEventSoftAPModeStationConnected Event
  */
-void onAPConnected(WiFiEventSoftAPModeStationConnected event)
+void onAPConnected(const WiFiEventSoftAPModeStationConnected &event)
 {
   DEBUGLOG("[WIFI] SSID        : %s\n", cfg.hostname);
   DEBUGLOG("[WIFI] Password    : %s\n", ADMIN_PASSWORD);
@@ -60,7 +60,7 @@ void onAPConnected(WiFiEventSoftAPModeStationConnected event)
  *
  * @param event WiFiEventStationModeDisconnected Event
  */
-void onSTADisconnected(WiFiEventStationModeDisconnected event)
+void onSTADisconnected(const WiFiEventStationModeDisconnected &event)
 {
   DEBUGLOG("WiFi connection (%s) dropped.\n", event.ssid.c_str());
   DEBUGLOG("Reason: %d\n", event.reason);
@@ -78,9 +78,9 @@ void setupWiFi()
 {
   static WiFiEventHandler gotIpEventHandler, apConnectedEventHandler,
       disconnectedEventHandler;
-  gotIpEventHandler = WiFi.onStationModeGotIP(onSTAGotIP);
-  apConnectedEventHandler = WiFi.onSoftAPModeStationConnected(onAPConnected);
-  disconnectedEventHandler = WiFi.onStationModeDisconnected(onSTADisconnected);
+  gotIpEventHandler = WiFi.onStationModeGotIP(&onSTAGotIP);
+  apConnectedEventHandler = WiFi.onSoftAPModeStationConnected(&onAPConnected);
+  disconnectedEventHandler = WiFi.onStationModeDisconnected(&onSTADisconnected);
 
   // Set WiFi hostname
   if (os_strlen(cfg.hostname) == 0)
