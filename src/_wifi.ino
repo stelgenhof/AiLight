@@ -18,7 +18,8 @@
  *
  * @param event WiFiEventStationModeGotIP Event
  */
-void onSTAGotIP(WiFiEventStationModeGotIP event) {
+void onSTAGotIP(WiFiEventStationModeGotIP event)
+{
 
 #ifdef DEBUG
   const char *const PHY_MODE_NAMES[]{"", "B", "G", "N"};
@@ -44,7 +45,8 @@ void onSTAGotIP(WiFiEventStationModeGotIP event) {
  *
  * @param event WiFiEventSoftAPModeStationConnected Event
  */
-void onAPConnected(WiFiEventSoftAPModeStationConnected event) {
+void onAPConnected(WiFiEventSoftAPModeStationConnected event)
+{
   DEBUGLOG("[WIFI] SSID        : %s\n", cfg.hostname);
   DEBUGLOG("[WIFI] Password    : %s\n", ADMIN_PASSWORD);
   DEBUGLOG("[WIFI] IP Address  : %s\n", WiFi.softAPIP().toString().c_str());
@@ -58,20 +60,22 @@ void onAPConnected(WiFiEventSoftAPModeStationConnected event) {
  *
  * @param event WiFiEventStationModeDisconnected Event
  */
-void onSTADisconnected(WiFiEventStationModeDisconnected event) {
+void onSTADisconnected(WiFiEventStationModeDisconnected event)
+{
   DEBUGLOG("WiFi connection (%s) dropped.\n", event.ssid.c_str());
   DEBUGLOG("Reason: %d\n", event.reason);
 
   DEBUGLOG("Trying to reconnect\n");
   mqttReconnectTimer
       .detach(); // Ensure not to reconnect to MQTT while reconnecting to WiFi
-  wifiReconnectTimer.once(RECONNECT_TIME, setupWiFi);
+  wifiReconnectTimer.once(WIFI_RECONNECT_TIMEOUT, setupWiFi);
 }
 
 /**
  * @brief Bootstrap function for the WiFi connection
  */
-void setupWiFi() {
+void setupWiFi()
+{
   static WiFiEventHandler gotIpEventHandler, apConnectedEventHandler,
       disconnectedEventHandler;
   gotIpEventHandler = WiFi.onStationModeGotIP(onSTAGotIP);
@@ -79,14 +83,16 @@ void setupWiFi() {
   disconnectedEventHandler = WiFi.onStationModeDisconnected(onSTADisconnected);
 
   // Set WiFi hostname
-  if (os_strlen(cfg.hostname) == 0) {
+  if (os_strlen(cfg.hostname) == 0)
+  {
     os_strcpy(cfg.hostname, getDeviceID());
     EEPROM_write(cfg);
   }
   WiFi.hostname(cfg.hostname);
 
   // Set WiFi module to STA mode and set Power Output
-  if (WiFi.getMode() != WIFI_STA) {
+  if (WiFi.getMode() != WIFI_STA)
+  {
     WiFi.mode(WIFI_STA);
     WiFi.setOutputPower(WIFI_OUTPUT_POWER);
     delay(10);
@@ -100,7 +106,8 @@ void setupWiFi() {
   MDNS.addService("http", "tcp", 80);
 
   // Check connection and switch to AP mode if no connection
-  if (WiFi.waitForConnectResult() != WL_CONNECTED) {
+  if (WiFi.waitForConnectResult() != WL_CONNECTED)
+  {
     DEBUGLOG("[WIFI] Connection not established! Changing into AP mode...\n");
 
     wifiReconnectTimer.detach(); // Ensure not to reconnect to WiFi while

@@ -47,6 +47,12 @@
 #define WIFI_OUTPUT_POWER 1.0 // 20.5 is the maximum output power
 
 /**
+ * Timeout period for the device to keep trying to (re)connect to the configured WiFi 
+ * Access Point. If this timeout period has been reached, the device will assume a WiFi
+ * connection can not be made and will switch to Soft AP mode.
+#define WIFI_RECONNECT_TIMEOUT 60 // Timeout (in seconds)  
+
+/**
  * MQTT
  * ---------------------------
  * Use the below variables to set the default MQTT settings of your Ai-Thinker

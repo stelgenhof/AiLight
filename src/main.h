@@ -45,6 +45,10 @@
 #define POWERUP_MODE POWERUP_OFF
 #endif
 
+#ifndef WIFI_RECONNECT_TIMEOUT
+#define WIFI_RECONNECT_TIMEOUT 10
+#endif
+
 #include "AiLight.hpp"
 #include "ArduinoOTA.h"
 #include <ArduinoJson.h>
