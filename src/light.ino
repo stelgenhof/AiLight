@@ -71,7 +71,7 @@ void deviceMQTTCallback(uint8_t type, const char *topic, const char *payload) {
     mqttUnsubscribe(cfg.mqtt_command_topic);
 
     if (WiFi.isConnected()) {
-      mqttReconnectTimer.once(RECONNECT_TIME, mqttConnect);
+      mqttReconnectTimer.once(MQTT_RECONNECT_TIME, mqttConnect);
     }
   }
 
