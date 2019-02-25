@@ -294,6 +294,7 @@ void createAboutJSON(JsonObject &object) {
   object["device_ip"] = (WiFi.getMode() == WIFI_AP) ? WiFi.softAPIP().toString()
                                                     : WiFi.localIP().toString();
   object["mac"] = WiFi.macAddress();
+  object["core"] = ESP.getCoreVersion();
 }
 
 /**
