@@ -72,7 +72,6 @@ extern "C" {
 #define EEPROM_START_ADDRESS 0
 #define INIT_HASH 0x5F
 static const int BUFFER_SIZE = JSON_OBJECT_SIZE(10);
-#define RECONNECT_TIME 10
 
 // Key names as used internally and in the WebUI
 #define KEY_SETTINGS "s"
