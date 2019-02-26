@@ -412,8 +412,11 @@ void setupWeb() {
     AsyncWebServerResponse *response =
         request->beginResponse_P(200, HTTP_MIMETYPE_HTML, html_gz, html_gz_len);
 
-    response->addHeader("Content-Encoding", "gzip");
+    response->addHeader(HTTP_HEADER_CONTENT_ENCODING, HTTP_HEADER_CONTENT_ENCODING_VALUE);
     response->addHeader(HTTP_HEADER_SERVER, SERVER_SIGNATURE);
+    response->addHeader(HTTP_HEADER_XSS_PROTECTION, HTTP_HEADER_XSS_PROTECTION_VALUE);
+    response->addHeader(HTTP_HEADER_CONTENT_TYPE_OPTIONS, HTTP_HEADER_CONTENT_TYPE_OPTIONS_VALUE);
+    response->addHeader(HTTP_HEADER_FRAME_OPTIONS, HTTP_HEADER_FRAME_OPTIONS_VALUE);
 
     request->send(response);
   });
@@ -429,7 +432,7 @@ void setupWeb() {
           AsyncWebServerResponse *response =
               request->beginResponse(405, HTTP_MIMETYPE_JSON);
           response->addHeader(HTTP_HEADER_SERVER, SERVER_SIGNATURE);
-          response->addHeader(HTTP_HEADER_ALLOW, "GET, PATCH");
+          response->addHeader(HTTP_HEADER_ALLOW, HTTP_HEADER_ALLOW_GET_PATCH);
           request->send(response);
         }
 
@@ -482,7 +485,7 @@ void setupWeb() {
                    AsyncWebServerResponse *response =
                        request->beginResponse(405, HTTP_MIMETYPE_JSON);
                    response->addHeader(HTTP_HEADER_SERVER, SERVER_SIGNATURE);
-                   response->addHeader(HTTP_HEADER_ALLOW, "GET, PATCH");
+                   response->addHeader(HTTP_HEADER_ALLOW, HTTP_HEADER_ALLOW_GET_PATCH);
                    request->send(response);
 
                    return;
@@ -514,7 +517,7 @@ void setupWeb() {
                    AsyncWebServerResponse *response =
                        request->beginResponse(405, HTTP_MIMETYPE_JSON);
                    response->addHeader(HTTP_HEADER_SERVER, SERVER_SIGNATURE);
-                   response->addHeader(HTTP_HEADER_ALLOW, "GET");
+                   response->addHeader(HTTP_HEADER_ALLOW, HTTP_HEADER_ALLOW_GET);
                    request->send(response);
 
                    return;
