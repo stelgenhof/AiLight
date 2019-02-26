@@ -30,6 +30,21 @@ const char *getDeviceID() {
 }
 
 /**
+ * @brief Retrieves the (formatted) version of the ESP Core framework
+ *        used in this firmware.
+ *
+ * @return the (formatted) version of the ESP Core framework
+ */
+String getESPCoreVersion()
+{
+  String version = ESP.getCoreVersion();
+
+  version.replace("_", ".");
+
+  return version;
+}
+
+/**
  * @brief Loads the factory defaults for this Ai-Thinker RGBW Light
  *
  * If you like to change 'your' factory defaults, please change the appropriate
@@ -104,6 +119,7 @@ void setup() {
   DEBUGLOG("Firmware Version : %s\n", APP_VERSION);
   DEBUGLOG("Firmware Build   : %s - %s\n", __DATE__, __TIME__);
   DEBUGLOG("Device Name      : %s\n", cfg.hostname);
+  DEBUGLOG("ESP Core Version : %s\n", getESPCoreVersion().c_str());
   DEBUGLOG("\n");
 #endif
 
