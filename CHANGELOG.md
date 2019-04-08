@@ -8,6 +8,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## [Unreleased]
 
 ### Added
+
+### Changed
+
+### Fixed
+
+### Removed
+
+
+## [0.6.0] - 2019-04-08
+
+### Added
 - Included additional HTTP response headers for the Web UI to increase security.
 - As it may be hard to identify which ESP Core version is used, this Core version information has been added to the About page on the Web UI and the debug output.
 - Enabled Travis CI so the AiLight firmware gets build and tested with each change.
