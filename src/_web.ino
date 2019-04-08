@@ -6,10 +6,10 @@
  * This file is part of the Ai-Thinker RGBW Light Firmware.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
-
- * Created by Sacha Telgenhof <stelgenhof at gmail dot com>
+ *
+ * Created by Sacha Telgenhof <me at sachatelgenhof dot com>
  * (https://www.sachatelgenhof.nl)
- * Copyright (c) 2016 - 2018 Sacha Telgenhof
+ * Copyright (c) 2016 - 2019 Sacha Telgenhof
  */
 
 /**
@@ -118,6 +118,8 @@ void wsStart(uint8_t id) {
   }
   settings[KEY_REST_API_KEY] = cfg.api_key;
 
+  settings[KEY_POWERUP_MODE] = cfg.powerup_mode;
+
   char buffer[root.measureLength() + 1];
   root.printTo(buffer, sizeof(buffer));
 
@@ -166,10 +168,7 @@ void wsProcessMessage(uint8_t num, char *payload, size_t length) {
       const char *hostname = settings[KEY_HOSTNAME];
       if (os_strcmp(cfg.hostname, hostname) != 0) {
         os_strcpy(cfg.hostname, hostname);
-
-        cfg.mqtt_ha_is_discovered =
-            false; // Since hostname is used as name in HA
-
+        cfg.mqtt_ha_is_discovered = false; // Re-register the device via MQTT HASS Autodiscovery
         needRestart = true;
       }
     }
@@ -213,6 +212,7 @@ void wsProcessMessage(uint8_t num, char *payload, size_t length) {
       if (os_strcmp(cfg.mqtt_state_topic, mqtt_state_topic) != 0) {
         os_strcpy(cfg.mqtt_state_topic, mqtt_state_topic);
         mqtt_changed = true;
+        cfg.mqtt_ha_is_discovered = false; // Re-register the device via MQTT HASS Autodiscovery
       }
     }
 
@@ -221,6 +221,7 @@ void wsProcessMessage(uint8_t num, char *payload, size_t length) {
       if (os_strcmp(cfg.mqtt_command_topic, mqtt_command_topic) != 0) {
         os_strcpy(cfg.mqtt_command_topic, mqtt_command_topic);
         mqtt_changed = true;
+        cfg.mqtt_ha_is_discovered = false; // Re-register the device via MQTT HASS Autodiscovery
       }
     }
 
@@ -229,6 +230,7 @@ void wsProcessMessage(uint8_t num, char *payload, size_t length) {
       if (os_strcmp(cfg.mqtt_lwt_topic, mqtt_lwt_topic) != 0) {
         os_strcpy(cfg.mqtt_lwt_topic, mqtt_lwt_topic);
         mqtt_changed = true;
+        cfg.mqtt_ha_is_discovered = false; // Re-register the device via MQTT HASS Autodiscovery
       }
     }
 
@@ -283,6 +285,15 @@ void wsProcessMessage(uint8_t num, char *payload, size_t length) {
       const char *api_key = settings[KEY_REST_API_KEY];
       if (os_strcmp(cfg.api_key, api_key) != 0) {
         os_strcpy(cfg.api_key, api_key);
+      }
+    }
+
+    if (settings.containsKey(KEY_POWERUP_MODE)) {
+      uint8_t powerup_mode = (os_strlen(settings[KEY_POWERUP_MODE]) > 0)
+                                 ? settings[KEY_POWERUP_MODE]
+                                 : POWERUP_MODE;
+      if (cfg.powerup_mode != powerup_mode) {
+        cfg.powerup_mode = powerup_mode;
       }
     }
 
@@ -354,11 +365,15 @@ void setupWeb() {
   // Setup WebSocket and handle WebSocket events
   ws.onEvent([](AsyncWebSocket *server, AsyncWebSocketClient *client,
                 AwsEventType type, void *arg, uint8_t *data, size_t len) {
-
     if (type == WS_EVT_CONNECT) {
+
+#ifdef DEBUG
       IPAddress ip = client->remoteIP();
+#endif
+
       DEBUGLOG("[WEBSOCKET] client #%u connected (IP: %s)\n", client->id(),
                ip.toString().c_str());
+
       wsStart(client->id());
     } else if (type == WS_EVT_DISCONNECT) {
       DEBUGLOG("[WEBSOCKET] client #%u disconnected\n", client->id());
@@ -386,7 +401,6 @@ void setupWeb() {
         free(message);
       }
     }
-
   });
   server->addHandler(&ws);
   server->addHandler(&events);
@@ -398,8 +412,11 @@ void setupWeb() {
     AsyncWebServerResponse *response =
         request->beginResponse_P(200, HTTP_MIMETYPE_HTML, html_gz, html_gz_len);
 
-    response->addHeader("Content-Encoding", "gzip");
+    response->addHeader(HTTP_HEADER_CONTENT_ENCODING, HTTP_HEADER_CONTENT_ENCODING_VALUE);
     response->addHeader(HTTP_HEADER_SERVER, SERVER_SIGNATURE);
+    response->addHeader(HTTP_HEADER_XSS_PROTECTION, HTTP_HEADER_XSS_PROTECTION_VALUE);
+    response->addHeader(HTTP_HEADER_CONTENT_TYPE_OPTIONS, HTTP_HEADER_CONTENT_TYPE_OPTIONS_VALUE);
+    response->addHeader(HTTP_HEADER_FRAME_OPTIONS, HTTP_HEADER_FRAME_OPTIONS_VALUE);
 
     request->send(response);
   });
@@ -407,7 +424,6 @@ void setupWeb() {
   if (cfg.api) {
     server->onRequestBody([](AsyncWebServerRequest *request, uint8_t *data,
                              size_t len, size_t index, size_t total) {
-
       // Process requested changes for the light
       if (request->url().equals(HTTP_APIROUTE_LIGHT)) {
 
@@ -416,7 +432,7 @@ void setupWeb() {
           AsyncWebServerResponse *response =
               request->beginResponse(405, HTTP_MIMETYPE_JSON);
           response->addHeader(HTTP_HEADER_SERVER, SERVER_SIGNATURE);
-          response->addHeader(HTTP_HEADER_ALLOW, "GET, PATCH");
+          response->addHeader(HTTP_HEADER_ALLOW, HTTP_HEADER_ALLOW_GET_PATCH);
           request->send(response);
         }
 
@@ -464,13 +480,12 @@ void setupWeb() {
     // 'Light' API Endpoint
     server->on(HTTP_APIROUTE_LIGHT, HTTP_GET,
                [](AsyncWebServerRequest *request) {
-
                  // Check for appropriate HTTP method
                  if (request->method() != HTTP_GET) {
                    AsyncWebServerResponse *response =
                        request->beginResponse(405, HTTP_MIMETYPE_JSON);
                    response->addHeader(HTTP_HEADER_SERVER, SERVER_SIGNATURE);
-                   response->addHeader(HTTP_HEADER_ALLOW, "GET, PATCH");
+                   response->addHeader(HTTP_HEADER_ALLOW, HTTP_HEADER_ALLOW_GET_PATCH);
                    request->send(response);
 
                    return;
@@ -497,13 +512,12 @@ void setupWeb() {
     // 'About' API Endpoint
     server->on(HTTP_APIROUTE_ABOUT, HTTP_ANY,
                [](AsyncWebServerRequest *request) {
-
                  // Only allow HTTP_GET method
                  if (request->method() != HTTP_GET) {
                    AsyncWebServerResponse *response =
                        request->beginResponse(405, HTTP_MIMETYPE_JSON);
                    response->addHeader(HTTP_HEADER_SERVER, SERVER_SIGNATURE);
-                   response->addHeader(HTTP_HEADER_ALLOW, "GET");
+                   response->addHeader(HTTP_HEADER_ALLOW, HTTP_HEADER_ALLOW_GET);
                    request->send(response);
 
                    return;

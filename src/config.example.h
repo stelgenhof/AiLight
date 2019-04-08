@@ -4,10 +4,10 @@
  * This file is part of the Ai-Thinker RGBW Light Firmware.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
-
- * Created by Sacha Telgenhof <stelgenhof at gmail dot com>
+ *
+ * Created by Sacha Telgenhof <me at sachatelgenhof dot com>
  * (https://www.sachatelgenhof.nl)
- * Copyright (c) 2016 - 2018 Sacha Telgenhof
+ * Copyright (c) 2016 - 2019 Sacha Telgenhof
  */
 
 /**
@@ -27,6 +27,8 @@
 #define HOSTNAME "AiLight"
 #define ADMIN_PASSWORD "hinotori"
 
+#define POWERUP_MODE POWERUP_OFF
+
 /**
  * OTA (Over The Air) Updates
  * ---------------------------
@@ -43,6 +45,12 @@
 #define WIFI_SSID ""
 #define WIFI_PSK ""
 #define WIFI_OUTPUT_POWER 1.0 // 20.5 is the maximum output power
+
+/**
+ * Timeout period for the device to keep trying to (re)connect to the configured WiFi 
+ * Access Point. If this timeout period has been reached, the device will assume a WiFi
+ * connection can not be made and will switch to Soft AP mode.
+#define WIFI_RECONNECT_TIMEOUT 60 // Timeout (in seconds)  
 
 /**
  * MQTT
@@ -69,6 +77,14 @@
 
 #define MQTT_HOMEASSISTANT_DISCOVERY_ENABLED false
 #define MQTT_HOMEASSISTANT_DISCOVERY_PREFIX "homeassistant"
+
+/**
+ * Home Assistant 0.84 removed the "mqtt_json" platform type, replacing it with
+ * a combination of "platform: mqtt" and "schema: json". If you are using version 0.84
+ * or older of Home Assistant and using the MQTT discovery feature, set the following
+ * directive to "true" 
+ */
+#define MQTT_HOMEASSISTANT_DISCOVERY_PRE_0_84 false
 
 /**
  * HTTP

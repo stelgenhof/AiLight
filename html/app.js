@@ -5,9 +5,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
 
- * Created by Sacha Telgenhof <stelgenhof at gmail dot com>
+ * Created by Sacha Telgenhof <me at sachatelgenhof dot com>
  * (https://www.sachatelgenhof.nl)
- * Copyright (c) 2016 - 2018 Sacha Telgenhof
+ * Copyright (c) 2016 - 2019 Sacha Telgenhof
  */
 
 /* jshint curly: true, undef: true, unused: true, eqeqeq: true, esversion: 6, varstmt: true, browser: true, devel: true */
@@ -24,6 +24,7 @@ const K_W = "white_value";
 const K_GM = "gamma";
 const K_HD = "ha_discovery";
 const K_RA = "rest_api";
+const K_PM = "powerup_mode";
 
 const S_ON = 'ON';
 const S_OFF = 'OFF';
@@ -44,12 +45,12 @@ function Switch(id, du = true) {
   this.init();
 }
 
-(function() {
-  this.getState = function() {
+(function () {
+  this.getState = function () {
     return this.state;
   };
 
-  this.setState = function(state) {
+  this.setState = function (state) {
     const CLASS_CHECKED = 'checked';
     this.state = state;
     this.el.checked = this.state;
@@ -61,7 +62,7 @@ function Switch(id, du = true) {
     }
   };
 
-  this.toggleState = function() {
+  this.toggleState = function () {
     this.state = !this.state;
     this.setState(this.state);
 
@@ -91,7 +92,7 @@ function Switch(id, du = true) {
     }
   };
 
-  this.init = function() {
+  this.init = function () {
     this.el = document.getElementById("switch_" + this.id);
     this.state = this.el.checked;
     this.el.addEventListener("click", this.toggleState.bind(this), {
@@ -113,28 +114,28 @@ function Slider(id) {
   this._init();
 }
 
-(function() {
-  this.getValue = function() {
+(function () {
+  this.getValue = function () {
     return this.el.value;
   };
 
-  this.setValue = function(val) {
+  this.setValue = function (val) {
     this.el.value = val;
     this._sethigh();
   };
 
-  this._sethigh = function() {
+  this._sethigh = function () {
     this._high = (this.el.value - this.el.min) / (this.el.max - this.el.min) * 100 + '%';
     this.el.style.setProperty('--high', this._high);
 
     let output = this.el.parentNode.getElementsByTagName('output')[0];
-    if (typeof(output) !== "undefined") {
+    if (typeof (output) !== "undefined") {
       output.innerHTML = this.el.value;
     }
 
   };
 
-  this._send = function() {
+  this._send = function () {
     let msg = {
       'state': S_ON
     };
@@ -143,7 +144,7 @@ function Slider(id) {
     websock.send(JSON.stringify(msg));
   };
 
-  this._init = function() {
+  this._init = function () {
     this.el = document.getElementById("slider_" + this.id);
     this.el.style.setProperty('--low', '0%');
     this._sethigh();
@@ -239,7 +240,7 @@ function processData(data) {
       for (let dev in data[key]) {
         // Bind to span elements
         let d = document.querySelectorAll("span[data-s='" + dev + "']");
-        [].forEach.call(d, function(item) {
+        [].forEach.call(d, function (item) {
           item.innerHTML = data[key][dev];
         });
       }
@@ -253,7 +254,7 @@ function processData(data) {
       for (let s in data[key]) {
         // Bind to span elements
         let a = document.getElementById("pagescontent").querySelectorAll("span[data-s='" + s + "']");
-        [].forEach.call(a, function(item) {
+        [].forEach.call(a, function (item) {
           item.innerHTML = data[key][s];
         });
 
@@ -328,21 +329,21 @@ function wsConnect() {
 
   websock = new WebSocket('ws://' + host + ':' + port + '/ws');
 
-  websock.onopen = function(e) {
+  websock.onopen = function (e) {
     console.log('[WEBSOCKET] Connected to ' + e.target.url);
   };
 
-  websock.onclose = function(e) {
+  websock.onclose = function (e) {
     console.log('[WEBSOCKET] Connection closed');
     console.log(e);
     console.log(e.reason);
   };
 
-  websock.onerror = function(e) {
+  websock.onerror = function (e) {
     console.log('[WEBSOCKET] Error: ' + e);
   };
 
-  websock.onmessage = function(e) {
+  websock.onmessage = function (e) {
     let data = getJSON(e.data);
     if (data) {
       processData(data);
@@ -359,22 +360,22 @@ function esConnect() {
   if (!!window.EventSource) {
     let source = new EventSource('/events');
 
-    source.addEventListener('open', function(e) {
+    source.addEventListener('open', function (e) {
       console.log('[EVENTSOURCE] Connected to ' + e.target.url);
     }, false);
 
-    source.addEventListener('error', function(e) {
+    source.addEventListener('error', function (e) {
       if (e.target.readyState !== EventSource.OPEN) {
         console.log('[EVENTSOURCE] Connection closed');
       }
     }, false);
 
-    source.addEventListener('message', function(e) {
+    source.addEventListener('message', function (e) {
       console.log("message", e.data);
     }, false);
 
     // Handling OTA events
-    source.addEventListener('ota', function(e) {
+    source.addEventListener('ota', function (e) {
       if (e.data.startsWith("p-")) {
         let pb = document.getElementById("op");
         let p = parseInt(e.data.split("-")[1]);
@@ -412,7 +413,7 @@ function reload(show) {
     document.getElementById("rm").classList.add("is-active");
   }
 
-  setTimeout(function() {
+  setTimeout(function () {
     location.reload(true);
   }, WAIT);
 }
@@ -494,16 +495,16 @@ function save() {
 
   let Valid952HostnameRegex = /^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$/i;
 
+  // Parse all input fields and validate where needed
   let inputs = document.forms[0].querySelectorAll("input");
   for (let i = 0; i < inputs.length; i++) {
-    let t = inputs[i].id.split('.');
-    let id = t.pop();
+    let id = inputs[i].id.split('.').pop();
 
     // Clear any validation messages
     inputs[i].classList.remove("is-danger");
     let p = inputs[i].parentNode;
     let v = p.querySelectorAll("p.is-danger");
-    [].forEach.call(v, function(item) {
+    [].forEach.call(v, function (item) {
       p.removeChild(item);
     });
 
@@ -542,6 +543,13 @@ function save() {
     }
 
     s[id] = (inputs[i].type === 'checkbox') ? inputs[i].checked : inputs[i].value;
+  }
+
+  // Parse all select fields
+  let selects = document.forms[0].querySelectorAll("select");
+  for (let j = 0; j < selects.length; j++) {
+    let id = selects[j].id.split('.').pop();
+    s[id] = selects[j].value;
   }
 
   if (isValid) {
@@ -640,7 +648,7 @@ function generateAPIKey() {
  *
  * @return void
  */
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('button-restart').addEventListener('click', restart, {
     passive: true
   });
@@ -655,7 +663,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   let pw = document.getElementById("pagescontent").querySelectorAll("i.icon-eye");
-  [].forEach.call(pw, function(item) {
+  [].forEach.call(pw, function (item) {
     item.addEventListener('touchstart', togglePassword, {
       passive: true
     });

@@ -4,18 +4,23 @@
  * This file is part of the Ai-Thinker RGBW Light Firmware.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
-
- * Created by Sacha Telgenhof <stelgenhof at gmail dot com>
+ *
+ * Created by Sacha Telgenhof <me at sachatelgenhof dot com>
  * (https://www.sachatelgenhof.nl)
- * Copyright (c) 2016 - 2018 Sacha Telgenhof
+ * Copyright (c) 2016 - 2019 Sacha Telgenhof
  */
 
 #define APP_NAME "AiLight"
-#define APP_VERSION "0.5.1-dev"
-#define APP_AUTHOR "stelgenhof@gmail.com"
+#define APP_VERSION "0.6"
+#define APP_AUTHOR "me@sachatelgenhof.com"
 
 #define DEVICE_MANUFACTURER "Ai-Thinker"
 #define DEVICE_MODEL "RGBW Light"
+
+// Power Up Modes
+#define POWERUP_OFF 0
+#define POWERUP_ON 1
+#define POWERUP_SAME 2
 
 #include "config.h"
 
@@ -28,8 +33,20 @@
 #define MQTT_HOMEASSISTANT_DISCOVERY_PREFIX "homeassistant"
 #endif
 
+#ifndef MQTT_HOMEASSISTANT_DISCOVERY_PRE_0_84
+#define MQTT_HOMEASSISTANT_DISCOVERY_PRE_0_84 false
+#endif
+
 #ifndef REST_API_ENABLED
 #define REST_API_ENABLED false
+#endif
+
+#ifndef POWERUP_MODE
+#define POWERUP_MODE POWERUP_OFF
+#endif
+
+#ifndef WIFI_RECONNECT_TIMEOUT
+#define WIFI_RECONNECT_TIMEOUT 10
 #endif
 
 #include "AiLight.hpp"
@@ -53,9 +70,8 @@ extern "C" {
 #include "html.gz.h"
 
 #define EEPROM_START_ADDRESS 0
-#define INIT_HASH 0x4B
+#define INIT_HASH 0x5F
 static const int BUFFER_SIZE = JSON_OBJECT_SIZE(10);
-#define RECONNECT_TIME 10
 
 // Key names as used internally and in the WebUI
 #define KEY_SETTINGS "s"
@@ -88,6 +104,7 @@ static const int BUFFER_SIZE = JSON_OBJECT_SIZE(10);
 #define KEY_MQTT_HA_DISCOVERY_PREFIX "mqtt_ha_discovery_prefix"
 #define KEY_REST_API_ENABLED "switch_rest_api"
 #define KEY_REST_API_KEY "api_key"
+#define KEY_POWERUP_MODE "powerup_mode"
 
 // MQTT Event type definitions
 #define MQTT_EVENT_CONNECT 0
@@ -103,6 +120,16 @@ static const int BUFFER_SIZE = JSON_OBJECT_SIZE(10);
 #define HTTP_HEADER_ALLOW "Allow"
 #define HTTP_MIMETYPE_HTML "text/html"
 #define HTTP_MIMETYPE_JSON "application/json"
+#define HTTP_HEADER_XSS_PROTECTION "X-XSS-Protection"
+#define HTTP_HEADER_XSS_PROTECTION_VALUE "1; mode=block"
+#define HTTP_HEADER_CONTENT_TYPE_OPTIONS "X-Content-Type-Options"
+#define HTTP_HEADER_CONTENT_TYPE_OPTIONS_VALUE "nosniff"
+#define HTTP_HEADER_FRAME_OPTIONS "X-Frame-Options"
+#define HTTP_HEADER_FRAME_OPTIONS_VALUE "deny"
+#define HTTP_HEADER_CONTENT_ENCODING "Content-Encoding"
+#define HTTP_HEADER_CONTENT_ENCODING_VALUE "gzip"
+#define HTTP_HEADER_ALLOW_GET "GET"
+#define HTTP_HEADER_ALLOW_GET_PATCH "GET, PATCH"
 
 const char *SERVER_SIGNATURE = APP_NAME "/" APP_VERSION;
 
@@ -142,6 +169,7 @@ struct config_t {
   char mqtt_ha_disc_prefix[32]; // MQTT Discovery prefix for Home Assistant
   bool api;                     // REST API enabled or not
   char api_key[32];             // API Key
+  uint8_t powerup_mode;         // Power Up Mode
 } cfg;
 
 // Globals for flash
@@ -226,7 +254,7 @@ void StreamPrint_progmem(Print &out, PGM_P format, ...) {
  * @return void
  */
 template <class T> void EEPROM_write(const T &value) {
-  int ee = EEPROM_START_ADDRESS;
+  uint16_t ee = EEPROM_START_ADDRESS;
   const byte *p = (const byte *)(const void *)&value;
   for (uint16_t i = 0; i < sizeof(value); i++)
     EEPROM.write(ee++, *p++);
@@ -245,7 +273,7 @@ template <class T> void EEPROM_write(const T &value) {
  * @return void
  */
 template <class T> void EEPROM_read(T &value) {
-  int ee = EEPROM_START_ADDRESS;
+  uint16_t ee = EEPROM_START_ADDRESS;
   byte *p = (byte *)(void *)&value;
   for (uint16_t i = 0; i < sizeof(value); i++)
     *p++ = EEPROM.read(ee++);

@@ -8,20 +8,22 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
 
- * Created by Sacha Telgenhof <stelgenhof at gmail dot com>
+ * Created by Sacha Telgenhof <me at sachatelgenhof dot com>
  * (https://www.sachatelgenhof.nl)
- * Copyright (c) 2016 - 2018 Sacha Telgenhof
+ * Copyright (c) 2016 - 2019 Sacha Telgenhof
  */
 
 #include "AiLight.hpp"
 
-AiLightClass::AiLightClass(void) {
+AiLightClass::AiLightClass(void)
+{
   _my9291 = new my9291(MY9291_DI_PIN, MY9291_DCKI_PIN, MY9291_COMMAND_DEFAULT);
 
   setRGBW(); // Initialise colour channels
 }
 
-AiLightClass::AiLightClass(const AiLightClass &obj) {
+AiLightClass::AiLightClass(const AiLightClass &obj)
+{
   _my9291 = new my9291(MY9291_DI_PIN, MY9291_DCKI_PIN, MY9291_COMMAND_DEFAULT);
   *_my9291 = *obj._my9291;
 
@@ -32,7 +34,8 @@ AiLightClass::~AiLightClass(void) { delete _my9291; }
 
 uint8_t AiLightClass::getBrightness(void) { return _brightness; }
 
-void AiLightClass::setBrightness(uint16_t level) {
+void AiLightClass::setBrightness(uint16_t level)
+{
   _brightness = constrain(level, 0, MY9291_LEVEL_MAX); // Force boundaries
 
   setRGBW();
@@ -44,7 +47,8 @@ void AiLightClass::setState(bool state) { _my9291->setState(state); }
 
 Color AiLightClass::getColor(void) { return _color; }
 
-void AiLightClass::setColor(uint8_t red, uint8_t green, uint8_t blue) {
+void AiLightClass::setColor(uint8_t red, uint8_t green, uint8_t blue)
+{
   _color.red = red;
   _color.green = green;
   _color.blue = blue;
@@ -52,7 +56,8 @@ void AiLightClass::setColor(uint8_t red, uint8_t green, uint8_t blue) {
   setRGBW();
 }
 
-void AiLightClass::setWhite(uint8_t white) {
+void AiLightClass::setWhite(uint8_t white)
+{
   _color.white = white;
 
   setRGBW();
@@ -60,7 +65,8 @@ void AiLightClass::setWhite(uint8_t white) {
 
 uint16_t AiLightClass::getColorTemperature(void) { return _colortemp; }
 
-void AiLightClass::setColorTemperature(uint16_t temperature) {
+void AiLightClass::setColorTemperature(uint16_t temperature)
+{
   Color ctColor = colorTemperature2RGB(temperature);
 
   _color.red = ctColor.red;
@@ -70,7 +76,8 @@ void AiLightClass::setColorTemperature(uint16_t temperature) {
   setRGBW();
 }
 
-Color AiLightClass::colorTemperature2RGB(uint16_t temperature) {
+Color AiLightClass::colorTemperature2RGB(uint16_t temperature)
+{
   _colortemp = temperature; // Save colour temperature setting
   Color ctColor;
 
@@ -111,12 +118,14 @@ Color AiLightClass::colorTemperature2RGB(uint16_t temperature) {
 
 bool AiLightClass::hasGammaCorrection(void) { return _gammacorrection; }
 
-void AiLightClass::useGammaCorrection(bool gamma) {
+void AiLightClass::useGammaCorrection(bool gamma)
+{
   _gammacorrection = gamma;
   setRGBW();
 }
 
-void AiLightClass::setRGBW() {
+void AiLightClass::setRGBW()
+{
   uint8_t red =
       (_gammacorrection) ? pgm_read_byte(&gamma8[_color.red]) : _color.red;
   uint8_t green =

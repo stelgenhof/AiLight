@@ -20,39 +20,39 @@
         <nav class="nav">
           <div class="nav-left">
             <a class="nav-item is-brand" href="#">
-                <img src="logo.png" alt="Ai-Thinker RGBW Light">
-              </a>
+              <img src="logo.png" alt="Ai-Thinker RGBW Light">
+            </a>
             <div class="nav-item">
               <h2 class="title is-2">AiLight</h2>
             </div>
           </div>
           <div class="nav-center"></div>
           <span id="nav-toggle" class="nav-toggle">
-              <span></span>
-          <span></span>
-          <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
           </span>
 
           <div id="nav-menu" class="nav-right nav-menu">
             <span class="nav-item">
-                  <p class="control">
-                    <a class="button is-primary" href="#" id="button-restart">
-                      <span>RESTART</span>
-            <span class="icon">
-                        <i class="icon-power"></i>
-                      </span>
-            </a>
-            </p>
+              <p class="control">
+                <a class="button is-primary" href="#" id="button-restart">
+                  <span>RESTART</span>
+                  <span class="icon">
+                    <i class="icon-power"></i>
+                  </span>
+                </a>
+              </p>
             </span>
             <span class="nav-item">
-                  <p class="control">
-                    <a class="button is-danger is-outlined" href="#" id="reset">
-                      <span>RESET</span>
-            <span class="icon">
-                        <i class="icon-arrow-loop"></i>
-                      </span>
-            </a>
-            </p>
+              <p class="control">
+                <a class="button is-danger is-outlined" href="#" id="reset">
+                  <span>RESET</span>
+                  <span class="icon">
+                    <i class="icon-arrow-loop"></i>
+                  </span>
+                </a>
+              </p>
             </span>
           </div>
 
@@ -76,7 +76,10 @@
 
     <!-- Start page -->
     <section id="page_start" class="has-text-centered">
-      <p>Control your <strong><span data-s="manufacturer"></span>&nbsp;<span data-s="model"></span></strong> using the controls below</p>
+      <p>Control your
+        <strong>
+          <span data-s="manufacturer"></span>&nbsp;<span data-s="model"></span>
+        </strong> using the controls below</p>
 
       <table class="table">
         <tbody>
@@ -84,19 +87,23 @@
             <th>Switch</th>
             <td>
               <label class="switch is-primary">
-                  <input type="checkbox" name="state" id="switch_state">
-                </label>
+                <input type="checkbox" name="state" id="switch_state">
+              </label>
             </td>
           </tr>
           <tr>
             <th>Brightness</th>
-            <td><input class="slider is-primary" type="range" min="0" max="255" step="1" id="slider_brightness">
-              <output for="slider_brightness" class="tag is-light"></output></td>
+            <td>
+              <input class="slider is-primary" type="range" min="0" max="255" step="1" id="slider_brightness">
+              <output for="slider_brightness" class="tag is-light"></output>
+            </td>
           </tr>
           <tr>
             <th>Color Temperature</th>
-            <td><input class="slider is-primary" type="range" min="154" max="500" step="1" id="slider_color_temp">
-              <output for="slider_color_temp" class="tag is-light"></output></td>
+            <td>
+              <input class="slider is-primary" type="range" min="154" max="500" step="1" id="slider_color_temp">
+              <output for="slider_color_temp" class="tag is-light"></output>
+            </td>
           </tr>
           <tr>
             <th></th>
@@ -104,30 +111,38 @@
           </tr>
           <tr>
             <th>Red</th>
-            <td><input class="slider is-danger" type="range" min="0" max="255" step="1" id="slider_r">
-              <output for="slider_r" class="tag is-danger"></output></td>
+            <td>
+              <input class="slider is-danger" type="range" min="0" max="255" step="1" id="slider_r">
+              <output for="slider_r" class="tag is-danger"></output>
+            </td>
           </tr>
           <tr>
             <th>Green</th>
-            <td><input class="slider is-success" type="range" min="0" max="255" step="1" id="slider_g">
-              <output for="slider_g" class="tag is-success"></output></td>
+            <td>
+              <input class="slider is-success" type="range" min="0" max="255" step="1" id="slider_g">
+              <output for="slider_g" class="tag is-success"></output>
+            </td>
           </tr>
           <tr>
             <th>Blue</th>
-            <td><input class="slider is-info" type="range" min="0" max="255" step="1" id="slider_b">
-              <output for="slider_b" class="tag is-info"></output></td>
+            <td>
+              <input class="slider is-info" type="range" min="0" max="255" step="1" id="slider_b">
+              <output for="slider_b" class="tag is-info"></output>
+            </td>
           </tr>
           <tr>
             <th>White</th>
-            <td><input class="slider" type="range" min="0" max="255" step="1" id="slider_white_value">
-              <output for="slider_white_value" class="tag is-light"></output></td>
+            <td>
+              <input class="slider" type="range" min="0" max="255" step="1" id="slider_white_value">
+              <output for="slider_white_value" class="tag is-light"></output>
+            </td>
           </tr>
           <tr>
             <th>Gamma Correction</th>
             <td>
               <label class="switch is-primary">
-                  <input type="checkbox" name="gamma" id="switch_gamma">
-                </label>
+                <input type="checkbox" name="gamma" id="switch_gamma">
+              </label>
             </td>
           </tr>
         </tbody>
@@ -141,6 +156,28 @@
         <div class="columns is-mobile">
           <div class="column is-two-thirds is-offset-2">
 
+            <h1 class="title is-4 is-primary">General</h1>
+
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label">Power Up Mode</label>
+              </div>
+              <div class="field-body">
+                <div class="field is-narrow">
+                  <div class="control">
+                    <div class="select">
+                      <select name="powerup_mode" id="powerup_mode">
+                        <option value="0">Always Off</option>
+                        <option value="1">Always On</option>
+                        <option value="2">As before</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <br />
             <h1 class="title is-4 is-primary">Network</h1>
 
             <div class="field is-horizontal">
@@ -176,7 +213,8 @@
               <div class="field-body">
                 <div class="field">
                   <div class="control has-icon-right has-icon is-clearfix">
-                    <input class="input" type="password" minlength="8" maxlength="63" size="63" placeholder="WiFi PSK (Password)" id="wifi_psk">
+                    <input class="input" type="password" minlength="8" maxlength="63" size="63" placeholder="WiFi PSK (Password)"
+                      id="wifi_psk">
                     <span class="icon is-right" style="pointer-events: auto">
                       <i class="icon-eye" data-input="wifi_psk"></i>
                     </span>
@@ -185,7 +223,7 @@
               </div>
             </div>
 
-            <br/>
+            <br />
             <h1 class="title is-4 is-primary">MQTT</h1>
 
             <div class="field is-horizontal">
@@ -195,7 +233,8 @@
               <div class="field-body">
                 <div class="field">
                   <div class="control">
-                    <input class="input" type="text" minlength="1" maxlength="128" size="128" placeholder="MQTT Servername or IP Address" id="mqtt_server">
+                    <input class="input" type="text" minlength="1" maxlength="128" size="128" placeholder="MQTT Servername or IP Address"
+                      id="mqtt_server">
                   </div>
                 </div>
               </div>
@@ -208,7 +247,8 @@
               <div class="field-body">
                 <div class="field">
                   <div class="control">
-                    <input class="input" inputmode="numeric" type="text" min="0" max="65535" minlength="1" maxlength="5" size="5" placeholder="MQTT Server Port (e.g. 1883)" id="mqtt_port">
+                    <input class="input" inputmode="numeric" type="text" min="0" max="65535" minlength="1" maxlength="5"
+                      size="5" placeholder="MQTT Server Port (e.g. 1883)" id="mqtt_port">
                   </div>
                 </div>
               </div>
@@ -221,7 +261,8 @@
               <div class="field-body">
                 <div class="field">
                   <div class="control">
-                    <input class="input" type="text" maxlength="64" size="64" placeholder="Username used for connecting to the MQTT Server" id="mqtt_user">
+                    <input class="input" type="text" maxlength="64" size="64" placeholder="Username used for connecting to the MQTT Server"
+                      id="mqtt_user">
                   </div>
                 </div>
               </div>
@@ -234,7 +275,8 @@
               <div class="field-body">
                 <div class="field">
                   <div class="control has-icon-right has-icon is-clearfix">
-                    <input class="input" type="password" maxlength="64" size="10" placeholder="Password used for connecting to the MQTT Server" id="mqtt_password">
+                    <input class="input" type="password" maxlength="64" size="10" placeholder="Password used for connecting to the MQTT Server"
+                      id="mqtt_password">
                     <span class="icon is-right" style="pointer-events: auto">
                       <i class="icon-eye" data-input="mqtt_password"></i>
                     </span>
@@ -251,8 +293,8 @@
                 <div class="field">
                   <div class="control">
                     <label class="switch is-primary">
-                    <input type="checkbox" name="state" id="switch_ha_discovery">
-                  </label>
+                      <input type="checkbox" name="state" id="switch_ha_discovery">
+                    </label>
                   </div>
                 </div>
               </div>
@@ -265,7 +307,8 @@
               <div class="field-body">
                 <div class="field">
                   <div class="control">
-                    <input class="input" type="text" maxlength="32" size="32" placeholder="Prefix for the Home Assistant Discovery topic" id="mqtt_ha_discovery_prefix">
+                    <input class="input" type="text" maxlength="32" size="32" placeholder="Prefix for the Home Assistant Discovery topic"
+                      id="mqtt_ha_discovery_prefix">
                   </div>
                 </div>
               </div>
@@ -278,7 +321,8 @@
               <div class="field-body">
                 <div class="field">
                   <div class="control">
-                    <input class="input" type="text" maxlength="128" size="128" placeholder="MQTT Topic for publishing the state of this Ai-Thinker RGBW Light" id="mqtt_state_topic">
+                    <input class="input" type="text" maxlength="128" size="128" placeholder="MQTT Topic for publishing the state of this Ai-Thinker RGBW Light"
+                      id="mqtt_state_topic">
                   </div>
                 </div>
               </div>
@@ -291,7 +335,8 @@
               <div class="field-body">
                 <div class="field">
                   <div class="control">
-                    <input class="input" type="text" maxlength="128" size="128" placeholder="MQTT Topic for receiving commands for this Ai-Thinker RGBW Light" id="mqtt_command_topic">
+                    <input class="input" type="text" maxlength="128" size="128" placeholder="MQTT Topic for receiving commands for this Ai-Thinker RGBW Light"
+                      id="mqtt_command_topic">
                   </div>
                 </div>
               </div>
@@ -304,13 +349,14 @@
               <div class="field-body">
                 <div class="field">
                   <div class="control">
-                    <input class="input" type="text" maxlength="128" size="128" placeholder="MQTT Topic for notifying the status of this Ai-Thinker RGBW Light" id="mqtt_lwt_topic">
+                    <input class="input" type="text" maxlength="128" size="128" placeholder="MQTT Topic for notifying the status of this Ai-Thinker RGBW Light"
+                      id="mqtt_lwt_topic">
                   </div>
                 </div>
               </div>
             </div>
 
-            <br/>
+            <br />
             <h1 class="title is-4 is-primary">Developer</h1>
 
             <div class="field is-horizontal">
@@ -321,8 +367,8 @@
                 <div class="field">
                   <div class="control">
                     <label class="switch is-primary">
-                    <input type="checkbox" name="state" id="switch_rest_api">
-                  </label>
+                      <input type="checkbox" name="state" id="switch_rest_api">
+                    </label>
                   </div>
                 </div>
               </div>
@@ -335,7 +381,8 @@
               <div class="field-body">
                 <div class="field">
                   <div class="control has-icon-right has-icon is-clearfix">
-                    <input class="input" type="text" maxlength="32" size="32" placeholder="API Key for accessing the REST API" id="api_key">
+                    <input class="input" type="text" maxlength="32" size="32" placeholder="API Key for accessing the REST API"
+                      id="api_key">
                     <span class="icon is-right" style="pointer-events: auto">
                       <i class="icon-arrow-sync" data-input="api_key"></i>
                     </span>
@@ -344,7 +391,7 @@
               </div>
             </div>
 
-            <br/>
+            <br />
             <div class="field is-horizontal">
               <div class="field-label"></div>
               <div class="field-body">
@@ -365,31 +412,46 @@
     <section id="page_about">
 
       <div class="has-text-centered">
-        <h1 class="title is-4"><strong><span data-s="app_name"></span></strong></h1>
-        <h2 class="subtitle is-6">Version <span data-s="app_version"></span></h2>
+        <h1 class="title is-4">
+          <strong>
+            <span data-s="app_name"></span>
+          </strong>
+        </h1>
+        <h2 class="subtitle is-6">Version
+          <span data-s="app_version"></span>
+        </h2>
       </div>
 
       <table class="table">
         <tbody>
           <tr>
             <th>Name</th>
-            <td><span data-s="hostname"></span></td>
+            <td>
+              <span data-s="hostname"></span>
+            </td>
           </tr>
           <tr>
             <th>WiFi IP Address</th>
-            <td><span data-s="device_ip"></span></td>
+            <td>
+              <span data-s="device_ip"></span>
+            </td>
           </tr>
           <tr>
             <th>Hostname</th>
-            <td><span data-s="hostname"></span>.local</td>
+            <td>
+              <span data-s="hostname"></span>.local</td>
           </tr>
           <tr>
             <th>Manufacturer</th>
-            <td><span data-s="manufacturer"></span></td>
+            <td>
+              <span data-s="manufacturer"></span>
+            </td>
           </tr>
           <tr>
             <th>Model</th>
-            <td><span data-s="model"></span></td>
+            <td>
+              <span data-s="model"></span>
+            </td>
           </tr>
 
           <tr>
@@ -398,23 +460,37 @@
           </tr>
           <tr>
             <th>Firmware Build</th>
-            <td><span data-s="build_date"></span>&nbsp;<span data-s="build_time"></span></td>
+            <td>
+              <span data-s="build_date"></span>&nbsp;
+              <span data-s="build_time"></span>
+            </td>
           </tr>
           <tr>
             <th>Processor</th>
-            <td><span data-s="cpu_frequency"></span> MHz</td>
+            <td>
+              <span data-s="cpu_frequency"></span> MHz</td>
           </tr>
           <tr>
             <th>Memory</th>
-            <td><span data-s="memory"></span> bytes</td>
+            <td>
+              <span data-s="memory"></span> bytes</td>
           </tr>
           <tr>
             <th>Free Memory</th>
-            <td><span data-s="free_heap"></span> bytes</td>
+            <td>
+              <span data-s="free_heap"></span> bytes</td>
           </tr>
           <tr>
             <th>MAC Address</th>
-            <td><span data-s="mac"></span></td>
+            <td>
+              <span data-s="mac"></span>
+            </td>
+          </tr>
+          <tr>
+            <th>ESP Core Version</th>
+            <td>
+              <span data-s="core"></span>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -427,7 +503,11 @@
     <div class="modal-background"></div>
     <div class="modal-content">
       <div class="box">
-        <p>Your <strong><span data-s="manufacturer"></span>&nbsp;<span data-s="model"></span></strong> is currently being updated...</p>
+        <p>Your
+          <strong>
+            <span data-s="manufacturer"></span>&nbsp;
+            <span data-s="model"></span>
+          </strong> is currently being updated...</p>
         <progress class="progress is-primary" value="0" max="100" id="op"></progress>
       </div>
     </div>
@@ -438,7 +518,11 @@
     <div class="modal-background"></div>
     <div class="modal-content">
       <div class="box">
-        <p>Please wait while your <strong><span data-s="manufacturer"></span>&nbsp;<span data-s="model"></span></strong> is restarting...</p>
+        <p>Please wait while your
+          <strong>
+            <span data-s="manufacturer"></span>&nbsp;
+            <span data-s="model"></span>
+          </strong> is restarting...</p>
       </div>
     </div>
   </div>
@@ -448,10 +532,12 @@
     <div class="container">
       <div class="content has-text-centered">
         <p>
-          <strong>AiLight</strong> is a project by <a href="https://www.sachatelgenhof.nl">Sacha Telgenhof</a> &copy; 2017 - 2018
+          <strong>AiLight</strong> is a project by
+          <a href="https://www.sachatelgenhof.nl">Sacha Telgenhof</a> &copy; 2017 - 2019
         </p>
         <p>
-          <a href="https://github.com/stelgenhof/AiLight">Source code</a> is available on Github and licensed <a href="http://opensource.org/licenses/mit-license.php">MIT</a>.
+          <a href="https://github.com/stelgenhof/AiLight">Source code</a> is available on Github and licensed
+          <a href="http://opensource.org/licenses/mit-license.php">MIT</a>.
         </p>
       </div>
     </div>

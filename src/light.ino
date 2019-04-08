@@ -7,10 +7,10 @@
  * This file is part of the Ai-Thinker RGBW Light Firmware.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
-
- * Created by Sacha Telgenhof <stelgenhof at gmail dot com>
+ *
+ * Created by Sacha Telgenhof <me at sachatelgenhof dot com>
  * (https://www.sachatelgenhof.nl)
- * Copyright (c) 2016 - 2018 Sacha Telgenhof
+ * Copyright (c) 2016 - 2019 Sacha Telgenhof
  */
 
 /**
@@ -30,19 +30,25 @@ void deviceMQTTCallback(uint8_t type, const char *topic, const char *payload) {
     // MQTT discovery for Home Assistant
     if (cfg.mqtt_ha_use_discovery && !cfg.mqtt_ha_is_discovered) {
       static const int BUFFER_SIZE =
-          JSON_OBJECT_SIZE(8) + 128; // '128' is an arbritrary number. Increase
+          JSON_OBJECT_SIZE(9) + 128; // '128' is an arbritrary number. Increase
                                      // if required by the payload
       StaticJsonBuffer<BUFFER_SIZE> mqttJsonBuffer;
       JsonObject &md_root = mqttJsonBuffer.createObject();
 
       md_root["name"] = cfg.hostname;
+#ifdef MQTT_HOMEASSISTANT_DISCOVERY_PRE_0_84
       md_root["platform"] = "mqtt_json";
+#else
+      md_root["platform"] = "mqtt";
+      md_root["platform"] = "json";
+#endif
       md_root["state_topic"] = cfg.mqtt_state_topic;
       md_root["command_topic"] = cfg.mqtt_command_topic;
       md_root["rgb"] = true;
       md_root[KEY_COLORTEMP] = true;
       md_root[KEY_BRIGHTNESS] = true;
       md_root[KEY_WHITE] = true;
+      md_root["availability_topic"] = cfg.mqtt_lwt_topic;
 
       // Build the payload
       char md_buffer[md_root.measureLength() + 1];
@@ -65,7 +71,7 @@ void deviceMQTTCallback(uint8_t type, const char *topic, const char *payload) {
     mqttUnsubscribe(cfg.mqtt_command_topic);
 
     if (WiFi.isConnected()) {
-      mqttReconnectTimer.once(RECONNECT_TIME, mqttConnect);
+      mqttReconnectTimer.once(MQTT_RECONNECT_TIME, mqttConnect);
     }
   }
 
@@ -260,6 +266,11 @@ bool processJson(char *message) {
     }
   }
 
+  if (root.containsKey(KEY_GAMMA_CORRECTION)) {
+    bool use_gamma_correction = root[KEY_GAMMA_CORRECTION];
+    AiLight.useGammaCorrection(use_gamma_correction);
+  }
+
   return true;
 }
 
@@ -283,6 +294,8 @@ void createAboutJSON(JsonObject &object) {
   object["device_ip"] = (WiFi.getMode() == WIFI_AP) ? WiFi.softAPIP().toString()
                                                     : WiFi.localIP().toString();
   object["mac"] = WiFi.macAddress();
+
+  object["core"] = getESPCoreVersion();
 }
 
 /**
@@ -308,6 +321,7 @@ void createStateJSON(JsonObject &object) {
  * @brief Bootstrap function for the RGBW light
  */
 void setupLight() {
+
   // Restore last used settings (Note: set colour temperature first as it
   // changed the RGB channels!)
   AiLight.setColorTemperature(cfg.color_temp);
@@ -315,7 +329,19 @@ void setupLight() {
   AiLight.setWhite(cfg.color.white);
   AiLight.setBrightness(cfg.brightness);
   AiLight.useGammaCorrection(cfg.gamma);
-  AiLight.setState(cfg.is_on);
+
+  switch (cfg.powerup_mode) {
+  case POWERUP_ON:
+    AiLight.setState(true);
+    break;
+  case POWERUP_SAME:
+    AiLight.setState(cfg.is_on);
+    break;
+  case POWERUP_OFF:
+  default:
+    AiLight.setState(false);
+    break;
+  }
 
   mqttRegister(deviceMQTTCallback);
 }

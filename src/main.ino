@@ -4,10 +4,10 @@
  * This file is part of the Ai-Thinker RGBW Light Firmware.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
-
- * Created by Sacha Telgenhof <stelgenhof at gmail dot com>
+ *
+ * Created by Sacha Telgenhof <me at sachatelgenhof dot com>
  * (https://www.sachatelgenhof.nl)
- * Copyright (c) 2016 - 2018 Sacha Telgenhof
+ * Copyright (c) 2016 - 2019 Sacha Telgenhof
  */
 
 #include "main.h"
@@ -27,6 +27,21 @@ const char *getDeviceID() {
   os_strcat(identifier, cidBuf);
 
   return identifier;
+}
+
+/**
+ * @brief Retrieves the (formatted) version of the ESP Core framework
+ *        used in this firmware.
+ *
+ * @return the (formatted) version of the ESP Core framework
+ */
+String getESPCoreVersion()
+{
+  String version = ESP.getCoreVersion();
+
+  version.replace("_", ".");
+
+  return version;
 }
 
 /**
@@ -80,6 +95,8 @@ void loadFactoryDefaults() {
   cfg.api = REST_API_ENABLED;
   os_strcpy(cfg.api_key, ADMIN_PASSWORD);
 
+  cfg.powerup_mode = POWERUP_MODE;
+
   EEPROM_write(cfg);
 }
 
@@ -102,6 +119,7 @@ void setup() {
   DEBUGLOG("Firmware Version : %s\n", APP_VERSION);
   DEBUGLOG("Firmware Build   : %s - %s\n", __DATE__, __TIME__);
   DEBUGLOG("Device Name      : %s\n", cfg.hostname);
+  DEBUGLOG("ESP Core Version : %s\n", getESPCoreVersion().c_str());
   DEBUGLOG("\n");
 #endif
 
