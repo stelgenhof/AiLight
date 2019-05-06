@@ -1,8 +1,8 @@
 /**
  * AiLight Library
  *
- * AiLight is a simple library to control an AiLight that contains the MY9291
- * LED driver and encapsulates the MY9291 LED driver made by Xose Pérez
+ * AiLight is a simple library to control an AiLight that contains a MY92XX
+ * LED driver and encapsulates the MY92XX LED driver made by Xose Pérez
  *
  * This file is part of the Ai-Thinker RGBW Light Firmware.
  * For the full copyright and license information, please view the LICENSE
@@ -16,14 +16,21 @@
 #ifndef AiLight_h
 #define AiLight_h
 
-#include <my9291.h>
+#include <my92xx.h>
 
-// MY9291 PIN settings
-#define MY9291_DI_PIN 13
-#define MY9291_DCKI_PIN 15
+// MY92XX settings
+#define MY92XX_MODEL        MY92XX_MODEL_MY9231
+#define MY92XX_CHIPS        2
+#define MY92XX_DI_PIN 13
+#define MY92XX_DCKI_PIN 15
+#define MY92XX_RED 0
+#define MY92XX_GREEN 1
+#define MY92XX_BLUE 2
+#define MY92XX_WHITE 3
+
 
 // The maximum level used for colour channels and brightness
-#define MY9291_LEVEL_MAX 255
+#define MY92XX_LEVEL_MAX 255
 
 // Structure for holding the levels of all the colour channels
 
@@ -61,8 +68,9 @@ const static uint8_t PROGMEM gamma8[256] = {
 class AiLightClass
 {
 public:
-  AiLightClass(void);
-  AiLightClass(const AiLightClass &obj);
+  AiLightClass();
+  AiLightClass(my92xx_model_t model, unsigned char count);
+  AiLightClass(my92xx_model_t model, unsigned char count, const AiLightClass &obj);
   ~AiLightClass(void);
 
   /**
@@ -197,20 +205,20 @@ public:
   void useGammaCorrection(bool gamma);
 
 private:
-  my9291 *_my9291; // MY9291 driver handle
+   my92xx *_my92xx; // MY92XX driver handle 
 
   // Current colour levels (RGBW). Initial values are 1/4th of maximum
-  Color _color = {MY9291_LEVEL_MAX >> 2, MY9291_LEVEL_MAX >> 2,
-                  MY9291_LEVEL_MAX >> 2, 0};
+  Color _color = {MY92XX_LEVEL_MAX >> 2, MY92XX_LEVEL_MAX >> 2,
+                  MY92XX_LEVEL_MAX >> 2, 0};
 
   // Current brightness level. Initial value is 1/4th of maximum
-  uint8_t _brightness = MY9291_LEVEL_MAX >> 2;
+  uint8_t _brightness = MY92XX_LEVEL_MAX >> 2;
 
   // Current colour temperature setting. Initial value is equivalent of 2700K
   uint16_t _colortemp = 370;
 
   /**
-   * @brief Sets the levels of all colour levels (RGBW) to the MY9291 LED
+   * @brief Sets the levels of all colour levels (RGBW) to the MY92XX LED
    * driver.
    *
    * This internal method sets the levels of all colour levels (RGBW) to the
@@ -225,5 +233,4 @@ private:
   bool _gammacorrection = false;
 };
 
-extern AiLightClass AiLight;
 #endif

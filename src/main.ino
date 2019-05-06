@@ -66,6 +66,8 @@ void loadFactoryDefaults() {
   cfg.color_temp = LIGHT_COLOR_TEMPERATURE;
   cfg.color = {LIGHT_COLOR_RED, LIGHT_COLOR_GREEN, LIGHT_COLOR_BLUE,
                LIGHT_COLOR_WHITE};
+  cfg.chip_type = MY92XX_TYPE;
+  cfg.chip_count = MY92XX_COUNT;
 
   // Configuration defaults
   os_strcpy(cfg.hostname, getDeviceID());
@@ -122,7 +124,7 @@ void setup() {
   DEBUGLOG("ESP Core Version : %s\n", getESPCoreVersion().c_str());
   DEBUGLOG("\n");
 #endif
-
+  AiLight = new AiLightClass(cfg.chip_type, cfg.chip_count);
   setupLight();
   setupMQTT();
   setupWiFi();
