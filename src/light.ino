@@ -40,7 +40,7 @@ void deviceMQTTCallback(uint8_t type, const char *topic, const char *payload) {
       md_root["platform"] = "mqtt_json";
 #else
       md_root["platform"] = "mqtt";
-      md_root["platform"] = "json";
+      md_root["schema"] = "json";
 #endif
       md_root["state_topic"] = cfg.mqtt_state_topic;
       md_root["command_topic"] = cfg.mqtt_command_topic;
