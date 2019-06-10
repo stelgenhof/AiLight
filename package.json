@@ -15,7 +15,7 @@
   "author": {
     "name": "Sacha Telgenhof",
     "email": "me@sachatelgenhof.com",
-    "url": "https://www.sachatelgenhof"
+    "url": "https://www.sachatelgenhof.com"
   },
   "repository": {
     "type": "git",
@@ -42,7 +42,7 @@
     "gulp-plumber": "^1.2",
     "gulp-sass": "^4.0",
     "gulp-uglify": "^3.0",
-    "lite-server": "^2.3",
+    "lite-server": "^2.5",
     "uglify-es": "^3.0"
   }
 }
