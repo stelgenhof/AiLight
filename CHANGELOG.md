@@ -8,10 +8,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## [Unreleased]
 
 ### Added
+- my92XX Support. This allows for support of lightbulbs with the my9231 LED driver such as the LOHAS brand bulbs. [\#50](https://github.com/stelgenhof/AiLight/pull/50) ([Nick Wolff] (https://github.com/darkfiberiru))
 
 ### Changed
+- The example PlatformIO configuration has been changed due to the release of PlatformIO v4.0. If you use PlatformIO make sure the configuration entry 'env_default' is renamed to 'default_envs' in your platformio.ini file!
+- Updated third-party dependencies.
 
 ### Fixed
+- Corrected duplicate 'platform' JSON definition (to 'schema') for the MQTT discovery message. [\#55](https://github.com/stelgenhof/AiLight/pull/55) ([Ole-Kenneth] (https://github.com/olekenneth))
+- Added link type (MIME type) for the HTML stylesheet to avoid potential misinterpretations.
+
 
 ### Removed
 
