@@ -26,7 +26,6 @@
   },
   "homepage": "https://github.com/stelgenhof/AiLight#readme",
   "scripts": {
-    "dev": "lite-server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
@@ -42,7 +41,6 @@
     "gulp-plumber": "^1.2",
     "gulp-sass": "^4.0",
     "gulp-uglify": "^3.0",
-    "lite-server": "^2.5",
     "uglify-es": "^3.0"
   }
 }
