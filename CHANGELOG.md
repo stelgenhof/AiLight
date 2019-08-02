@@ -15,11 +15,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 - Updated third-party dependencies.
 
 ### Fixed
+- Building with VSCode + PlatformIO 4.0 extension gives error: "`.text' will not fit in region `iram1_0_seg'". [\#59](https://github.com/stelgenhof/AiLight/pull/59) ([Donnie] (https://github.com/donkawechico))
 - Corrected duplicate 'platform' JSON definition (to 'schema') for the MQTT discovery message. [\#55](https://github.com/stelgenhof/AiLight/pull/55) ([Ole-Kenneth] (https://github.com/olekenneth))
 - Added link type (MIME type) for the HTML stylesheet to avoid potential misinterpretations.
 
-
 ### Removed
+- LiteServer for testing the UI as it was hardly used.
 
 
 ## [0.6.0] - 2019-04-08
