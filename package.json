@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "bulma": "^0.4",
-    "del": "^5.0",
+    "del": "^5.1",
     "gulp": "^4.0",
     "gulp-base64-favicon": "^1.0",
     "gulp-clean-css": "^4.0",
