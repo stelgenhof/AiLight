@@ -86,6 +86,9 @@ void mqttRegister(void (*callback)(uint8_t, const char *, const char *)) {
 void onMQTTConnect(bool sessionPresent) {
   DEBUGLOG("[MQTT] Connected\n");
 
+  _mqtt_last_connection = millis();
+  _mqtt_connecting = false;
+
   // Notify subscribers (connected)
   for (uint8_t i = 0; i < _mqtt_callbacks.size(); i++) {
     (*_mqtt_callbacks[i])(MQTT_EVENT_CONNECT, NULL, NULL);
@@ -98,6 +101,9 @@ void onMQTTConnect(bool sessionPresent) {
  */
 void onMQTTDisconnect(AsyncMqttClientDisconnectReason reason) {
   DEBUGLOG("[MQTT] Disconnected. Reason: %d\n", reason);
+
+  _mqtt_last_connection = millis();
+  _mqtt_connecting = false;
 
   // Notify subscribers (disconnected)
   for (uint8_t i = 0; i < _mqtt_callbacks.size(); i++) {
@@ -137,12 +143,25 @@ void onMQTTMessage(char *topic, char *payload,
  */
 void mqttConnect() {
 
+  // Do not make a connection if already connected or trying to
+  if (mqtt.connected() || _mqtt_connecting) {
+    DEBUGLOG("[MQTT] Already connected or trying to connect.\n");
+    return;
+  }
+
+  if (!os_strlen(cfg.mqtt_server) > 0) {
+    DEBUGLOG("[MQTT] MQTT Server not configured. Skipping MQTT.\n");
+    return;
+  }
+
   DEBUGLOG("[MQTT] Connecting to broker '%s:%i'", cfg.mqtt_server,
            cfg.mqtt_port);
 
   if ((os_strlen(cfg.mqtt_user) > 0) && (os_strlen(cfg.mqtt_password) > 0)) {
     DEBUGLOG(" as user '%s'\n", cfg.mqtt_user);
   }
+
+  _mqtt_connecting = true;
 
   mqtt.connect();
 }
@@ -161,4 +180,8 @@ void setupMQTT() {
   mqtt.setClientId(cfg.hostname);
   mqtt.setWill(cfg.mqtt_lwt_topic, 2, MQTT_RETAIN, MQTT_STATUS_OFFLINE);
   mqtt.setCredentials(cfg.mqtt_user, cfg.mqtt_password);
+
+  if (WiFi.isConnected()) {
+    mqttReconnectTimer.attach_ms(MQTT_RECONNECT_TIME, mqttConnect);
+  }
 }

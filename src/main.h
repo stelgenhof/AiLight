@@ -162,15 +162,17 @@ struct config_t {
   char mqtt_password[64];     // Password used for connecting to the MQTT Broker
   char mqtt_state_topic[128]; // MQTT Topic for publishing the state
   char mqtt_command_topic[128]; // MQTT Topic for receiving commands
-  char mqtt_lwt_topic[128]; // MQTT Topic for publising Last Will and Testament
-  bool gamma;               // Gamma Correction enabled or not
+  char mqtt_lwt_topic[128];     // MQTT Topic for publishing Last Will and
+  // Testament
+  bool gamma;                 // Gamma Correction enabled or not
   bool mqtt_ha_use_discovery; // Home Assistant MQTT discovery enabled or not
-  bool mqtt_ha_is_discovered; // Has this device already been discovered or not
+  bool mqtt_ha_is_discovered; // Has this device already been discovered or
+  // not
   char mqtt_ha_disc_prefix[32]; // MQTT Discovery prefix for Home Assistant
   bool api;                     // REST API enabled or not
   char api_key[32];             // API Key
   uint8_t powerup_mode;         // Power Up Mode
-  my92xx_model_t chip_type;          // Device Type
+  my92xx_model_t chip_type;     // Device Type
   unsigned char chip_count;
 } cfg;
 
@@ -197,6 +199,10 @@ int stepR, stepG, stepB, stepW, stepBrightness = 0;
 uint16_t stepCount = 0;
 Color transColor;
 uint8_t transBrightness = 0;
+
+// Globals for MQTT
+uint32_t _mqtt_last_connection = 0;
+bool _mqtt_connecting = false;
 
 #ifdef DEBUG
 #define SerialPrint(format, ...)                                               \
