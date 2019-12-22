@@ -201,7 +201,6 @@ Color transColor;
 uint8_t transBrightness = 0;
 
 // Globals for MQTT
-uint32_t _mqtt_last_connection = 0;
 bool _mqtt_connecting = false;
 
 #ifdef DEBUG

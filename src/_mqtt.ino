@@ -86,7 +86,6 @@ void mqttRegister(void (*callback)(uint8_t, const char *, const char *)) {
 void onMQTTConnect(bool sessionPresent) {
   DEBUGLOG("[MQTT] Connected\n");
 
-  _mqtt_last_connection = millis();
   _mqtt_connecting = false;
 
   // Notify subscribers (connected)
@@ -102,7 +101,6 @@ void onMQTTConnect(bool sessionPresent) {
 void onMQTTDisconnect(AsyncMqttClientDisconnectReason reason) {
   DEBUGLOG("[MQTT] Disconnected. Reason: %d\n", reason);
 
-  _mqtt_last_connection = millis();
   _mqtt_connecting = false;
 
   // Notify subscribers (disconnected)
