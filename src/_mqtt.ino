@@ -21,7 +21,7 @@
  */
 void mqttPublish(const char *topic, const char *message) {
   // Don't do anything if we are not connected to the MQTT broker
-  if (!mqtt.connected()) {
+  if (!mqtt.connected() || _mqtt_connecting) {
     return;
   }
 
@@ -40,7 +40,7 @@ void mqttPublish(const char *topic, const char *message) {
  */
 void mqttSubscribe(const char *topic, uint8_t qos = MQTT_QOS_LEVEL) {
   // Don't do anything if we are not connected to the MQTT broker
-  if (!mqtt.connected()) {
+  if (!mqtt.connected() || _mqtt_connecting) {
     return;
   }
 
@@ -58,7 +58,7 @@ void mqttSubscribe(const char *topic, uint8_t qos = MQTT_QOS_LEVEL) {
  */
 void mqttUnsubscribe(const char *topic) {
   // Don't do anything if we are not connected to the MQTT broker
-  if (!mqtt.connected()) {
+  if (!mqtt.connected() || _mqtt_connecting) {
     return;
   }
 
@@ -143,12 +143,11 @@ void mqttConnect() {
 
   // Do not make a connection if already connected or trying to
   if (mqtt.connected() || _mqtt_connecting) {
-    DEBUGLOG("[MQTT] Already connected or trying to connect.\n");
     return;
   }
 
   if (!os_strlen(cfg.mqtt_server) > 0) {
-    DEBUGLOG("[MQTT] MQTT Server not configured. Skipping MQTT.\n");
+    DEBUGLOG("[MQTT] MQTT Broker not configured.\n");
     return;
   }
 

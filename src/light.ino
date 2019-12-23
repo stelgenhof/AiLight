@@ -69,10 +69,6 @@ void deviceMQTTCallback(uint8_t type, const char *topic, const char *payload) {
   // Handling the event of disconnecting from the MQTT broker
   if (type == MQTT_EVENT_DISCONNECT) {
     mqttUnsubscribe(cfg.mqtt_command_topic);
-
-    //    if (WiFi.isConnected()) {
-    //      mqttReconnectTimer.attach(MQTT_RECONNECT_TIME, mqttConnect);
-    //    }
   }
 
   // Handling the event a message is received from the MQTT broker
