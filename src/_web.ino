@@ -13,7 +13,7 @@
  */
 
 /**
- * @brief Check whether the requestor is authorized using the requested API
+ * @brief Check whether the requester is authorized using the requested API
  * endpoint
  *
  * @param request the API endpoint request object
@@ -293,10 +293,10 @@ void wsProcessMessage(uint8_t num, char *payload, size_t length) {
     }
 
     if (settings.containsKey(KEY_POWERUP_MODE)) {
-      uint8_t powerup_mode = (os_strlen(settings[KEY_POWERUP_MODE]) > 0)
-                                 ? settings[KEY_POWERUP_MODE]
-                                 : POWERUP_MODE;
-      cfg.powerup_mode = powerup_mode;
+      uint8_t power_up_mode = (os_strlen(settings[KEY_POWERUP_MODE]) > 0)
+                                  ? settings[KEY_POWERUP_MODE]
+                                  : POWERUP_MODE;
+      cfg.powerup_mode = power_up_mode;
     }
 
     // Reconnect to the MQTT broker due to new settings
@@ -341,7 +341,7 @@ void wsProcessMessage(uint8_t num, char *payload, size_t length) {
     AiLight->useGammaCorrection(gamma);
   }
 
-  // Store light parameters for persistance
+  // Store light parameters for persistence
   cfg.is_on = AiLight->getState();
   cfg.brightness = AiLight->getBrightness();
   cfg.color_temp = AiLight->getColorTemperature();
@@ -561,5 +561,5 @@ void setupWeb() {
   });
 
   server->begin();
-  DEBUGLOG("[HTTP] Webserver running...\n");
+  DEBUGLOG("[HTTP] Server started\n");
 }
