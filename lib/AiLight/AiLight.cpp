@@ -15,17 +15,18 @@
 
 #include "AiLight.hpp"
 
-AiLightClass::AiLightClass(my92xx_model_t model, unsigned char count)
-{
-  _my92xx = new my92xx(model, count, MY92XX_DI_PIN, MY92XX_DCKI_PIN, MY92XX_COMMAND_DEFAULT);
+AiLightClass::AiLightClass(my92xx_model_t model, uint8_t count) {
+  _my92xx = new my92xx(model, count, MY92XX_DI_PIN, MY92XX_DCKI_PIN,
+                       MY92XX_COMMAND_DEFAULT);
 
   setRGBW(); // Initialise colour channels
 }
 
-AiLightClass::AiLightClass(my92xx_model_t model, unsigned char count, const AiLightClass &obj)
-{
+AiLightClass::AiLightClass(my92xx_model_t model, uint8_t count,
+                           const AiLightClass &obj) {
 
-  _my92xx = new my92xx(model, count, MY92XX_DI_PIN, MY92XX_DCKI_PIN, MY92XX_COMMAND_DEFAULT); 
+  _my92xx = new my92xx(model, count, MY92XX_DI_PIN, MY92XX_DCKI_PIN,
+                       MY92XX_COMMAND_DEFAULT);
   *_my92xx = *obj._my92xx;
 
   setRGBW(); // Initialise colour channels
@@ -35,8 +36,7 @@ AiLightClass::~AiLightClass(void) { delete _my92xx; }
 
 uint8_t AiLightClass::getBrightness(void) { return _brightness; }
 
-void AiLightClass::setBrightness(uint16_t level)
-{
+void AiLightClass::setBrightness(uint16_t level) {
   _brightness = constrain(level, 0, MY92XX_LEVEL_MAX); // Force boundaries
 
   setRGBW();
@@ -44,16 +44,14 @@ void AiLightClass::setBrightness(uint16_t level)
 
 bool AiLightClass::getState(void) { return _my92xx->getState(); }
 
-void AiLightClass::setState(bool state)
- {
-    _my92xx->setState(state); 
-    _my92xx->update();
-    }
+void AiLightClass::setState(bool state) {
+  _my92xx->setState(state);
+  _my92xx->update();
+}
 
 Color AiLightClass::getColor(void) { return _color; }
 
-void AiLightClass::setColor(uint8_t red, uint8_t green, uint8_t blue)
-{
+void AiLightClass::setColor(uint8_t red, uint8_t green, uint8_t blue) {
   _color.red = red;
   _color.green = green;
   _color.blue = blue;
@@ -61,17 +59,15 @@ void AiLightClass::setColor(uint8_t red, uint8_t green, uint8_t blue)
   setRGBW();
 }
 
-void AiLightClass::setWhite(uint8_t white)
-{
+void AiLightClass::setWhite(uint8_t white) {
   _color.white = white;
 
   setRGBW();
 }
 
-uint16_t AiLightClass::getColorTemperature(void) { return _colortemp; }
+uint16_t AiLightClass::getColorTemperature(void) { return _color_temp; }
 
-void AiLightClass::setColorTemperature(uint16_t temperature)
-{
+void AiLightClass::setColorTemperature(uint16_t temperature) {
   Color ctColor = colorTemperature2RGB(temperature);
 
   _color.red = ctColor.red;
@@ -81,9 +77,8 @@ void AiLightClass::setColorTemperature(uint16_t temperature)
   setRGBW();
 }
 
-Color AiLightClass::colorTemperature2RGB(uint16_t temperature)
-{
-  _colortemp = temperature; // Save colour temperature setting
+Color AiLightClass::colorTemperature2RGB(uint16_t temperature) {
+  _color_temp = temperature; // Save colour temperature setting
   Color ctColor;
 
   temperature = (temperature == 0) ? 1 : temperature; // Avoid division by zero
@@ -121,30 +116,34 @@ Color AiLightClass::colorTemperature2RGB(uint16_t temperature)
   return ctColor;
 }
 
-bool AiLightClass::hasGammaCorrection(void) { return _gammacorrection; }
+bool AiLightClass::hasGammaCorrection(void) { return _gamma_correction; }
 
-void AiLightClass::useGammaCorrection(bool gamma)
-{
-  _gammacorrection = gamma;
+void AiLightClass::useGammaCorrection(bool gamma) {
+  _gamma_correction = gamma;
   setRGBW();
 }
 
-void AiLightClass::setRGBW()
-{
+void AiLightClass::setRGBW() {
   uint8_t red =
-      (_gammacorrection) ? pgm_read_byte(&gamma8[_color.red]) : _color.red;
+      (_gamma_correction) ? pgm_read_byte(&gamma8[_color.red]) : _color.red;
   uint8_t green =
-      (_gammacorrection) ? pgm_read_byte(&gamma8[_color.green]) : _color.green;
+      (_gamma_correction) ? pgm_read_byte(&gamma8[_color.green]) : _color.green;
   uint8_t blue =
-      (_gammacorrection) ? pgm_read_byte(&gamma8[_color.blue]) : _color.blue;
+      (_gamma_correction) ? pgm_read_byte(&gamma8[_color.blue]) : _color.blue;
 
-  _my92xx->setChannel(MY92XX_RED, (uint32_t)map(red, 0, MY92XX_LEVEL_MAX, 0, _brightness));
-  _my92xx->setChannel(MY92XX_GREEN, (uint32_t)map(green, 0, MY92XX_LEVEL_MAX, 0, _brightness));
-  _my92xx->setChannel(MY92XX_BLUE, (uint32_t)map(blue, 0, MY92XX_LEVEL_MAX, 0, _brightness));
-  _my92xx->setChannel(MY92XX_WHITE, (uint32_t)map(_color.white, 0, MY92XX_LEVEL_MAX, 0, _brightness));
-  _my92xx->setChannel(MY92XX_WHITE+1, (uint32_t)map(_color.white, 0, MY92XX_LEVEL_MAX, 0, _brightness));
+  _my92xx->setChannel(MY92XX_RED,
+                      (uint32_t)map(red, 0, MY92XX_LEVEL_MAX, 0, _brightness));
+  _my92xx->setChannel(
+      MY92XX_GREEN, (uint32_t)map(green, 0, MY92XX_LEVEL_MAX, 0, _brightness));
+  _my92xx->setChannel(MY92XX_BLUE,
+                      (uint32_t)map(blue, 0, MY92XX_LEVEL_MAX, 0, _brightness));
+  _my92xx->setChannel(
+      MY92XX_WHITE,
+      (uint32_t)map(_color.white, 0, MY92XX_LEVEL_MAX, 0, _brightness));
+  _my92xx->setChannel(
+      MY92XX_WHITE + 1,
+      (uint32_t)map(_color.white, 0, MY92XX_LEVEL_MAX, 0, _brightness));
 
+  _my92xx->setState(true);
   _my92xx->update();
 }
-
-
