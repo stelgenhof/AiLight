@@ -173,7 +173,7 @@ struct config_t {
   char api_key[32];             // API Key
   uint8_t powerup_mode;         // Power Up Mode
   my92xx_model_t chip_type;     // Device Type
-  unsigned char chip_count;
+  uint8_t chip_count;
 } cfg;
 
 AiLightClass *AiLight;
