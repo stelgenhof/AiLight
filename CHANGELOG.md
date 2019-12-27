@@ -8,21 +8,23 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## [Unreleased]
 
 ### Added
+- Github Actions Workflow, to have the firmware automatically build upon a push of new code.
 - my92XX Support. This allows for support of light bulbs with the my9231 LED driver such as the LOHAS brand bulbs
-. [\#50](https://github.com/stelgenhof/AiLight/pull/50) ([Nick Wolff] (https://github.com/darkfiberiru))
+. [\#50](https://github.com/stelgenhof/AiLight/pull/50) ([Nick Wolff](https://github.com/darkfiberiru))
 
 ### Changed
+- Locking ESP Libraries to v1.2.2 as the 1.2.3 version of the WebServer package fails to build. 
+- Changed data type of the count parameter to uint8_t as it is an integer.
 - The example PlatformIO configuration has been changed due to the release of PlatformIO v4.0. If you use PlatformIO make sure the configuration entry 'env_default' is renamed to 'default_envs' in your platformio.ini file!
 - Updated third-party dependencies.
+- Various typo fixes and cleanup.
 
 ### Fixed
 - Connection to the MQTT broker was assumed to be always present and in case of a disconnect, a retry would be
  triggered. However in the case of the MQTT broker becoming unavailable, there was no possibility to get the
-  connection back except for restarting the device. This has been resolved by checking at regular intervals if the
-   connection is still there. [\#56](https://github.com/stelgenhof/AiLight/issues/56), [\#66](https://github.com
-   /stelgenhof/AiLight/issues/66).
-- Building with VSCode + PlatformIO 4.0 extension gives error: "`.text' will not fit in region `iram1_0_seg'". [\#59](https://github.com/stelgenhof/AiLight/pull/59) ([Donnie] (https://github.com/donkawechico))
-- Corrected duplicate 'platform' JSON definition (to 'schema') for the MQTT discovery message. [\#55](https://github.com/stelgenhof/AiLight/pull/55) ([Ole-Kenneth] (https://github.com/olekenneth))
+  connection back except for restarting the device. This has been resolved by checking at regular intervals if the connection is still there. [\#56](https://github.com/stelgenhof/AiLight/issues/56), [\#66](https://github.com/stelgenhof/AiLight/issues/66).
+- Building with VSCode + PlatformIO 4.0 extension gives error: "`.text' will not fit in region `iram1_0_seg'". [\#59](https://github.com/stelgenhof/AiLight/pull/59) ([Donnie](https://github.com/donkawechico))
+- Corrected duplicate 'platform' JSON definition (to 'schema') for the MQTT discovery message. [\#55](https://github.com/stelgenhof/AiLight/pull/55) ([Ole-Kenneth](https://github.com/olekenneth))
 - Added link type (MIME type) for the HTML stylesheet to avoid potential misinterpretations.
 
 ### Removed
@@ -83,13 +85,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## [0.4.1] - 2017-06-29
 
 ### Added
--	Altered validation of WiFi Passwords in the Web UI to allow for WiFi networks without a password.
+- Altered validation of WiFi Passwords in the Web UI to allow for WiFi networks without a password.
 - Added validation for WiFi SSID in the Web UI (required and cannot exceed 31 characters).
 - Added Gulp task for compiling release binaries. Compiled binaries are now available from this version going forward.
 
 ### Changed
 - The Web UI client side script has been upgraded to ES6 (ES2015).
--	Replaced core functions like 'strcpy', 'strcmp', etc. with the ESP8266 SDK counterpart.
+- Replaced core functions like 'strcpy', 'strcmp', etc. with the ESP8266 SDK counterpart.
 - Existing WebSocket client connections are now disconnected upon OTA start.
 
 ### Fixed
@@ -109,9 +111,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 - Adjusted path to gulp binary in the 'build.py' file to provide better support Windows OS.
 
 ### Fixed
-- Fixed issue #10: In the Web UI, the object holding the form's input values wasn't initialized, resulting in the user settings not being saved.
+- Fixed issue [\10](https://github.com/stelgenhof/AiLight/issues/10): In the Web UI, the object holding the form's input values was not initialized, resulting in the user settings not being saved.
 - Ensured OTA 'complete' message isn't shown multiple times.
-- Fixed issue #8: `[Violation] Added non-passive event listener to a scroll-blocking 'touchmove' event` in Web UI.
+- Fixed issue [\#8](https://github.com/stelgenhof/AiLight/issues/8): `[Violation] Added non-passive event listener to a scroll-blocking 'touchmove' event` in Web UI.
 - Included missing gulp-util package in the 'package.json' file.
 
 ### Removed
