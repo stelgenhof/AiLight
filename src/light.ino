@@ -69,10 +69,6 @@ void deviceMQTTCallback(uint8_t type, const char *topic, const char *payload) {
   // Handling the event of disconnecting from the MQTT broker
   if (type == MQTT_EVENT_DISCONNECT) {
     mqttUnsubscribe(cfg.mqtt_command_topic);
-
-    if (WiFi.isConnected()) {
-      mqttReconnectTimer.once(MQTT_RECONNECT_TIME, mqttConnect);
-    }
   }
 
   // Handling the event a message is received from the MQTT broker
@@ -91,7 +87,7 @@ void deviceMQTTCallback(uint8_t type, const char *topic, const char *payload) {
         return;
       }
 
-      // Store light parameters for persistance
+      // Store light parameters for persistence
       cfg.is_on = AiLight->getState();
       cfg.brightness = AiLight->getBrightness();
       cfg.color_temp = AiLight->getColorTemperature();
@@ -207,8 +203,8 @@ bool processJson(char *message) {
       stepCount = 0;
     } else {
       AiLight->setColor(root[KEY_COLOR][KEY_COLOR_R],
-                       root[KEY_COLOR][KEY_COLOR_G],
-                       root[KEY_COLOR][KEY_COLOR_B]);
+                        root[KEY_COLOR][KEY_COLOR_G],
+                        root[KEY_COLOR][KEY_COLOR_B]);
     }
   }
 
@@ -373,7 +369,8 @@ void loopLight() {
       flash = false;
 
       AiLight->setState(currentState);
-      AiLight->setColor(currentColor.red, currentColor.green, currentColor.blue);
+      AiLight->setColor(currentColor.red, currentColor.green,
+                        currentColor.blue);
       AiLight->setBrightness(currentBrightness);
 
       sendState(); // Notify subscribers again about current state
@@ -394,24 +391,24 @@ void loopLight() {
         // Transition/fade RGB LEDS (if level is different from current)
         if (stepR != 0 || stepG != 0 || stepB != 0) {
           AiLight->setColor(calculateLevel(stepR, AiLight->getColor().red,
-                                          stepCount, transColor.red),
-                           calculateLevel(stepG, AiLight->getColor().green,
-                                          stepCount, transColor.green),
-                           calculateLevel(stepB, AiLight->getColor().blue,
-                                          stepCount, transColor.blue));
+                                           stepCount, transColor.red),
+                            calculateLevel(stepG, AiLight->getColor().green,
+                                           stepCount, transColor.green),
+                            calculateLevel(stepB, AiLight->getColor().blue,
+                                           stepCount, transColor.blue));
         }
 
         // Transition/fade white LEDS (if level is different from current)
         if (stepW != 0) {
           AiLight->setWhite(calculateLevel(stepW, AiLight->getColor().white,
-                                          stepCount, transColor.white));
+                                           stepCount, transColor.white));
         }
 
         // Transition/fade brightness (if level is different from current)
         if (stepBrightness != 0) {
           AiLight->setBrightness(calculateLevel(stepBrightness,
-                                               AiLight->getBrightness(),
-                                               stepCount, transBrightness));
+                                                AiLight->getBrightness(),
+                                                stepCount, transBrightness));
         }
 
         stepCount++;

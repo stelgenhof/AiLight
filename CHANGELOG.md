@@ -8,13 +8,19 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## [Unreleased]
 
 ### Added
-- my92XX Support. This allows for support of lightbulbs with the my9231 LED driver such as the LOHAS brand bulbs. [\#50](https://github.com/stelgenhof/AiLight/pull/50) ([Nick Wolff] (https://github.com/darkfiberiru))
+- my92XX Support. This allows for support of light bulbs with the my9231 LED driver such as the LOHAS brand bulbs
+. [\#50](https://github.com/stelgenhof/AiLight/pull/50) ([Nick Wolff] (https://github.com/darkfiberiru))
 
 ### Changed
 - The example PlatformIO configuration has been changed due to the release of PlatformIO v4.0. If you use PlatformIO make sure the configuration entry 'env_default' is renamed to 'default_envs' in your platformio.ini file!
 - Updated third-party dependencies.
 
 ### Fixed
+- Connection to the MQTT broker was assumed to be always present and in case of a disconnect, a retry would be
+ triggered. However in the case of the MQTT broker becoming unavailable, there was no possibility to get the
+  connection back except for restarting the device. This has been resolved by checking at regular intervals if the
+   connection is still there. [\#56](https://github.com/stelgenhof/AiLight/issues/56), [\#66](https://github.com
+   /stelgenhof/AiLight/issues/66).
 - Building with VSCode + PlatformIO 4.0 extension gives error: "`.text' will not fit in region `iram1_0_seg'". [\#59](https://github.com/stelgenhof/AiLight/pull/59) ([Donnie] (https://github.com/donkawechico))
 - Corrected duplicate 'platform' JSON definition (to 'schema') for the MQTT discovery message. [\#55](https://github.com/stelgenhof/AiLight/pull/55) ([Ole-Kenneth] (https://github.com/olekenneth))
 - Added link type (MIME type) for the HTML stylesheet to avoid potential misinterpretations.

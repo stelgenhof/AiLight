@@ -35,8 +35,7 @@ const char *getDeviceID() {
  *
  * @return the (formatted) version of the ESP Core framework
  */
-String getESPCoreVersion()
-{
+String getESPCoreVersion() {
   String version = ESP.getCoreVersion();
 
   version.replace("_", ".");
@@ -126,8 +125,8 @@ void setup() {
 #endif
   AiLight = new AiLightClass(cfg.chip_type, cfg.chip_count);
   setupLight();
-  setupMQTT();
   setupWiFi();
+  setupMQTT();
   setupOTA();
   setupWeb();
 
