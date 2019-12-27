@@ -21,5 +21,6 @@ jobs:
       run: |
         cp src/config.example.h src/config.h
         cp platformio.example.ini platformio.ini
+        yarn install
     - name: Build with PlatformIO
       run: platformio run
