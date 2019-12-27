@@ -32,7 +32,8 @@
 /**
  * LedDriver
  * --------------------------
- * Define type and number of chips used. Allow firmware use with multiple types/designs of lights
+ * Define type and number of chips used. Allow firmware use with multiple
+ * types/designs of lights
  */
 #define MY92XX_TYPE MY92XX_MODEL_MY9291
 #define MY92XX_COUNT 1
@@ -55,10 +56,12 @@
 #define WIFI_OUTPUT_POWER 1.0 // 20.5 is the maximum output power
 
 /**
- * Timeout period for the device to keep trying to (re)connect to the configured WiFi 
- * Access Point. If this timeout period has been reached, the device will assume a WiFi
+ * Timeout period for the device to keep trying to (re)connect to the configured
+WiFi
+ * Access Point. If this timeout period has been reached, the device will assume
+a WiFi
  * connection can not be made and will switch to Soft AP mode.
-#define WIFI_RECONNECT_TIMEOUT 60 // Timeout (in seconds)  
+#define WIFI_RECONNECT_TIMEOUT 60 // Timeout (in seconds)
 
 /**
  * MQTT
@@ -88,9 +91,9 @@
 
 /**
  * Home Assistant 0.84 removed the "mqtt_json" platform type, replacing it with
- * a combination of "platform: mqtt" and "schema: json". If you are using version 0.84
- * or older of Home Assistant and using the MQTT discovery feature, set the following
- * directive to "true" 
+ * a combination of "platform: mqtt" and "schema: json". If you are using
+ * version 0.84 or older of Home Assistant and using the MQTT discovery feature,
+ * set the following directive to "true"
  */
 #define MQTT_HOMEASSISTANT_DISCOVERY_PRE_0_84 false
 
