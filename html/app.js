@@ -385,7 +385,7 @@ function esConnect() {
                 if (p === 100 && !hS) {
                     hS = true;
                     let f = document.createElement('p');
-                    f.innerHTML = "Completed successfully! Please wait for your Smart Light to be restarted.";
+                    f.innerHTML = "Completed successfully! Please wait for your AiLight Smart Light to be restarted.";
                     pb.parentNode.appendChild(f);
                     reload(false);
                 }
@@ -424,7 +424,7 @@ function reload(show) {
  * @return bool true when user approves, false otherwise
  */
 function restart() {
-    let response = window.confirm("Are you sure you want to restart your Smart Light?");
+    let response = window.confirm("Are you sure you want to restart your AiLight Smart Light?");
     if (response === false) {
         return false;
     }
@@ -443,7 +443,8 @@ function restart() {
  * @return bool true when user approves, false otherwise
  */
 function reset() {
-    let response = window.confirm("You are about to reset your Smart Light to the factory defaults!\n Are you sure you" +
+    let response = window.confirm("You are about to reset your AiLight Smart Light to the factory defaults!\n Are you" +
+        " sure you" +
         " want to reset?");
     if (response === false) {
         return false;
