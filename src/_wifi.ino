@@ -1,10 +1,10 @@
 /**
- * Ai-Thinker RGBW Light Firmware - WiFi Module
+ * AiLight Firmware - WiFi Module
  *
  * The WiFi module holds all the code to manage all functions for setting up the
  * WiFi connection.
  *
- * This file is part of the Ai-Thinker RGBW Light Firmware.
+ * This file is part of the AiLight Firmware.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *

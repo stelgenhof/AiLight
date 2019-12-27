@@ -1,7 +1,7 @@
 /**
- * Ai-Thinker RGBW Light Firmware - Configuration
+ * AiLight Firmware - Configuration
  *
- * This file is part of the Ai-Thinker RGBW Light Firmware.
+ * This file is part of the AiLight Firmware.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
@@ -13,8 +13,8 @@
 /**
  * Light
  * ---------------------------
- * Use the below variables to set the default behaviour of your Ai-Thinker RGBW
- * Light. These will be used as the factory defaults of your device.
+ * Use the below variables to set the default behaviour of your Smart Light.
+ * These will be used as the factory defaults of your device.
  */
 #define LIGHT_STATE false
 #define LIGHT_BRIGHTNESS 0
@@ -47,27 +47,26 @@
 /**
  * WiFi
  * ---------------------------
- * Use the below variables to set the default WiFi settings of your Ai-Thinker
- * RGBW Light. These will be used as the factory defaults of your device. If no
- * SSID/PSK are provided, your Ai-Thinker RGBW light will start in AP mode.
+ * Use the below variables to set the default WiFi settings of your Smart Light.
+ * These will be used as the factory defaults of your device. If no
+ * SSID/PSK are provided, your Smart Light will start in AP mode.
  */
 #define WIFI_SSID ""
 #define WIFI_PSK ""
 #define WIFI_OUTPUT_POWER 1.0 // 20.5 is the maximum output power
 
 /**
- * Timeout period for the device to keep trying to (re)connect to the configured
-WiFi
- * Access Point. If this timeout period has been reached, the device will assume
-a WiFi
- * connection can not be made and will switch to Soft AP mode.
+ * Timeout period for the device to keep trying to (re)connect to the
+ * configured WiFi Access Point. If this timeout period has been reached, the
+ * device will assume a WiFi connection can not be made and will switch to
+ * Soft AP mode.
 #define WIFI_RECONNECT_TIMEOUT 60 // Timeout (in seconds)
 
 /**
  * MQTT
  * ---------------------------
- * Use the below variables to set the default MQTT settings of your Ai-Thinker
- * RGBW Light. These will be used as the factory defaults of your device and
+ * Use the below variables to set the default MQTT settings of your Smart Light.
+ * These will be used as the factory defaults of your device and
  * making the connection to your Home Assistant instance. Most of these settings
  * can also be changed in the UI environment.
  */
@@ -100,7 +99,7 @@ a WiFi
 /**
  * HTTP
  * ---------------------------
- * Use the below variables to set the default HTTP settings of your Ai-Thinker
- * RGBW Light. These will be used as the factory defaults of your device.
+ * Use the below variables to set the default HTTP settings of your Smart Light.
+ * These will be used as the factory defaults of your device.
  */
 #define REST_API_ENABLED false

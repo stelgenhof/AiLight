@@ -1,7 +1,7 @@
 /**
- * Ai-Thinker RGBW Light Firmware
+ * AiLight Firmware
  *
- * This file is part of the Ai-Thinker RGBW Light Firmware.
+ * This file is part of the AiLight Firmware.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *

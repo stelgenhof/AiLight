@@ -13,6 +13,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 . [\#50](https://github.com/stelgenhof/AiLight/pull/50) ([Nick Wolff](https://github.com/darkfiberiru))
 
 ### Changed
+- Changed all references to the Ai-Thinker brand name now that the AiLight Firmware als supports other types (based on the MY9231 LED driver).
+- Added the LED driver type to the Web UI and serial output information.
 - Locking ESP Libraries to v1.2.2 as the 1.2.3 version of the WebServer package fails to build. 
 - Changed data type of the count parameter to uint8_t as it is an integer.
 - The example PlatformIO configuration has been changed due to the release of PlatformIO v4.0. If you use PlatformIO make sure the configuration entry 'env_default' is renamed to 'default_envs' in your platformio.ini file!
@@ -28,6 +30,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 - Added link type (MIME type) for the HTML stylesheet to avoid potential misinterpretations.
 
 ### Removed
+- Removed the 'manufacturer' information from the Web UI now that the AiLight Firmware als supports other types (based on the MY9231 LED driver).
 - LiteServer for testing the UI as it was hardly used.
 
 
@@ -124,7 +127,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## [0.3.0] - 2017-05-09
 
 ### Added
-- MQTT Last Will and Testament, giving the MQTT broker and other clients option to know if the Ai-Thinker RGBW light has been disconnected gracefully or not.
+- MQTT Last Will and Testament, giving the MQTT broker and other clients option to know if the Smart light has been disconnected gracefully or not.
 - Gamma Correction: makes the colours of the LED light to appear closer to what our eyes perceive. This allows for better colour representations.
 - favico added to HTML UI
 - Added model name to distinguish naming between AiLight and Ai-Thinker light bulb manufacturer/model name.

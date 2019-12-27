@@ -1,10 +1,10 @@
 /**
- * Ai-Thinker RGBW Light Firmware - MQTT Module
+ * AiLight Firmware - MQTT Module
  *
  * The MQTT module holds all the code to manage all functions for communicating
  * with the MQTT broker.
  *
- * This file is part of the Ai-Thinker RGBW Light Firmware.
+ * This file is part of the AiLight Firmware.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *

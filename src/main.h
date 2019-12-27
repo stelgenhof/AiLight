@@ -1,7 +1,7 @@
 /**
- * Ai-Thinker RGBW Light Firmware
+ * AiLight Firmware
  *
- * This file is part of the Ai-Thinker RGBW Light Firmware.
+ * This file is part of the AiLight Firmware.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
@@ -11,10 +11,9 @@
  */
 
 #define APP_NAME "AiLight"
-#define APP_VERSION "0.6.1-dev"
+#define APP_VERSION "0.7.0-dev"
 #define APP_AUTHOR "me@sachatelgenhof.com"
 
-#define DEVICE_MANUFACTURER "Ai-Thinker"
 #define DEVICE_MODEL "RGBW Light"
 
 // Power Up Modes
@@ -177,6 +176,8 @@ struct config_t {
 } cfg;
 
 AiLightClass *AiLight;
+
+const char *led_driver_table[2] = {"MY9291", "MY9231"};
 
 // Globals for flash
 bool flash = false;

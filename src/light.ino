@@ -1,10 +1,10 @@
 /**
- * Ai-Thinker RGBW Light Firmware - Light Module
+ * AiLight Firmware - Light Module
  *
  * The Light module contains all the code to process incoming commands and set
  * the light attributes (RGBW, brightness, etc.) accordingly.
  *
- * This file is part of the Ai-Thinker RGBW Light Firmware.
+ * This file is part of the AiLight Firmware.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
@@ -285,8 +285,7 @@ void createAboutJSON(JsonObject &object) {
   object["memory"] = ESP.getFlashChipSize();
   object["free_heap"] = ESP.getFreeHeap();
   object["cpu_frequency"] = ESP.getCpuFreqMHz();
-  object["manufacturer"] = DEVICE_MANUFACTURER;
-  object["model"] = DEVICE_MODEL;
+  object["led_driver"] = led_driver_table[cfg.chip_type];
   object["device_ip"] = (WiFi.getMode() == WIFI_AP) ? WiFi.softAPIP().toString()
                                                     : WiFi.localIP().toString();
   object["mac"] = WiFi.macAddress();
