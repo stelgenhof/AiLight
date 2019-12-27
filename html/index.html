@@ -421,12 +421,12 @@
     <section id="page_about">
 
         <div class="has-text-centered">
-            <h1 class="title is-4">
+            <h1 class="title is-3-mobile">
                 <strong>
                     <span data-s="app_name"></span>
                 </strong>
             </h1>
-            <h2 class="subtitle is-6">Version
+            <h2 class="subtitle is-5-mobile">Version
                 <span data-s="app_version"></span>
             </h2>
         </div>
@@ -438,6 +438,29 @@
                 <td>
                     <span data-s="hostname"></span>
                 </td>
+            </tr>
+            <tr>
+                <th>LED Driver</th>
+                <td>
+                    <span data-s="led_driver"></span>
+                </td>
+            </tr>
+            <tr>
+                <th>Firmware Build</th>
+                <td>
+                    <span data-s="build_date"></span>&nbsp;
+                    <span data-s="build_time"></span>
+                </td>
+            </tr>
+            <tr>
+                <th>ESP Core Version</th>
+                <td>
+                    <span data-s="core"></span>
+                </td>
+            </tr>
+            <tr>
+                <th></th>
+                <td></td>
             </tr>
             <tr>
                 <th>WiFi IP Address</th>
@@ -452,22 +475,14 @@
                 </td>
             </tr>
             <tr>
-                <th>LED Driver</th>
+                <th>MAC Address</th>
                 <td>
-                    <span data-s="led_driver"></span>
+                    <span data-s="mac"></span>
                 </td>
             </tr>
-
             <tr>
                 <th></th>
                 <td></td>
-            </tr>
-            <tr>
-                <th>Firmware Build</th>
-                <td>
-                    <span data-s="build_date"></span>&nbsp;
-                    <span data-s="build_time"></span>
-                </td>
             </tr>
             <tr>
                 <th>Processor</th>
@@ -485,18 +500,6 @@
                 <th>Free Memory</th>
                 <td>
                     <span data-s="free_heap"></span> bytes
-                </td>
-            </tr>
-            <tr>
-                <th>MAC Address</th>
-                <td>
-                    <span data-s="mac"></span>
-                </td>
-            </tr>
-            <tr>
-                <th>ESP Core Version</th>
-                <td>
-                    <span data-s="core"></span>
                 </td>
             </tr>
             </tbody>
