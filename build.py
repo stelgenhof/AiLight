@@ -8,7 +8,7 @@
 #
 # Created by Sacha Telgenhof <me at sachatelgenhof dot com>
 # (https://www.sachatelgenhof.nl)
-# Copyright (c) 2016 - 2019 Sacha Telgenhof
+# Copyright (c) 2016 - 2020 Sacha Telgenhof
 
 Import("env")
 
