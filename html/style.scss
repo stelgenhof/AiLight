@@ -42,8 +42,8 @@
 }
 
 i {
-  font-family: 'ailight' !important;
-  speak-as: none;
+  font-family: 'ailight', sans-serif !important;
+  speak-as: normal;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
@@ -58,12 +58,12 @@ i {
 .icon-eye {
   font-size: 1.5rem;
   height: 2.75rem;
-}
 
-.icon-eye:before {
-  content: "\e900";
-  color: $grey-lighter;
-  vertical-align: -webkit-baseline-middle;
+  &:before {
+    content: "\e900";
+    color: $grey-lighter;
+    vertical-align: -webkit-baseline-middle;
+  }
 }
 
 .icon-arrow-loop:before {
@@ -225,10 +225,6 @@ i {
 input[type=range].slider {
   $radius: 290486px;
   --height: 8px;
-
-  &.is-fullwidth {
-    width: 100%;
-  }
 
   border: none;
   border-radius: $radius;

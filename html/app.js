@@ -24,7 +24,6 @@ const K_W = "white_value";
 const K_GM = "gamma";
 const K_HD = "ha_discovery";
 const K_RA = "rest_api";
-const K_PM = "powerup_mode";
 
 const S_ON = 'ON';
 const S_OFF = 'OFF';
@@ -287,7 +286,7 @@ function processData(data) {
 
         // Set state
         if (key === K_S) {
-            stSwitch.setState((data[key] === S_OFF) ? false : true);
+            stSwitch.setState((data[key] !== S_OFF));
         }
 
         if (key === K_BR) {
