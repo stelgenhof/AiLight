@@ -141,6 +141,10 @@ void onMQTTMessage(char *topic, char *payload,
  */
 void mqttConnect() {
 
+  if (!WiFi.isConnected()) {
+    return;
+  }
+
   // Do not make a connection if already connected or trying to
   if (mqtt.connected() || _mqtt_connecting) {
     return;
@@ -178,7 +182,5 @@ void setupMQTT() {
   mqtt.setWill(cfg.mqtt_lwt_topic, 2, MQTT_RETAIN, MQTT_STATUS_OFFLINE);
   mqtt.setCredentials(cfg.mqtt_user, cfg.mqtt_password);
 
-  if (WiFi.isConnected()) {
-    mqttReconnectTimer.attach_ms(MQTT_RECONNECT_TIME, mqttConnect);
-  }
+  mqttReconnectTimer.attach_ms(MQTT_RECONNECT_TIME, mqttConnect);
 }

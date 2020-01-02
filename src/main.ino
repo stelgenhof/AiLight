@@ -126,8 +126,8 @@ void setup() {
 #endif
   AiLight = new AiLightClass(cfg.chip_type, cfg.chip_count);
   setupLight();
-  setupWiFi();
   setupMQTT();
+  setupWiFi();
   setupOTA();
   setupWeb();
 
