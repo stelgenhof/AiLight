@@ -81,7 +81,7 @@ Color AiLightClass::colorTemperature2RGB(uint16_t temperature) {
   _color_temp = temperature; // Save colour temperature setting
   Color ctColor;
 
-  temperature = (temperature == 0) ? 1 : temperature; // Avoid division by zero
+  temperature = temperature == 0 ? 1 : temperature; // Avoid division by zero
 
   // Convert from mired value to relative Kelvin temperature. The temperature
   // must fall between 1000 and 40000 degrees. All calculations require
@@ -91,25 +91,25 @@ Color AiLightClass::colorTemperature2RGB(uint16_t temperature) {
   // Perform conversions from colour temperature to RGB values
 
   // Red
-  float red = (tmpKelvin <= 66)
-                  ? MY92XX_LEVEL_MAX
-                  : 329.698727446 * pow((tmpKelvin - 60), -0.1332047592);
+  float red = tmpKelvin <= 66
+              ? MY92XX_LEVEL_MAX
+              : 329.698727446 * pow((tmpKelvin - 60), -0.1332047592);
 
   ctColor.red = constrain(red, 0, MY92XX_LEVEL_MAX); // Force boundaries
 
   // Green
-  float green = (tmpKelvin <= 66)
-                    ? 99.4708025861 * log(tmpKelvin) - 161.1195681661
-                    : 288.1221695283 * pow(tmpKelvin, -0.0755148492);
+  float green = tmpKelvin <= 66
+                ? 99.4708025861 * log(tmpKelvin) - 161.1195681661
+                : 288.1221695283 * pow(tmpKelvin, -0.0755148492);
 
   ctColor.green = constrain(green, 0, MY92XX_LEVEL_MAX); // Force boundaries
 
   // Blue
-  float blue = (tmpKelvin >= 66)
-                   ? MY92XX_LEVEL_MAX
-                   : ((tmpKelvin <= 19) ? 0
-                                        : 138.5177312231 * log(tmpKelvin - 10) -
-                                              305.0447927307);
+  float blue = tmpKelvin >= 66
+               ? MY92XX_LEVEL_MAX
+               : tmpKelvin <= 19 ? 0
+                                 : 138.5177312231 * log(tmpKelvin - 10) -
+                                   305.0447927307;
 
   ctColor.blue = constrain(blue, 0, MY92XX_LEVEL_MAX); // Force boundaries
 
