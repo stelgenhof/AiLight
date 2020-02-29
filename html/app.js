@@ -211,7 +211,7 @@ function sendRGB() {
  *
  * @param str text string to be parsed
  *
- * @return mixed JSON structure when succesful; false when not
+ * @return mixed JSON structure when successful; false when not
  */
 function getJSON(str) {
     try {
@@ -420,7 +420,7 @@ function reload(show) {
 /**
  * Handler for the Restart button
  *
- * @return bool true when user approves, false otherwise
+ * @return boolean true when user approves, false otherwise
  */
 function restart() {
     let response = window.confirm("Are you sure you want to restart your AiLight Smart Light?");
@@ -439,7 +439,7 @@ function restart() {
 /**
  * Handler for the Reset button
  *
- * @return bool true when user approves, false otherwise
+ * @return boolean true when user approves, false otherwise
  */
 function reset() {
     let response = window.confirm("You are about to reset your AiLight Smart Light to the factory defaults!\n Are you" +
