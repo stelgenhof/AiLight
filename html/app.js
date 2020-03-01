@@ -413,7 +413,7 @@ function reload(show) {
     }
 
     setTimeout(function () {
-        location.reload(true);
+        location.reload();
     }, WAIT);
 }
 
