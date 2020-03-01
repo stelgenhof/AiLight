@@ -231,6 +231,11 @@ function getJSON(str) {
 function processData(data) {
     for (let key in data) {
 
+        if (!data.hasOwnProperty(key)) {
+            console.log('[WEBSOCKET] Unable to process message');
+            return;
+        }
+
         // Process Device information
         if (key === 'd') {
             document.title = data.d.app_name;
@@ -240,7 +245,9 @@ function processData(data) {
                 // Bind to span elements
                 let d = document.querySelectorAll("span[data-s='" + dev + "']");
                 [].forEach.call(d, function (item) {
-                    item.innerHTML = data[key][dev];
+                    if (data[key].hasOwnProperty(dev)) {
+                        item.innerHTML = data[key][dev];
+                    }
                 });
             }
         }
@@ -254,31 +261,37 @@ function processData(data) {
                 // Bind to span elements
                 let a = document.getElementById("pagescontent").querySelectorAll("span[data-s='" + s + "']");
                 [].forEach.call(a, function (item) {
-                    item.innerHTML = data[key][s];
+                    if (data[key].hasOwnProperty(s)) {
+                        item.innerHTML = data[key][s];
+                    }
                 });
 
                 // Bind to specific DOM elements
-                if (document.getElementById(s) !== null) {
+                if (data[key].hasOwnProperty(s) && document.getElementById(s) !== null) {
                     document.getElementById(s).value = data[key][s];
                 }
 
                 // Set HA Discovery switch and prefix field
                 if (s === "switch_ha_discovery") {
-                    hdSwitch.setState(data[key][s]);
+                    if (data[key].hasOwnProperty(s)) {
+                        hdSwitch.setState(data[key][s]);
 
-                    let ad = document.getElementById('mqtt_ha_discovery');
-                    if (!data[key][s]) {
-                        ad.style.display = "none";
+                        let ad = document.getElementById('mqtt_ha_discovery');
+                        if (!data[key][s]) {
+                            ad.style.display = "none";
+                        }
                     }
                 }
 
                 // Set REST API switch and API Key field
                 if (s === "switch_rest_api") {
-                    raSwitch.setState(data[key][s]);
+                    if (data[key].hasOwnProperty(s)) {
+                        raSwitch.setState(data[key][s]);
 
-                    let ap = document.getElementById('rest_api_key');
-                    if (!data[key][s]) {
-                        ap.style.display = "none";
+                        let ap = document.getElementById('rest_api_key');
+                        if (!data[key][s]) {
+                            ap.style.display = "none";
+                        }
                     }
                 }
             }
@@ -597,18 +610,18 @@ function initTabs() {
 function displayPage() {
     const CLASS_ACTIVE = "is-active";
     const CURRENT_ATTRIBUTE = "data-current";
-    const ID_TABPAGE = "page_";
+    const ID_TAB_PAGE = "page_";
     let current = this.parentNode.getAttribute(CURRENT_ATTRIBUTE);
 
     // Remove class of active tab and hide contents
     document.getElementById("tab_" + current).classList.remove(CLASS_ACTIVE);
-    document.getElementById(ID_TABPAGE + current).style.display = "none";
+    document.getElementById(ID_TAB_PAGE + current).style.display = "none";
 
     // Add class to new active tab and show contents
     let id = this.id.split("_")[1];
 
     this.classList.add(CLASS_ACTIVE);
-    document.getElementById(ID_TABPAGE + id).style.display = "block";
+    document.getElementById(ID_TAB_PAGE + id).style.display = "block";
     this.parentNode.setAttribute(CURRENT_ATTRIBUTE, id);
 }
 

@@ -99,7 +99,7 @@ function header(done) {
     ws.write('#define html_gz_len ' + data.length + '\n');
     ws.write('const uint8_t html_gz[] PROGMEM = {');
 
-    for (i = 0; i < data.length; i++) {
+    for (let i = 0; i < data.length; i++) {
         if (i % 1000 === 0) ws.write('\n');
         ws.write('0x' + ('00' + data[i].toString(16)).slice(-2));
         if (i < data.length - 1) ws.write(',');
