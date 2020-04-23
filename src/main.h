@@ -70,7 +70,7 @@ extern "C" {
 
 #define EEPROM_START_ADDRESS 0
 #define INIT_HASH 0x5F
-static const int BUFFER_SIZE = JSON_OBJECT_SIZE(10);
+static const int BUFFER_SIZE = JSON_OBJECT_SIZE(13);
 
 // Key names as used internally and in the WebUI
 #define KEY_SETTINGS "s"
@@ -82,6 +82,7 @@ static const int BUFFER_SIZE = JSON_OBJECT_SIZE(10);
 #define KEY_COLORTEMP "color_temp"
 #define KEY_FLASH "flash"
 #define KEY_COLOR "color"
+#define KEY_COLOR_ARRAY "color_array"
 #define KEY_COLOR_R "r"
 #define KEY_COLOR_G "g"
 #define KEY_COLOR_B "b"

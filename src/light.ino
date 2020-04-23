@@ -208,6 +208,31 @@ bool processJson(char *message) {
     }
   }
 
+  if (root.containsKey(KEY_COLOR_ARRAY)) {
+
+    // In transition/fade
+    if (transitionTime > 0) {
+      transColor.red = root[KEY_COLOR_ARRAY][0];
+      transColor.green = root[KEY_COLOR_ARRAY][1];
+      transColor.blue = root[KEY_COLOR_ARRAY][2];
+
+      // If light is off, start fading from Zero
+      if (!AiLight->getState()) {
+        AiLight->setColor(0, 0, 0);
+      }
+
+      stepR = calculateStep(AiLight->getColor().red, transColor.red);
+      stepG = calculateStep(AiLight->getColor().green, transColor.green);
+      stepB = calculateStep(AiLight->getColor().blue, transColor.blue);
+
+      stepCount = 0;
+    } else {
+      AiLight->setColor(root[KEY_COLOR_ARRAY][0],
+                        root[KEY_COLOR_ARRAY][1],
+                        root[KEY_COLOR_ARRAY][2]);
+    }
+  }
+
   if (root.containsKey(KEY_WHITE)) {
     // In transition/fade
     if (transitionTime > 0) {
@@ -308,6 +333,11 @@ void createStateJSON(JsonObject &object) {
   color[KEY_COLOR_R] = AiLight->getColor().red;
   color[KEY_COLOR_G] = AiLight->getColor().green;
   color[KEY_COLOR_B] = AiLight->getColor().blue;
+
+  JsonArray &color_array = object.createNestedArray(KEY_COLOR_ARRAY);
+  color_array.add(AiLight->getColor().red);
+  color_array.add(AiLight->getColor().green);
+  color_array.add(AiLight->getColor().blue);
 
   object[KEY_GAMMA_CORRECTION] = AiLight->hasGammaCorrection();
 }
