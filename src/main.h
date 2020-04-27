@@ -36,6 +36,10 @@
 #define MQTT_HOMEASSISTANT_DISCOVERY_PRE_0_84 false
 #endif
 
+#ifndef KEY_COLOR_ARRAY
+#define KEY_COLOR_ARRAY "color_array"
+#endif
+
 #ifndef REST_API_ENABLED
 #define REST_API_ENABLED false
 #endif
@@ -70,7 +74,11 @@ extern "C" {
 
 #define EEPROM_START_ADDRESS 0
 #define INIT_HASH 0x5F
+#ifndef MQTT_OPENHAB_ENABLED
+static const int BUFFER_SIZE = JSON_OBJECT_SIZE(10);
+#else
 static const int BUFFER_SIZE = JSON_OBJECT_SIZE(13);
+#endif
 
 // Key names as used internally and in the WebUI
 #define KEY_SETTINGS "s"
@@ -82,7 +90,6 @@ static const int BUFFER_SIZE = JSON_OBJECT_SIZE(13);
 #define KEY_COLORTEMP "color_temp"
 #define KEY_FLASH "flash"
 #define KEY_COLOR "color"
-#define KEY_COLOR_ARRAY "color_array"
 #define KEY_COLOR_R "r"
 #define KEY_COLOR_G "g"
 #define KEY_COLOR_B "b"

@@ -103,3 +103,12 @@
  * These will be used as the factory defaults of your device.
  */
 #define REST_API_ENABLED false
+
+/**
+ * OpenHAB support
+ * ---------------------------
+ * To enable support for openHAB uncomment MQTT_OPENHAB_SUPPORT
+ * To change the used JSON key modify KEY_COLOR_ARRAY (default: "color_array") 
+ */
+//#define MQTT_OPENHAB_SUPPORT
+//#define KEY_COLOR_ARRAY "color_array"

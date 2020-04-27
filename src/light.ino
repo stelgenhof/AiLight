@@ -208,6 +208,7 @@ bool processJson(char *message) {
     }
   }
 
+#ifdef MQTT_OPENHAB_SUPPORT
   if (root.containsKey(KEY_COLOR_ARRAY)) {
 
     // In transition/fade
@@ -232,6 +233,7 @@ bool processJson(char *message) {
                         root[KEY_COLOR_ARRAY][2]);
     }
   }
+#endif
 
   if (root.containsKey(KEY_WHITE)) {
     // In transition/fade
@@ -334,10 +336,12 @@ void createStateJSON(JsonObject &object) {
   color[KEY_COLOR_G] = AiLight->getColor().green;
   color[KEY_COLOR_B] = AiLight->getColor().blue;
 
+#ifdef MQTT_OPENHAB_SUPPORT
   JsonArray &color_array = object.createNestedArray(KEY_COLOR_ARRAY);
   color_array.add(AiLight->getColor().red);
   color_array.add(AiLight->getColor().green);
   color_array.add(AiLight->getColor().blue);
+#endif
 
   object[KEY_GAMMA_CORRECTION] = AiLight->hasGammaCorrection();
 }
