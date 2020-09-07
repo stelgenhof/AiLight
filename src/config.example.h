@@ -1,20 +1,20 @@
 /**
- * Ai-Thinker RGBW Light Firmware - Configuration
+ * AiLight Firmware - Configuration
  *
- * This file is part of the Ai-Thinker RGBW Light Firmware.
+ * This file is part of the AiLight Firmware.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
  * Created by Sacha Telgenhof <me at sachatelgenhof dot com>
  * (https://www.sachatelgenhof.nl)
- * Copyright (c) 2016 - 2019 Sacha Telgenhof
+ * Copyright (c) 2016 - 2020 Sacha Telgenhof
  */
 
 /**
  * Light
  * ---------------------------
- * Use the below variables to set the default behaviour of your Ai-Thinker RGBW
- * Light. These will be used as the factory defaults of your device.
+ * Use the below variables to set the default behaviour of your Smart Light.
+ * These will be used as the factory defaults of your device.
  */
 #define LIGHT_STATE false
 #define LIGHT_BRIGHTNESS 0
@@ -32,7 +32,8 @@
 /**
  * LedDriver
  * --------------------------
- * Define type and number of chips used. Allow firmware use with multiple types/designs of lights
+ * Define type and number of chips used. Allow firmware use with multiple
+ * types/designs of lights
  */
 #define MY92XX_TYPE MY92XX_MODEL_MY9291
 #define MY92XX_COUNT 1
@@ -46,25 +47,26 @@
 /**
  * WiFi
  * ---------------------------
- * Use the below variables to set the default WiFi settings of your Ai-Thinker
- * RGBW Light. These will be used as the factory defaults of your device. If no
- * SSID/PSK are provided, your Ai-Thinker RGBW light will start in AP mode.
+ * Use the below variables to set the default WiFi settings of your Smart Light.
+ * These will be used as the factory defaults of your device. If no
+ * SSID/PSK are provided, your Smart Light will start in AP mode.
  */
 #define WIFI_SSID ""
 #define WIFI_PSK ""
 #define WIFI_OUTPUT_POWER 1.0 // 20.5 is the maximum output power
 
 /**
- * Timeout period for the device to keep trying to (re)connect to the configured WiFi 
- * Access Point. If this timeout period has been reached, the device will assume a WiFi
- * connection can not be made and will switch to Soft AP mode.
-#define WIFI_RECONNECT_TIMEOUT 60 // Timeout (in seconds)  
+ * Timeout period for the device to keep trying to (re)connect to the
+ * configured WiFi Access Point. If this timeout period has been reached, the
+ * device will assume a WiFi connection can not be made and will switch to
+ * Soft AP mode.
+#define WIFI_RECONNECT_TIMEOUT 60 // Timeout (in seconds)
 
 /**
  * MQTT
  * ---------------------------
- * Use the below variables to set the default MQTT settings of your Ai-Thinker
- * RGBW Light. These will be used as the factory defaults of your device and
+ * Use the below variables to set the default MQTT settings of your Smart Light.
+ * These will be used as the factory defaults of your device and
  * making the connection to your Home Assistant instance. Most of these settings
  * can also be changed in the UI environment.
  */
@@ -88,16 +90,25 @@
 
 /**
  * Home Assistant 0.84 removed the "mqtt_json" platform type, replacing it with
- * a combination of "platform: mqtt" and "schema: json". If you are using version 0.84
- * or older of Home Assistant and using the MQTT discovery feature, set the following
- * directive to "true" 
+ * a combination of "platform: mqtt" and "schema: json". If you are using
+ * version 0.84 or older of Home Assistant and using the MQTT discovery feature,
+ * set the following directive to "true"
  */
 #define MQTT_HOMEASSISTANT_DISCOVERY_PRE_0_84 false
 
 /**
  * HTTP
  * ---------------------------
- * Use the below variables to set the default HTTP settings of your Ai-Thinker
- * RGBW Light. These will be used as the factory defaults of your device.
+ * Use the below variables to set the default HTTP settings of your Smart Light.
+ * These will be used as the factory defaults of your device.
  */
 #define REST_API_ENABLED false
+
+/**
+ * OpenHAB support
+ * ---------------------------
+ * To enable support for openHAB uncomment MQTT_OPENHAB_SUPPORT
+ * To change the used JSON key modify KEY_COLOR_ARRAY (default: "color_array") 
+ */
+//#define MQTT_OPENHAB_SUPPORT
+//#define KEY_COLOR_ARRAY "color_array"

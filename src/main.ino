@@ -1,21 +1,21 @@
 /**
- * Ai-Thinker RGBW Light Firmware
+ * AiLight Firmware
  *
- * This file is part of the Ai-Thinker RGBW Light Firmware.
+ * This file is part of the AiLight Firmware.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
  * Created by Sacha Telgenhof <me at sachatelgenhof dot com>
  * (https://www.sachatelgenhof.nl)
- * Copyright (c) 2016 - 2019 Sacha Telgenhof
+ * Copyright (c) 2016 - 2020 Sacha Telgenhof
  */
 
 #include "main.h"
 
 /**
- * @brief Determines the ID of this Ai-Thinker RGBW Light
+ * @brief Determines the ID of this Smart Light
  *
- * @return the unique identifier of this Ai-Thinker RGBW Light
+ * @return the unique identifier of this Smart RGBW Light
  */
 const char *getDeviceID() {
   char *identifier = new char[30];
@@ -35,8 +35,7 @@ const char *getDeviceID() {
  *
  * @return the (formatted) version of the ESP Core framework
  */
-String getESPCoreVersion()
-{
+String getESPCoreVersion() {
   String version = ESP.getCoreVersion();
 
   version.replace("_", ".");
@@ -45,7 +44,7 @@ String getESPCoreVersion()
 }
 
 /**
- * @brief Loads the factory defaults for this Ai-Thinker RGBW Light
+ * @brief Loads the factory defaults for this Smart Light
  *
  * If you like to change 'your' factory defaults, please change the appropriate
  * settings in your config.h file.
@@ -120,8 +119,9 @@ void setup() {
   DEBUGLOG("Welcome to %s!\n", APP_NAME);
   DEBUGLOG("Firmware Version : %s\n", APP_VERSION);
   DEBUGLOG("Firmware Build   : %s - %s\n", __DATE__, __TIME__);
-  DEBUGLOG("Device Name      : %s\n", cfg.hostname);
   DEBUGLOG("ESP Core Version : %s\n", getESPCoreVersion().c_str());
+  DEBUGLOG("Device Name      : %s\n", cfg.hostname);
+  DEBUGLOG("LED Driver       : %s\n", led_driver_table[cfg.chip_type]);
   DEBUGLOG("\n");
 #endif
   AiLight = new AiLightClass(cfg.chip_type, cfg.chip_count);

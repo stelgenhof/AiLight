@@ -1,0 +1,24 @@
+name: AiLight Build
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python
+      uses: actions/setup-python@v1
+      with:
+        python-version: '3.x'
+    - name: Install PlatformIO
+      run: |
+        python -m pip install --upgrade pip
+        pip install -U platformio   
+    - name: Prepare Build
+      run: |
+        cp src/config.example.h src/config.h
+        cp platformio.example.ini platformio.ini
+        npm install
+    - name: Build with PlatformIO
+      run: platformio run

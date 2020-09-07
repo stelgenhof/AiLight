@@ -1,16 +1,16 @@
 /**
- * Ai-Thinker RGBW Light Firmware - Light Module
+ * AiLight Firmware - Light Module
  *
  * The Light module contains all the code to process incoming commands and set
  * the light attributes (RGBW, brightness, etc.) accordingly.
  *
- * This file is part of the Ai-Thinker RGBW Light Firmware.
+ * This file is part of the AiLight Firmware.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
  * Created by Sacha Telgenhof <me at sachatelgenhof dot com>
  * (https://www.sachatelgenhof.nl)
- * Copyright (c) 2016 - 2019 Sacha Telgenhof
+ * Copyright (c) 2016 - 2020 Sacha Telgenhof
  */
 
 /**
@@ -69,10 +69,6 @@ void deviceMQTTCallback(uint8_t type, const char *topic, const char *payload) {
   // Handling the event of disconnecting from the MQTT broker
   if (type == MQTT_EVENT_DISCONNECT) {
     mqttUnsubscribe(cfg.mqtt_command_topic);
-
-    if (WiFi.isConnected()) {
-      mqttReconnectTimer.once(MQTT_RECONNECT_TIME, mqttConnect);
-    }
   }
 
   // Handling the event a message is received from the MQTT broker
@@ -91,7 +87,7 @@ void deviceMQTTCallback(uint8_t type, const char *topic, const char *payload) {
         return;
       }
 
-      // Store light parameters for persistance
+      // Store light parameters for persistence
       cfg.is_on = AiLight->getState();
       cfg.brightness = AiLight->getBrightness();
       cfg.color_temp = AiLight->getColorTemperature();
@@ -207,10 +203,37 @@ bool processJson(char *message) {
       stepCount = 0;
     } else {
       AiLight->setColor(root[KEY_COLOR][KEY_COLOR_R],
-                       root[KEY_COLOR][KEY_COLOR_G],
-                       root[KEY_COLOR][KEY_COLOR_B]);
+                        root[KEY_COLOR][KEY_COLOR_G],
+                        root[KEY_COLOR][KEY_COLOR_B]);
     }
   }
+
+#ifdef MQTT_OPENHAB_SUPPORT
+  if (root.containsKey(KEY_COLOR_ARRAY)) {
+
+    // In transition/fade
+    if (transitionTime > 0) {
+      transColor.red = root[KEY_COLOR_ARRAY][0];
+      transColor.green = root[KEY_COLOR_ARRAY][1];
+      transColor.blue = root[KEY_COLOR_ARRAY][2];
+
+      // If light is off, start fading from Zero
+      if (!AiLight->getState()) {
+        AiLight->setColor(0, 0, 0);
+      }
+
+      stepR = calculateStep(AiLight->getColor().red, transColor.red);
+      stepG = calculateStep(AiLight->getColor().green, transColor.green);
+      stepB = calculateStep(AiLight->getColor().blue, transColor.blue);
+
+      stepCount = 0;
+    } else {
+      AiLight->setColor(root[KEY_COLOR_ARRAY][0],
+                        root[KEY_COLOR_ARRAY][1],
+                        root[KEY_COLOR_ARRAY][2]);
+    }
+  }
+#endif
 
   if (root.containsKey(KEY_WHITE)) {
     // In transition/fade
@@ -289,8 +312,7 @@ void createAboutJSON(JsonObject &object) {
   object["memory"] = ESP.getFlashChipSize();
   object["free_heap"] = ESP.getFreeHeap();
   object["cpu_frequency"] = ESP.getCpuFreqMHz();
-  object["manufacturer"] = DEVICE_MANUFACTURER;
-  object["model"] = DEVICE_MODEL;
+  object["led_driver"] = led_driver_table[cfg.chip_type];
   object["device_ip"] = (WiFi.getMode() == WIFI_AP) ? WiFi.softAPIP().toString()
                                                     : WiFi.localIP().toString();
   object["mac"] = WiFi.macAddress();
@@ -313,6 +335,13 @@ void createStateJSON(JsonObject &object) {
   color[KEY_COLOR_R] = AiLight->getColor().red;
   color[KEY_COLOR_G] = AiLight->getColor().green;
   color[KEY_COLOR_B] = AiLight->getColor().blue;
+
+#ifdef MQTT_OPENHAB_SUPPORT
+  JsonArray &color_array = object.createNestedArray(KEY_COLOR_ARRAY);
+  color_array.add(AiLight->getColor().red);
+  color_array.add(AiLight->getColor().green);
+  color_array.add(AiLight->getColor().blue);
+#endif
 
   object[KEY_GAMMA_CORRECTION] = AiLight->hasGammaCorrection();
 }
@@ -373,7 +402,8 @@ void loopLight() {
       flash = false;
 
       AiLight->setState(currentState);
-      AiLight->setColor(currentColor.red, currentColor.green, currentColor.blue);
+      AiLight->setColor(currentColor.red, currentColor.green,
+                        currentColor.blue);
       AiLight->setBrightness(currentBrightness);
 
       sendState(); // Notify subscribers again about current state
@@ -394,24 +424,24 @@ void loopLight() {
         // Transition/fade RGB LEDS (if level is different from current)
         if (stepR != 0 || stepG != 0 || stepB != 0) {
           AiLight->setColor(calculateLevel(stepR, AiLight->getColor().red,
-                                          stepCount, transColor.red),
-                           calculateLevel(stepG, AiLight->getColor().green,
-                                          stepCount, transColor.green),
-                           calculateLevel(stepB, AiLight->getColor().blue,
-                                          stepCount, transColor.blue));
+                                           stepCount, transColor.red),
+                            calculateLevel(stepG, AiLight->getColor().green,
+                                           stepCount, transColor.green),
+                            calculateLevel(stepB, AiLight->getColor().blue,
+                                           stepCount, transColor.blue));
         }
 
         // Transition/fade white LEDS (if level is different from current)
         if (stepW != 0) {
           AiLight->setWhite(calculateLevel(stepW, AiLight->getColor().white,
-                                          stepCount, transColor.white));
+                                           stepCount, transColor.white));
         }
 
         // Transition/fade brightness (if level is different from current)
         if (stepBrightness != 0) {
           AiLight->setBrightness(calculateLevel(stepBrightness,
-                                               AiLight->getBrightness(),
-                                               stepCount, transBrightness));
+                                                AiLight->getBrightness(),
+                                                stepCount, transBrightness));
         }
 
         stepCount++;

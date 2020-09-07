@@ -4,13 +4,13 @@
  * AiLight is a simple library to control an AiLight that contains a MY92XX
  * LED driver and encapsulates the MY92XX LED driver made by Xose Pérez
  *
- * This file is part of the Ai-Thinker RGBW Light Firmware.
+ * This file is part of the AiLight Firmware.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
 
  * Created by Sacha Telgenhof <me at sachatelgenhof dot com>
  * (https://www.sachatelgenhof.nl)
- * Copyright (c) 2016 - 2019 Sacha Telgenhof
+ * Copyright (c) 2016 - 2020 Sacha Telgenhof
  */
 
 #ifndef AiLight_h
@@ -19,8 +19,8 @@
 #include <my92xx.h>
 
 // MY92XX settings
-#define MY92XX_MODEL        MY92XX_MODEL_MY9231
-#define MY92XX_CHIPS        2
+#define MY92XX_MODEL MY92XX_MODEL_MY9231
+#define MY92XX_CHIPS 2
 #define MY92XX_DI_PIN 13
 #define MY92XX_DCKI_PIN 15
 #define MY92XX_RED 0
@@ -28,14 +28,12 @@
 #define MY92XX_BLUE 2
 #define MY92XX_WHITE 3
 
-
 // The maximum level used for colour channels and brightness
 #define MY92XX_LEVEL_MAX 255
 
 // Structure for holding the levels of all the colour channels
 
-struct Color
-{
+struct Color {
   uint8_t red;
   uint8_t green;
   uint8_t blue;
@@ -46,31 +44,30 @@ struct Color
 // values. The output values are specified for 8-bit colours with a gamma
 // correction factor of 2.8
 const static uint8_t PROGMEM gamma8[256] = {
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2,
-    2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4,
-    4, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 8, 8,
-    8, 9, 9, 9, 10, 10, 10, 11, 11, 11, 12, 12, 13, 13, 13,
-    14, 14, 15, 15, 16, 16, 17, 17, 18, 18, 19, 19, 20, 20, 21,
-    21, 22, 22, 23, 24, 24, 25, 25, 26, 27, 27, 28, 29, 29, 30,
-    31, 32, 32, 33, 34, 35, 35, 36, 37, 38, 39, 39, 40, 41, 42,
-    43, 44, 45, 46, 47, 48, 49, 50, 50, 51, 52, 54, 55, 56, 57,
-    58, 59, 60, 61, 62, 63, 64, 66, 67, 68, 69, 70, 72, 73, 74,
-    75, 77, 78, 79, 81, 82, 83, 85, 86, 87, 89, 90, 92, 93, 95,
-    96, 98, 99, 101, 102, 104, 105, 107, 109, 110, 112, 114, 115, 117, 119,
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   1,
+    1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2,
+    2,   2,   2,   2,   3,   3,   3,   3,   3,   3,   3,   4,   4,   4,   4,
+    4,   5,   5,   5,   5,   6,   6,   6,   6,   7,   7,   7,   7,   8,   8,
+    8,   9,   9,   9,   10,  10,  10,  11,  11,  11,  12,  12,  13,  13,  13,
+    14,  14,  15,  15,  16,  16,  17,  17,  18,  18,  19,  19,  20,  20,  21,
+    21,  22,  22,  23,  24,  24,  25,  25,  26,  27,  27,  28,  29,  29,  30,
+    31,  32,  32,  33,  34,  35,  35,  36,  37,  38,  39,  39,  40,  41,  42,
+    43,  44,  45,  46,  47,  48,  49,  50,  50,  51,  52,  54,  55,  56,  57,
+    58,  59,  60,  61,  62,  63,  64,  66,  67,  68,  69,  70,  72,  73,  74,
+    75,  77,  78,  79,  81,  82,  83,  85,  86,  87,  89,  90,  92,  93,  95,
+    96,  98,  99,  101, 102, 104, 105, 107, 109, 110, 112, 114, 115, 117, 119,
     120, 122, 124, 126, 127, 129, 131, 133, 135, 137, 138, 140, 142, 144, 146,
     148, 150, 152, 154, 156, 158, 160, 162, 164, 167, 169, 171, 173, 175, 177,
     180, 182, 184, 186, 189, 191, 193, 196, 198, 200, 203, 205, 208, 210, 213,
     215, 218, 220, 223, 225, 228, 231, 233, 236, 239, 241, 244, 247, 249, 252,
     255};
 
-class AiLightClass
-{
+class AiLightClass {
 public:
   AiLightClass();
-  AiLightClass(my92xx_model_t model, unsigned char count);
-  AiLightClass(my92xx_model_t model, unsigned char count, const AiLightClass &obj);
+  AiLightClass(my92xx_model_t model, uint8_t count);
+  AiLightClass(my92xx_model_t model, uint8_t count, const AiLightClass &obj);
   ~AiLightClass(void);
 
   /**
@@ -170,7 +167,8 @@ public:
    * (Conversion is based on the algorithm by Tanner Helland.)
    *
    * @param temperature the desired colour temperature (in mired)
-   * @return Color a color object (RGBW) representing the given colour temperature
+   * @return Color a color object (RGBW) representing the given colour
+   * temperature
    *
    * Sources:
    * http://www.tannerhelland.com/4435/convert-temperature-rgb-algorithm-code/
@@ -205,7 +203,7 @@ public:
   void useGammaCorrection(bool gamma);
 
 private:
-   my92xx *_my92xx; // MY92XX driver handle 
+  my92xx *_my92xx; // MY92XX driver handle
 
   // Current colour levels (RGBW). Initial values are 1/4th of maximum
   Color _color = {MY92XX_LEVEL_MAX >> 2, MY92XX_LEVEL_MAX >> 2,
@@ -215,7 +213,7 @@ private:
   uint8_t _brightness = MY92XX_LEVEL_MAX >> 2;
 
   // Current colour temperature setting. Initial value is equivalent of 2700K
-  uint16_t _colortemp = 370;
+  uint16_t _color_temp = 370;
 
   /**
    * @brief Sets the levels of all colour levels (RGBW) to the MY92XX LED
@@ -230,7 +228,7 @@ private:
   void setRGBW();
 
   // Gamma correction is enabled or disabled
-  bool _gammacorrection = false;
+  bool _gamma_correction = false;
 };
 
 #endif

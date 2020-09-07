@@ -1,7 +1,8 @@
+@charset "utf-8";
 /**
- * Ai-Thinker RGBW Light Firmware - Styling
+ * AiLight Firmware - Styling
  *
- * This file is part of the Ai-Thinker RGBW Light Firmware.
+ * This file is part of the AiLight Firmware.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
@@ -13,10 +14,9 @@
  *
  * Created by Sacha Telgenhof <me at sachatelgenhof dot com>
  * (https://www.sachatelgenhof.nl)
- * Copyright (c) 2016 - 2019 Sacha Telgenhof
+ * Copyright (c) 2016 - 2020 Sacha Telgenhof
  */
 
-@charset "utf-8";
 @import './node_modules/bulma/sass/utilities/_all';
 @import './node_modules/bulma/sass/base/_all';
 @import './node_modules/bulma/sass/elements/box';
@@ -33,6 +33,7 @@
 @import './node_modules/bulma/sass/components/modal';
 @import './node_modules/bulma/sass/grid/columns';
 @import './node_modules/bulma/sass/layout/_all';
+
 @font-face {
   font-family: 'ailight';
   src: url('ailight.ttf?vhsro1') format('truetype'), url('ailight.woff?vhsro1') format('woff');
@@ -41,8 +42,8 @@
 }
 
 i {
-  font-family: 'ailight' !important;
-  speak-as: none;
+  font-family: 'ailight', sans-serif !important;
+  speak-as: normal;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
@@ -57,12 +58,12 @@ i {
 .icon-eye {
   font-size: 1.5rem;
   height: 2.75rem;
-}
 
-.icon-eye:before {
-  content: "\e900";
-  color: $grey-lighter;
-  vertical-align: -webkit-baseline-middle;
+  &:before {
+    content: "\e900";
+    color: $grey-lighter;
+    vertical-align: -webkit-baseline-middle;
+  }
 }
 
 .icon-arrow-loop:before {
@@ -92,16 +93,19 @@ i {
   p {
     margin-bottom: 2rem;
   }
+
   .table {
     tr {
       &:hover {
         background: none;
       }
     }
+
     th {
       text-align: right;
       border: none;
     }
+
     td {
       vertical-align: middle;
       border: none;
@@ -113,16 +117,19 @@ i {
   div:first-child {
     margin-bottom: 1rem;
   }
+
   .table {
     tr {
       &:hover {
         background: none;
       }
     }
+
     th {
       text-align: right;
       border: none;
     }
+
     td {
       vertical-align: middle;
       border: none;
@@ -141,6 +148,7 @@ i {
 // Switch Component
 .switch {
   --height: 22px;
+
   input {
     opacity: 0;
     display: inline-block;
@@ -150,6 +158,7 @@ i {
     z-index: 1;
     cursor: pointer;
   }
+
   appearance: none;
   position: relative;
   outline: 0;
@@ -162,6 +171,7 @@ i {
   box-sizing: border-box;
   display: inline-block;
   -webkit-tap-highlight-color: transparent;
+
   &:after,
   &:before {
     content: " ";
@@ -172,25 +182,32 @@ i {
     border-radius: calc((var(--height) - 2px) / 2);
     transition: 0.233s;
   }
+
   &:before {
     width: calc(1.625 * var(--height) - 2px);
     background-color: $grey-lighter;
   }
+
   &:after {
     width: calc(var(--height) - 2px);
     background-color: #FFF;
     box-shadow: 0 2px 3px rgba(17, 17, 17, 0.1);
   }
+
   &.checked {
     border-color: $text;
     background-color: $text;
+
     &:before {
       transform: scale(0);
     }
+
     &:after {
       transform: translateX(calc(0.625 * var(--height)));
     }
-  } // Colors
+  }
+
+  // Colors
   @each $name,
   $pair in ("primary": ($primary,
   $primary-invert)) {
@@ -208,9 +225,7 @@ i {
 input[type=range].slider {
   $radius: 290486px;
   --height: 8px;
-  &.is-fullwidth {
-    width: 100%;
-  }
+
   border: none;
   border-radius: $radius;
   height: var(--height);
@@ -220,18 +235,23 @@ input[type=range].slider {
   outline: none;
   background: $border;
   -webkit-tap-highlight-color: transparent;
+
   &:focus {
     outline: none;
-  } // http://stackoverflow.com/questions/18794026/remove-dotted-outline-from-range-input-element-in-firefox
+  }
+
+  // http://stackoverflow.com/questions/18794026/remove-dotted-outline-from-range-input-element-in-firefox
   &::-moz-focus-outer {
     border: none;
   }
+
   &,
   &::-webkit-slider-runnable-track,
   &::-webkit-slider-thumb {
     appearance: none;
     -webkit-appearance: none;
   }
+
   @mixin thumb-base() {
     border-radius: 50%;
     height: calc(var(--height) * 2.33);
@@ -259,28 +279,36 @@ input[type=range].slider {
     transform: translateZ(0);
     transition: (0.233s / 2);
   }
+
   &::-webkit-slider-thumb {
     @include thumb-base();
+
     &:active {
       @include thumb-base-active();
     }
   }
+
   &::-webkit-slider-runnable-track {
     @include track();
   }
+
   &::-moz-range-thumb {
     @include thumb-base();
+
     &:active {
       @include thumb-base-active();
     }
   }
+
   &::-moz-range-progress:focus {
     outline: 0;
     border: 0;
   }
+
   &::-moz-range-track {
     background: transparent;
   }
+
   &::-moz-range-progress {
     display: flex;
     align-items: center;
@@ -289,42 +317,53 @@ input[type=range].slider {
     border-radius: $radius;
     background-color: $text;
   }
+
   &::-ms-thumb {
     @include thumb-base();
+
     &:active {
       @include thumb-base-active();
     }
   }
+
   &::-ms-tooltip {
     display: none;
-  } // Colors
+  }
+
+  // Colors
   @each $name,
   $pair in ("primary": ($primary,
   $primary-invert),
-  "info": ($info,
-  $info-invert),
-  "success": ($success,
-  $success-invert),
-  "danger": ($danger,
-  $danger-invert)) {
+          "info": ($info,
+          $info-invert),
+          "success": ($success,
+          $success-invert),
+          "danger": ($danger,
+          $danger-invert)) {
     $color: nth($pair, 1);
     &.is-#{$name} {
       &::-webkit-slider-thumb {
         border-color: $color;
       }
+
       &::-webkit-slider-runnable-track {
         --track-background: linear-gradient(to right, transparent var(--low), $color calc(0%), $color var(--high), transparent calc(0%)) no-repeat 0 100%;
         background: var(--track-background);
-      } // http://www.quirksmode.org/blog/archives/2015/11/styling_and_scr.html
+      }
+
+      // http://www.quirksmode.org/blog/archives/2015/11/styling_and_scr.html
       &::-moz-range-thumb {
         border-color: $color;
       }
+
       &::-moz-range-progress {
         background-color: $color;
       }
+
       &::-ms-thumb {
         border-color: $color;
       }
+
       &::-ms-fill-lower {
         background-color: $color;
       }

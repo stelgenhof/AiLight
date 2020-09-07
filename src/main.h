@@ -1,20 +1,19 @@
 /**
- * Ai-Thinker RGBW Light Firmware
+ * AiLight Firmware
  *
- * This file is part of the Ai-Thinker RGBW Light Firmware.
+ * This file is part of the AiLight Firmware.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
  * Created by Sacha Telgenhof <me at sachatelgenhof dot com>
  * (https://www.sachatelgenhof.nl)
- * Copyright (c) 2016 - 2019 Sacha Telgenhof
+ * Copyright (c) 2016 - 2020 Sacha Telgenhof
  */
 
 #define APP_NAME "AiLight"
-#define APP_VERSION "0.6.1-dev"
+#define APP_VERSION "0.7.0-dev"
 #define APP_AUTHOR "me@sachatelgenhof.com"
 
-#define DEVICE_MANUFACTURER "Ai-Thinker"
 #define DEVICE_MODEL "RGBW Light"
 
 // Power Up Modes
@@ -35,6 +34,10 @@
 
 #ifndef MQTT_HOMEASSISTANT_DISCOVERY_PRE_0_84
 #define MQTT_HOMEASSISTANT_DISCOVERY_PRE_0_84 false
+#endif
+
+#ifndef KEY_COLOR_ARRAY
+#define KEY_COLOR_ARRAY "color_array"
 #endif
 
 #ifndef REST_API_ENABLED
@@ -71,7 +74,11 @@ extern "C" {
 
 #define EEPROM_START_ADDRESS 0
 #define INIT_HASH 0x5F
+#ifndef MQTT_OPENHAB_ENABLED
 static const int BUFFER_SIZE = JSON_OBJECT_SIZE(10);
+#else
+static const int BUFFER_SIZE = JSON_OBJECT_SIZE(13);
+#endif
 
 // Key names as used internally and in the WebUI
 #define KEY_SETTINGS "s"
@@ -163,20 +170,24 @@ struct config_t {
   char mqtt_password[64];     // Password used for connecting to the MQTT Broker
   char mqtt_state_topic[128]; // MQTT Topic for publishing the state
   char mqtt_command_topic[128]; // MQTT Topic for receiving commands
-  char mqtt_lwt_topic[128]; // MQTT Topic for publising Last Will and Testament
-  bool gamma;               // Gamma Correction enabled or not
+  char mqtt_lwt_topic[128];     // MQTT Topic for publishing Last Will and
+  // Testament
+  bool gamma;                 // Gamma Correction enabled or not
   bool mqtt_ha_use_discovery; // Home Assistant MQTT discovery enabled or not
-  bool mqtt_ha_is_discovered; // Has this device already been discovered or not
+  bool mqtt_ha_is_discovered; // Has this device already been discovered or
+  // not
   char mqtt_ha_disc_prefix[32]; // MQTT Discovery prefix for Home Assistant
   bool mqtt_ha_use_legacy_discovery; // For HA <= 0.84, use "platform: mqtt_json" for discovery
   bool api;                     // REST API enabled or not
   char api_key[32];             // API Key
   uint8_t powerup_mode;         // Power Up Mode
-  my92xx_model_t chip_type;          // Device Type
-  unsigned char chip_count;
+  my92xx_model_t chip_type;     // Device Type
+  uint8_t chip_count;
 } cfg;
 
 AiLightClass *AiLight;
+
+const char *led_driver_table[2] = {"MY9291", "MY9231"};
 
 // Globals for flash
 bool flash = false;
@@ -199,6 +210,9 @@ int stepR, stepG, stepB, stepW, stepBrightness = 0;
 uint16_t stepCount = 0;
 Color transColor;
 uint8_t transBrightness = 0;
+
+// Globals for MQTT
+bool _mqtt_connecting = false;
 
 #ifdef DEBUG
 #define SerialPrint(format, ...)                                               \

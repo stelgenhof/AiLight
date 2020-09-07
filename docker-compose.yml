@@ -1,0 +1,10 @@
+version: '3.7'
+
+services:
+  cppcheck:
+    image: neszt/cppcheck-docker
+    volumes:
+      - .:/src
+    working_dir: /src
+    stdin_open: true
+    tty: true

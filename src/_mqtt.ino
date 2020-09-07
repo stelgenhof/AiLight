@@ -1,16 +1,16 @@
 /**
- * Ai-Thinker RGBW Light Firmware - MQTT Module
+ * AiLight Firmware - MQTT Module
  *
  * The MQTT module holds all the code to manage all functions for communicating
  * with the MQTT broker.
  *
- * This file is part of the Ai-Thinker RGBW Light Firmware.
+ * This file is part of the AiLight Firmware.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
  * Created by Sacha Telgenhof <me at sachatelgenhof dot com>
  * (https://www.sachatelgenhof.nl)
- * Copyright (c) 2016 - 2019 Sacha Telgenhof
+ * Copyright (c) 2016 - 2020 Sacha Telgenhof
  */
 
 /**
@@ -21,7 +21,7 @@
  */
 void mqttPublish(const char *topic, const char *message) {
   // Don't do anything if we are not connected to the MQTT broker
-  if (!mqtt.connected()) {
+  if (!mqtt.connected() || _mqtt_connecting) {
     return;
   }
 
@@ -40,7 +40,7 @@ void mqttPublish(const char *topic, const char *message) {
  */
 void mqttSubscribe(const char *topic, uint8_t qos = MQTT_QOS_LEVEL) {
   // Don't do anything if we are not connected to the MQTT broker
-  if (!mqtt.connected()) {
+  if (!mqtt.connected() || _mqtt_connecting) {
     return;
   }
 
@@ -58,7 +58,7 @@ void mqttSubscribe(const char *topic, uint8_t qos = MQTT_QOS_LEVEL) {
  */
 void mqttUnsubscribe(const char *topic) {
   // Don't do anything if we are not connected to the MQTT broker
-  if (!mqtt.connected()) {
+  if (!mqtt.connected() || _mqtt_connecting) {
     return;
   }
 
@@ -86,6 +86,8 @@ void mqttRegister(void (*callback)(uint8_t, const char *, const char *)) {
 void onMQTTConnect(bool sessionPresent) {
   DEBUGLOG("[MQTT] Connected\n");
 
+  _mqtt_connecting = false;
+
   // Notify subscribers (connected)
   for (uint8_t i = 0; i < _mqtt_callbacks.size(); i++) {
     (*_mqtt_callbacks[i])(MQTT_EVENT_CONNECT, NULL, NULL);
@@ -98,6 +100,8 @@ void onMQTTConnect(bool sessionPresent) {
  */
 void onMQTTDisconnect(AsyncMqttClientDisconnectReason reason) {
   DEBUGLOG("[MQTT] Disconnected. Reason: %d\n", reason);
+
+  _mqtt_connecting = false;
 
   // Notify subscribers (disconnected)
   for (uint8_t i = 0; i < _mqtt_callbacks.size(); i++) {
@@ -137,12 +141,28 @@ void onMQTTMessage(char *topic, char *payload,
  */
 void mqttConnect() {
 
+  if (!WiFi.isConnected()) {
+    return;
+  }
+
+  // Do not make a connection if already connected or trying to
+  if (mqtt.connected() || _mqtt_connecting) {
+    return;
+  }
+
+  if (!os_strlen(cfg.mqtt_server) > 0) {
+    DEBUGLOG("[MQTT] MQTT Broker not configured.\n");
+    return;
+  }
+
   DEBUGLOG("[MQTT] Connecting to broker '%s:%i'", cfg.mqtt_server,
            cfg.mqtt_port);
 
   if ((os_strlen(cfg.mqtt_user) > 0) && (os_strlen(cfg.mqtt_password) > 0)) {
     DEBUGLOG(" as user '%s'\n", cfg.mqtt_user);
   }
+
+  _mqtt_connecting = true;
 
   mqtt.connect();
 }
@@ -161,4 +181,6 @@ void setupMQTT() {
   mqtt.setClientId(cfg.hostname);
   mqtt.setWill(cfg.mqtt_lwt_topic, 2, MQTT_RETAIN, MQTT_STATUS_OFFLINE);
   mqtt.setCredentials(cfg.mqtt_user, cfg.mqtt_password);
+
+  mqttReconnectTimer.attach_ms(MQTT_RECONNECT_TIME, mqttConnect);
 }

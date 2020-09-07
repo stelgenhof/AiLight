@@ -1,13 +1,13 @@
 /**
- * Ai-Thinker RGBW Light Firmware
+ * AiLight Firmware
  *
- * This file is part of the Ai-Thinker RGBW Light Firmware.
+ * This file is part of the AiLight Firmware.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
  * Created by Sacha Telgenhof <me at sachatelgenhof dot com>
  * (https://www.sachatelgenhof.nl)
- * Copyright (c) 2016 - 2019 Sacha Telgenhof
+ * Copyright (c) 2016 - 2020 Sacha Telgenhof
  */
 
 const {
@@ -23,14 +23,14 @@ const sass = require('gulp-sass');
 const cssBase64 = require('gulp-css-base64');
 const favicon = require('gulp-base64-favicon');
 const inline = require('gulp-inline');
-const cleancss = require('gulp-clean-css');
-const htmlmin = require('gulp-htmlmin');
+const clean_css = require('gulp-clean-css');
+const html_min = require('gulp-htmlmin');
 const gzip = require('gulp-gzip');
-const uglifyjs = require('uglify-es');
+const uglify_js = require('uglify-es');
 const composer = require('gulp-uglify/composer');
-const minify = composer(uglifyjs, console);
+const minify = composer(uglify_js, console);
 
-/* Configuration */
+// Configuration
 const sourceFolder = 'src/';
 const targetFolder = 'html/';
 
@@ -40,8 +40,6 @@ function scss(done) {
         .pipe(plumber())
         .pipe(sass().on('error', sass.logError))
         .pipe(dest('html'));
-
-    done();
 }
 
 // Base 64 CSS
@@ -49,8 +47,6 @@ function base64CSS(done) {
     return src(targetFolder + 'style.css')
         .pipe(cssBase64())
         .pipe(dest('html'));
-
-    done();
 }
 
 // Clean the generated output files
@@ -72,10 +68,10 @@ function html(done) {
                     mangle: true
                 });
             },
-            css: [cleancss],
+            css: [clean_css],
             disabledTypes: ['svg']
         }))
-        .pipe(htmlmin({
+        .pipe(html_min({
             collapseWhitespace: true,
             removeComments: true,
             removeEmptyAttributes: true,
@@ -85,27 +81,25 @@ function html(done) {
         }))
         .pipe(gzip())
         .pipe(dest(sourceFolder));
-
-    done();
 }
 
 // Build the C++ include header file
 function header(done) {
-    var source = sourceFolder + 'index.html.gz';
-    var destination = sourceFolder + 'html.gz.h';
+    const source = sourceFolder + 'index.html.gz';
+    const destination = sourceFolder + 'html.gz.h';
 
-    var ws = fs.createWriteStream(destination);
+    const ws = fs.createWriteStream(destination);
 
     ws.on('error', function (err) {
         console.log(err);
     });
 
-    var data = fs.readFileSync(source);
+    const data = fs.readFileSync(source);
 
     ws.write('#define html_gz_len ' + data.length + '\n');
     ws.write('const uint8_t html_gz[] PROGMEM = {');
 
-    for (i = 0; i < data.length; i++) {
+    for (let i = 0; i < data.length; i++) {
         if (i % 1000 === 0) ws.write('\n');
         ws.write('0x' + ('00' + data[i].toString(16)).slice(-2));
         if (i < data.length - 1) ws.write(',');
@@ -124,12 +118,12 @@ function header(done) {
 // Creates a gamma correction table
 // Copy the contents of this file in the lib/AiLight/AiLight.hpp file
 function gamma(done) {
-    var gamma = 2.8; // Correction factor
-    var MAX_IN = 255; // Tope end of INPUT range
-    var MAX_OUT = 255; // Tope end of OUTPUT range
-    var destination = 'gamma.h';
+    const gamma = 2.8; // Correction factor
+    const MAX_IN = 255; // End of INPUT range
+    const MAX_OUT = 255; // End of OUTPUT range
+    const destination = 'gamma.h';
 
-    var ws = fs.createWriteStream(destination);
+    const ws = fs.createWriteStream(destination);
 
     ws.on('error', function (err) {
         console.log(err);
@@ -139,7 +133,7 @@ function gamma(done) {
     ws.write('// values. The output values are specified for 8-bit colours with a gamma\n');
     ws.write('// correction factor of 2.8\n');
     ws.write('const static uint8_t PROGMEM gamma8[256] = {');
-    for (var i = 0; i <= MAX_IN; i++) {
+    for (let i = 0; i <= MAX_IN; i++) {
         if (i > 0) {
             ws.write(',');
         }
@@ -148,7 +142,7 @@ function gamma(done) {
             ws.write('\n');
         }
 
-        var level = (Math.floor(Math.pow(i / MAX_IN, gamma) * MAX_OUT + 0.5));
+        const level = (Math.floor(Math.pow(i / MAX_IN, gamma) * MAX_OUT + 0.5));
         ws.write(("    " + level).slice(-4));
     }
 
