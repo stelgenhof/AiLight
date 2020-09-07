@@ -277,13 +277,9 @@ bool processJson(char *message) {
     state = (os_strcmp(root[KEY_STATE], MQTT_PAYLOAD_ON) == 0) ? true : false;
 
     if (transitionTime > 0 && !state) {
-      transColor.red = 0;
-      transColor.green = 0;
-      transColor.blue = 0;
-
-      stepR = calculateStep(AiLight->getColor().red, transColor.red);
-      stepG = calculateStep(AiLight->getColor().green, transColor.green);
-      stepB = calculateStep(AiLight->getColor().blue, transColor.blue);
+      transBrightness = 0;
+      stepBrightness = calculateStep(AiLight->getBrightness(), transBrightness);
+      stepCount = 0;
     } else {
       AiLight->setState(state);
     }
