@@ -6,7 +6,7 @@
  * file that was distributed with this source code.
  *
  * Created by Sacha Telgenhof <me at sachatelgenhof dot com>
- * (https://www.sachatelgenhof.nl)
+ * (https://www.sachatelgenhof.com)
  * Copyright (c) 2016 - 2021 Sacha Telgenhof
  */
 

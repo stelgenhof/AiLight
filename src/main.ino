@@ -6,8 +6,8 @@
  * file that was distributed with this source code.
  *
  * Created by Sacha Telgenhof <me at sachatelgenhof dot com>
- * (https://www.sachatelgenhof.nl)
- * Copyright (c) 2016 - 2020 Sacha Telgenhof
+ * (https://www.sachatelgenhof.com)
+ * Copyright (c) 2016 - 2021 Sacha Telgenhof
  */
 
 #include "main.h"

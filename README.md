@@ -7,7 +7,6 @@
 Current Stable Release: **v0.6.0** (Please read the [changelog](https://github.com/stelgenhof/AiLight/blob/master/CHANGELOG.md) for detailed information).
 
 ![Ai-Thinker RGBW Light bulb](https://github.com/stelgenhof/AiLight/wiki/images/aithinker_light.png)
-![AiLight](https://www.sachatelgenhof.nl/user/pages/02.blog/ailight/screen_combo_m.png)
 
 ## Features
 

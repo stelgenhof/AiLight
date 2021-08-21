@@ -6,8 +6,8 @@
  * file that was distributed with this source code.
  *
  * Created by Sacha Telgenhof <me at sachatelgenhof dot com>
- * (https://www.sachatelgenhof.nl)
- * Copyright (c) 2016 - 2020 Sacha Telgenhof
+ * (https://www.sachatelgenhof.com)
+ * Copyright (c) 2016 - 2021 Sacha Telgenhof
  */
 
 /**
@@ -108,7 +108,7 @@
  * OpenHAB support
  * ---------------------------
  * To enable support for openHAB uncomment MQTT_OPENHAB_SUPPORT
- * To change the used JSON key modify KEY_COLOR_ARRAY (default: "color_array") 
+ * To change the used JSON key modify KEY_COLOR_ARRAY (default: "color_array")
  */
 //#define MQTT_OPENHAB_SUPPORT
 //#define KEY_COLOR_ARRAY "color_array"
