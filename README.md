@@ -1,4 +1,4 @@
-![AiLight Build](https://github.com/stelgenhof/AiLight/workflows/AiLight%20Build/badge.svg?branch=develop)
+![AiLight Build](https://github.com/stelgenhof/AiLight/workflows/AiLight%20Build/badge.svg?branch=develop) [![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
 
 ![AiLight](https://raw.githubusercontent.com/wiki/stelgenhof/AiLight/images/ailight_logo.png)
 
