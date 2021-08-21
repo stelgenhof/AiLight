@@ -26,7 +26,8 @@
   },
   "homepage": "https://github.com/stelgenhof/AiLight#readme",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prettier --write \"**/*.js\""
   },
   "devDependencies": {
     "bulma": "^0.4",
@@ -41,6 +42,7 @@
     "gulp-plumber": "^1.2",
     "gulp-sass": "^5.0",
     "gulp-uglify": "^3.0",
+    "prettier": "2.3.2",
     "sass": "^1.38.0",
     "uglify-es": "^3.0"
   }
