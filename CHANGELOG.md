@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## [Unreleased]
 
 ### Added
+- Prettier to nicely format the Javascript files.
+- Support for OpenHAB colorwheel [\#76](https://github.com/stelgenhof/AiLight/pull/76). ([aHcVolle](https://github.com/aHcVolle))
+- Code of Conduct.
 - Github Actions Workflow, to have the firmware automatically build upon a push of new code.
 - my92XX Support. This allows for support of light bulbs with the my9231 LED driver such as the LOHAS brand bulbs
 . [\#50](https://github.com/stelgenhof/AiLight/pull/50) ([Nick Wolff](https://github.com/darkfiberiru))
@@ -15,11 +18,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Changed
 - Changed all references to the Ai-Thinker brand name now that the AiLight Firmware als supports other types (based on the MY9231 LED driver).
 - Added the LED driver type to the Web UI and serial output information.
-- Locking ESP Libraries to v1.2.2 as the 1.2.3 version of the WebServer package fails to build. 
+- Locking ESP Libraries to v1.2.2 as the 1.2.3 version of the WebServer package fails to build.
 - Changed data type of the count parameter to uint8_t as it is an integer.
 - The example PlatformIO configuration has been changed due to the release of PlatformIO v4.0. If you use PlatformIO make sure the configuration entry 'env_default' is renamed to 'default_envs' in your platformio.ini file!
-- Updated third-party dependencies.
-- Various typo fixes and cleanup.
+- Updated third-party dependencies and packages.
+- Various typo fixes, security updates and cleanup.
 
 ### Fixed
 - Connection to the MQTT broker was assumed to be always present and in case of a disconnect, a retry would be
@@ -30,7 +33,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 - Added link type (MIME type) for the HTML stylesheet to avoid potential misinterpretations.
 
 ### Removed
-- Removed the 'manufacturer' information from the Web UI now that the AiLight Firmware als supports other types (based on the MY9231 LED driver).
+- TravisCI configuration as now GitHub Actions is used.
+- 'manufacturer' information from the Web UI now that the AiLight Firmware als supports other types (based on the MY9231 LED driver).
 - LiteServer for testing the UI as it was hardly used.
 
 
@@ -46,9 +50,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ### Changed
 - Locked down versions of the platform and dependent libraries to safeguard stability. Altered the debug flag in the platformio.ini configuration file to show all warnings.
-- Home Assistant 0.84 (and up) changed the configuration syntax for the MQTT JSON platform type. A compiler directive is introduced to allow the firmware to be compiled for versions 0.84 or older of Home Assistant. [\#51](https://github.com/stelgenhof/AiLight/issues/51) 
+- Home Assistant 0.84 (and up) changed the configuration syntax for the MQTT JSON platform type. A compiler directive is introduced to allow the firmware to be compiled for versions 0.84 or older of Home Assistant. [\#51](https://github.com/stelgenhof/AiLight/issues/51)
 - Added monitor_speed parameter for development environments in the platformio.ini configuration file to be able to override the default (9600).
-- In addition to the hostname, if the MQTT state topic, command topic or state topic are changed, the device will re-register itself on Home Assistant via the MQTT Auto discovery (if enabled). These settings are part of the Home Assistant device configuration and therefor need to be re-initialized if they are changed.   
+- In addition to the hostname, if the MQTT state topic, command topic or state topic are changed, the device will re-register itself on Home Assistant via the MQTT Auto discovery (if enabled). These settings are part of the Home Assistant device configuration and therefor need to be re-initialized if they are changed.
 - Renamed the 'extra_script' parameter to 'extra_scripts' in the platformio.ini configuration file as 'extra_script' will be deprecated.
 - Increased buffer for MQTT discovery payload. Payload was too small causing Home Assistant not to recognize all configuration options.
 - Added DEBUG block for code parts that are only required in debug mode.
