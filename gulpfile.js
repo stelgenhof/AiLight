@@ -7,7 +7,7 @@
  *
  * Created by Sacha Telgenhof <me at sachatelgenhof dot com>
  * (https://www.sachatelgenhof.nl)
- * Copyright (c) 2016 - 2020 Sacha Telgenhof
+ * Copyright (c) 2016 - 2021 Sacha Telgenhof
  */
 
 const {
@@ -19,7 +19,7 @@ const {
 const fs = require('fs');
 const del = require('del');
 const plumber = require('gulp-plumber');
-const sass = require('gulp-sass');
+const sass = require('gulp-sass')(require('sass'));
 const cssBase64 = require('gulp-css-base64');
 const favicon = require('gulp-base64-favicon');
 const inline = require('gulp-inline');
