@@ -11,7 +11,7 @@
  */
 
 #define APP_NAME "AiLight"
-#define APP_VERSION "0.7.0-dev"
+#define APP_VERSION "1.0.0"
 #define APP_AUTHOR "me@sachatelgenhof.com"
 
 #define DEVICE_MODEL "RGBW Light"
