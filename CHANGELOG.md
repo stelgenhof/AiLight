@@ -6,26 +6,26 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org).
 
-## [Unreleased]
+[1.0.0] - 2021-08-22
 
 ### Added
 
-- Prettier to nicely format the Javascript files.
 - Support for OpenHAB colorwheel [\#76](https://github.com/stelgenhof/AiLight/pull/76). ([aHcVolle](https://github.com/aHcVolle))
-- Code of Conduct.
-- Github Actions Workflow, to have the firmware automatically build upon a push of new code.
+- GitHub Actions Workflow, to have the firmware automatically build upon a push of new code.
 - my92XX Support. This allows for support of light bulbs with the my9231 LED driver such as the LOHAS brand bulbs
   . [\#50](https://github.com/stelgenhof/AiLight/pull/50) ([Nick Wolff](https://github.com/darkfiberiru))
+- Code of Conduct.
+- Prettier to nicely format the JavaScript files.
 
 ### Changed
 
-- Changed all references to the Ai-Thinker brand name now that the AiLight Firmware als supports other types (based on the MY9231 LED driver).
+- All references to the Ai-Thinker brand name now that the AiLight Firmware also supports other types (based on the MY9231 LED driver).
 - Added the LED driver type to the Web UI and serial output information.
-- Locking ESP Libraries to v1.2.2 as the 1.2.3 version of the WebServer package fails to build.
-- Changed data type of the count parameter to uint8_t as it is an integer.
-- The example PlatformIO configuration has been changed due to the release of PlatformIO v4.0. If you use PlatformIO make sure the configuration entry 'env_default' is renamed to 'default_envs' in your platformio.ini file!
+- Locked ESP Libraries to v1.2.2 as the 1.2.3 version of the WebServer package fails to build.
+- Set data type of the count parameter to uint8_t as it is an integer.
+- The example PlatformIO configuration has been changed due to the release of PlatformIO v4.0. If you use PlatformIO make sure the configuration entry `env_default` is renamed to `default_envs` in your `platformio.ini` file!
 - Updated third-party dependencies and packages.
-- Various typo fixes, security updates and cleanup.
+- Various typo fixes, security updates and clean-up.
 
 ### Fixed
 
@@ -34,12 +34,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
   connection back except for restarting the device. This has been resolved by checking at regular intervals if the connection is still there. [\#56](https://github.com/stelgenhof/AiLight/issues/56), [\#66](https://github.com/stelgenhof/AiLight/issues/66).
 - Building with VSCode + PlatformIO 4.0 extension gives error: "`.text' will not fit in region `iram1_0_seg'". [\#59](https://github.com/stelgenhof/AiLight/pull/59) ([Donnie](https://github.com/donkawechico))
 - Corrected duplicate 'platform' JSON definition (to 'schema') for the MQTT discovery message. [\#55](https://github.com/stelgenhof/AiLight/pull/55) ([Ole-Kenneth](https://github.com/olekenneth))
-- Added link type (MIME type) for the HTML stylesheet to avoid potential misinterpretations.
+- Added link type (MIME type) for the HTML style sheet to avoid potential misinterpretations.
 
 ### Removed
 
 - TravisCI configuration as now GitHub Actions is used.
-- 'manufacturer' information from the Web UI now that the AiLight Firmware als supports other types (based on the MY9231 LED driver).
+- 'manufacturer' information element from the Web UI now that the AiLight Firmware also supports other types (based on the MY9231 LED driver).
 - LiteServer for testing the UI as it was hardly used.
 
 ## [0.6.0] - 2019-04-08
@@ -57,22 +57,22 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 - Locked down versions of the platform and dependent libraries to safeguard stability. Altered the debug flag in the platformio.ini configuration file to show all warnings.
 - Home Assistant 0.84 (and up) changed the configuration syntax for the MQTT JSON platform type. A compiler directive is introduced to allow the firmware to be compiled for versions 0.84 or older of Home Assistant. [\#51](https://github.com/stelgenhof/AiLight/issues/51)
-- Added monitor_speed parameter for development environments in the platformio.ini configuration file to be able to override the default (9600).
-- In addition to the hostname, if the MQTT state topic, command topic or state topic are changed, the device will re-register itself on Home Assistant via the MQTT Auto discovery (if enabled). These settings are part of the Home Assistant device configuration and therefor need to be re-initialized if they are changed.
-- Renamed the 'extra_script' parameter to 'extra_scripts' in the platformio.ini configuration file as 'extra_script' will be deprecated.
+- Added `monitor_speed` parameter for development environments in the `platformio.ini` configuration file to be able to override the default (9600).
+- In addition to the host name, if the MQTT state topic, command topic or state topic are changed, the device will re-register itself on Home Assistant via the MQTT Auto discovery (if enabled). These settings are part of the Home Assistant device configuration and therefor need to be re-initialized if they are changed.
+- Renamed the 'extra_script' parameter to 'extra_scripts' in the `platformio.ini` configuration file as 'extra_script' will be deprecated.
 - Increased buffer for MQTT discovery payload. Payload was too small causing Home Assistant not to recognize all configuration options.
 - Added DEBUG block for code parts that are only required in debug mode.
 - Suppressed message during build and included step to remove prior generated files for the WebUI (gulpfile.js).
-- Changed the name of the ESPAsyncWebServer library in the platformio.ini configuration file since original project has changed their naming.
+- Changed the name of the ESPAsyncWebServer library in the `platformio.ini` configuration file since original project has changed their naming.
 - Updated e-mail address and copyright year.
 
 ### Fixed
 
 - MQTT Reconnect timer was using the WiFi timeout directive rather than the applicable MQTT timeout directive. Created a new compiler directive to allow for setting the WiFi reconnect time to a custom value.
-- Corrected OTA port argument in the platformio.ini configuration file (Needs equal sign)
+- Corrected OTA port argument in the `platformio.ini` configuration file (Needs equal sign)
 - When settings in the Web UI were saved, the Lights tab was made active. This made verifying your changed settings quite cumbersome. After saving, the Settings tab now stays active. [\#14](https://github.com/stelgenhof/AiLight/issues/14).
 - Removed the Program Memory Macros for all constants used with AsyncWebServer methods. These were causing random Software WDT resets and removing these were the remedy. [\#27](https://github.com/stelgenhof/AiLight/issues/27).
-- Corrected debug flag in the platformio.ini configuration file.
+- Corrected debug flag in the `platformio.ini` configuration file.
 
 ### Removed
 
@@ -90,7 +90,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 - Changed signature use of MQTT callback handlers (based on AsyncMQTT's own examples.)
 - Updated Bulma CSS Framework to 0.4.4 (including other NPM packages).
 - Clear EEPROM space before loading factory defaults.
-- Replaced core function 'memcpy' with the ESP8266 SDK counterpart.
+- Replaced core function `memcpy` with the ESP8266 SDK counterpart.
 
 ### Fixed
 
@@ -156,7 +156,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Changed
 
 - Migrated to AsyncMQTTClient library (replacing PubSubClient Library) \* Please be aware of changes to the platformio.ini and config.h files!
-- Build.py script now uses locally installed Gulp binary instead of global one
+- `Build.py` script now uses locally installed Gulp binary instead of global one
 - HTML UI title includes now the device name so it's easier to identify which light you are looking at
 - Reduced size of HTML UI by removing unused style sheet elements, shrinking logo and removing unnecessary code.
 - The sliders are now accompanied with a value bubble to make it easier understanding what the actual value is.
