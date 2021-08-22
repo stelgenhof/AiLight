@@ -134,7 +134,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ### Fixed
 
-- Fixed issue [\10](https://github.com/stelgenhof/AiLight/issues/10): In the Web UI, the object holding the form's input values was not initialized, resulting in the user settings not being saved.
+- Fixed issue [#10](https://github.com/stelgenhof/AiLight/issues/10): In the Web UI, the object holding the form's input values was not initialized, resulting in the user settings not being saved.
 - Ensured OTA 'complete' message isn't shown multiple times.
 - Fixed issue [\#8](https://github.com/stelgenhof/AiLight/issues/8): `[Violation] Added non-passive event listener to a scroll-blocking 'touchmove' event` in Web UI.
 - Included missing gulp-util package in the 'package.json' file.
