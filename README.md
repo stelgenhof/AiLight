@@ -8,6 +8,8 @@ Current Stable Release: **v1.0.0** (Please read the [changelog](https://github.c
 
 ![Ai-Thinker RGBW Light bulb](https://github.com/stelgenhof/AiLight/wiki/images/aithinker_light.png)
 
+> **AiLight** is archived. The firmware has seen various improvements and fixes over the years and I feel it reached maturity. Go forth and fork **AiLight** if you like to improve it.
+
 ## Features
 
 With **AiLight** you can:
