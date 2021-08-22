@@ -185,8 +185,8 @@ After two weeks of hacking and modding, a first Alpha release is ready! The AiLi
 Initial Release of the AiLight: AiLight is a simple library to control an AiLight that contains the MY9291 LED driver.
 
 [1.0.0]: https://github.com/stelgenhof/AiLight/compare/v0.6.0...v1.0.0
-[0.6.0]: https://github.com/stelgenhof/AiLight/compare/v0.5.0...v0.6
-[0.5.0]: https://github.com/stelgenhof/AiLight/compare/v0.4.1...v0.5
+[0.6.0]: https://github.com/stelgenhof/AiLight/compare/v0.5.0...v0.6.0
+[0.5.0]: https://github.com/stelgenhof/AiLight/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/stelgenhof/AiLight/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/stelgenhof/AiLight/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/stelgenhof/AiLight/compare/v0.2.0-alpha...v0.3.0
